@@ -5,9 +5,9 @@ export default {
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
-      'p_orange': '#B13D14',
-      'p_orangeDark': '#9C1A04',
-      'p_cake': '#FCE7D2',
+      'p_orange': '#e86743',
+      'p_orangeDark': '#cc4220',
+      'p_cake': '#ed853a',
       'p_dark': '#340701',
       'p_silver': '#484848',
       'p_silverDark': '#262626',
@@ -18,7 +18,12 @@ export default {
       'text': 'Urbanist, sans-serif'
 
     },
-    extend: {},
+    extend: {
+
+      dropShadow: {
+        'Dark': '#121212c2 0px 9px 6px;'
+      }
+    },
   },
   plugins: [],
 }

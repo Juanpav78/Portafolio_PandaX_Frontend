@@ -1,0 +1,23 @@
+[
+    {
+        "titulo": "Portafolio 2022",
+        "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam reiciendis, quaerat accusamus ea, ipsa laboriosam labore numquam ad veniam facere unde modi earum voluptatum repellendus quasi totam consectetur asperiores officia. ",
+        "imagen": "/src/assets/proyectos/PrPortafolio2.png" ,
+        "tipo": "diseño" ,
+        "link": "https://pandaxportfolio.netlify.app/"
+    },
+    {
+        "titulo": "Pasteleria Gateaux",
+        "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam reiciendis, quaerat accusamus ea, ipsa laboriosam labore numquam ad veniam facere unde modi earum voluptatum repellendus quasi totam consectetur asperiores officia. ",
+        "imagen": "/src/assets/proyectos/PrGateaux.png" ,
+        "tipo": "clon" ,
+        "link": "https://www.google.co.ve/"
+    },
+    {
+        "titulo": "PokeDex",
+        "descripcion": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam reiciendis, quaerat accusamus ea, ipsa laboriosam labore numquam ad veniam facere unde modi earum voluptatum repellendus quasi totam consectetur asperiores officia. ",
+        "imagen": "/src/assets/proyectos/PrPokemon.png" ,
+        "tipo": "frontend" ,
+        "link": "https://pokewebacm.netlify.app/"
+    }
+]

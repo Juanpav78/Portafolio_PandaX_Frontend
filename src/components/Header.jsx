@@ -1,5 +1,5 @@
 import Nav from "./Nav";
-import Logo from "/public/PandaX_White.svg";
+import Logo from "/src/assets/PandaX_White.svg";
 
 const Header = () => {
   return (
