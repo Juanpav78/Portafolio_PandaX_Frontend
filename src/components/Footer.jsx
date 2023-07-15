@@ -3,7 +3,7 @@ import { faWhatsapp, faInstagram, faGithub, faYoutube, faLinkedin } from "@forta
 const Footer = () => {
   return (
     <footer className='bg-p_silverDark p-8 mt-0.5'>
-      <div className='max-w-6xl mx-auto grid grid-cols-2 gap-8 justify-center'>
+      <div className='max-w-6xl mx-auto grid grid-cols-1 gap-8 justify-center md:grid-cols-2'>
       <div className=''>
         <h4 className='mb-4 text-p_white text-center font-title text-3xl'>Social Networks</h4>
         <div className='flex gap-4 justify-center'>

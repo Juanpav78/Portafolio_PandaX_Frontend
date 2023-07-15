@@ -4,14 +4,14 @@ import Boton from "../components/Boton"
 import Coffe from '/src/assets/coffe.png'
 const Contact = () => {
   return (
-    <section className='contact  bg-p_silverDark p-8' >
+    <section className='contact  bg-p_silverDark p-8' id="contact" >
     <h2 className='text-center  font-title text-6xl text-p_white mb-16'>Contact
     <span className=' ml-4 w-72 font-title mb-2 font-bold text-6xl inner-box--text '>
         Me
       </span>
     </h2>
 
-    <div className='grid grid-cols-2 max-w-6xl mx-auto gap-8'>
+    <div className='grid grid-cols-1 md:grid-cols-2 max-w-6xl mx-auto gap-8'>
       <div className=' p-8 flex  flex-col justify-center items-center'>
         <img className='w-44' src={Coffe} alt="cafe taza" />
         <p className=' text-p_white text-center m-4 text-lg font-text'>Contactame en mis redes sociales o por whatsapp, hagamos algo juntos!</p>
