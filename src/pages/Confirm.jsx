@@ -1,8 +1,9 @@
-import React from 'react'
 
 const Confirm = () => {
   return (
-    <div>Confirm</div>
+    <main>
+      <h1 className=' text-4xl text-p_white font-title text-center p-44'>Tu cuenta ha sido confirmada</h1>
+    </main>
   )
 }
 

@@ -3,7 +3,7 @@ import Boton from "../components/Boton"
 
 const Login = () => {
   return (
-    <main className='max-w-6xl mx-auto pt-44 pb-20'>
+    <main className='max-w-6xl mx-auto py-20'>
         <form className='border-1px flex flex-col p-8 max-w-md  mx-auto' action="">
           
           <legend className='font-title text-4xl mb-8 text-p_white'>Iniciar Sesion</legend>

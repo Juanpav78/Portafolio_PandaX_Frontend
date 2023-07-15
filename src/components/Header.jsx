@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Nav from "./Nav";
 import Logo from "/src/assets/PandaX_White.svg";
 
 const Header = () => {
+  const location = useLocation();
   return (
-    <header className='fixed w-full p-5 bg-p_silverDark  '>
+    <header className={` w-full p-5 bg-p_silverDark ${location.pathname === "/" ? "fixed" : ""} `}>
         <div className='max-w-6xl mx-auto flex justify-between flex-col  md:flex-row items-center'>
         <Link to='/' className='flex items-center gap-2 '>
             <img className='w-20' src={Logo} alt="PandaX Logo Panda Rojo Web Developer Portafolio" />
