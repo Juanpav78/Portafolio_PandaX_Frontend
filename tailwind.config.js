@@ -12,6 +12,8 @@ export default {
       'p_silver': '#484848',
       'p_silverDark': '#262626',
       'p_white': '#FDFFFC',
+      'p_blue' : '#2f7abb',
+      'p_red' : '#bb2f2f'
     },
     fontFamily: {
       'title': 'Righteous, cursive',

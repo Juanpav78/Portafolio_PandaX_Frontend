@@ -10,6 +10,7 @@ import AdminLayout from './layouts/AdminLayout';
 import IndexAdmin from './pages/IndexAdmin';
 import Edit from './pages/Edit';
 import Create from './pages/Create';
+import NewPassword from './pages/NewPassword';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
           <Route path='login'                     element={<Login />} />
           <Route path='signup'                    element={<Signup />} />
           <Route path='recover-password'          element={<Password />} />
-          <Route path='recover-password/:token'   element={<Password />} />
+          <Route path='recover-password/:token'   element={<NewPassword />} />
           <Route path='confirm/:id'               element={<Confirm />} />
         </Route>
         <Route path='/admin/' element={<AdminLayout />}>
