@@ -12,9 +12,14 @@ import Edit from './pages/Edit';
 import Create from './pages/Create';
 import NewPassword from './pages/NewPassword';
 
+import { AuthProvider } from './context/AuthProvider';
+import { ProyectosProvider } from './context/ProyectosProvider';
+
 function App() {
   return (
     <BrowserRouter>
+    <AuthProvider>
+      <ProyectosProvider>
       <Routes>
         <Route path='/' element={<IndexLayout />}>
           <Route index  element={<Index />} />
@@ -27,11 +32,13 @@ function App() {
           <Route path='confirm/:id'               element={<Confirm />} />
         </Route>
         <Route path='/admin/' element={<AdminLayout />}>
-          <Route index  element={<IndexAdmin />} />
+          <Route index    element={<IndexAdmin />} />
           <Route path='create'              element={<Create />} />
           <Route path='edit/:id'            element={<Edit />} />
         </Route>
       </Routes>
+      </ProyectosProvider>
+    </AuthProvider>
     </BrowserRouter>
   )
 }

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Boton from "../components/Boton"
 import Alert from "../components/Alert";
-import axios from "axios";
+import clientAxios from "../config/clientAxios";
 const Signup = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -51,7 +51,7 @@ const Signup = () => {
     /*Registro del usuario desde la API*/
 
     try {
-      const {data} = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios`,
+      const {data} = await clientAxios.post('/usuarios',
       {nombre,email,password}
 
       )
@@ -68,7 +68,6 @@ const Signup = () => {
       setRepeatPassword('')
 
     } catch (error) {
-      console.log(error)
       setAlerta({msg : error.response.data.msg, //error
         error : true
         })

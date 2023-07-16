@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {useParams} from "react-router-dom";
-import axios from "axios";
+import clientAxios from "../config/clientAxios";
 import Alert from "../components/Alert";
 
 //TODO: REALIZAR UN STATE PARA MOSTRAR UN ENLACE AL LOGIN
@@ -12,8 +12,8 @@ const Confirm = () => {
   useEffect(()=>{
     const confirmCuenta =async()=>{
       try {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/confirmar/${id}`
-        const {data} = await axios(url);
+        const url = `/usuarios/confirmar/${id}`
+        const {data} = await clientAxios(url);
 
         setAlerta({msg :data.msg, //cuenta confirmada correctamente
         error : false

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import Boton from "../components/Boton"
 import Alert from "../components/Alert";
-import axios from "axios";
+import clientAxios from "../config/clientAxios";
 import { useEffect, useState } from "react";
 
 //TODO: REALIZAR UN STATE PARA MOSTRAR UN ENLACE AL LOGIN
@@ -36,8 +36,8 @@ const NewPassword = () => {
         }
 
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/recover-password/${token}`
-            const {data} = await axios.post(url, {password});
+            const url = `/usuarios/recover-password/${token}`
+            const {data} = await clientAxios.post(url, {password});
 
             setAlerta({msg :data.msg, //password cambiado de forma exitosa
             error : false
@@ -58,7 +58,7 @@ const NewPassword = () => {
     useEffect(()=>{
         const comprobarToken = async ()=>{
           try {
-            const {data} = await axios(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios/recover-password/${token}`)
+            const {data} = await clientAxios(`/usuarios/recover-password/${token}`)
             setAlerta({msg :data.msg, //Token verificado
             error : false
             })

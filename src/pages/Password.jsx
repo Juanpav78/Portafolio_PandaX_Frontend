@@ -1,6 +1,6 @@
 import Boton from "../components/Boton"
 import Alert from "../components/Alert";
-import axios from "axios";
+import clientAxios from "../config/clientAxios";
 import { useState } from "react";
 
 const Password = () => {
@@ -21,8 +21,8 @@ const Password = () => {
     }
 
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/recover-password`
-      const {data} = await axios.post(url, {email});
+      const url = `/usuarios/recover-password`
+      const {data} = await clientAxios.post(url, {email});
 
       setAlerta({msg :data.msg, //Correo enviando correctamente
       error : false

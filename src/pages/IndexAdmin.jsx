@@ -1,8 +1,16 @@
-import React from 'react'
-
+import useProyectos from "../hooks/useProyectos"
 const IndexAdmin = () => {
+  const {proyectos} = useProyectos();
   return (
-    <div>IndexAdmin</div>
+      <>
+      <h1 className=' font-title text-6xl inner-box--text'>Proyectos</h1>
+
+      <div>
+          {proyectos.length ?
+          <p></p> : <p></p> 
+        }
+      </div>
+      </>
   )
 }
 

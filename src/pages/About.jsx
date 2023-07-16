@@ -18,7 +18,7 @@ const About = () => {
         <h2 className='text-3xl text-p_white mb-4 font-title text-center'>About me</h2>  
         <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>Hola, me llamo Juan, soy autodidacta y me apasiona la programación.</p>
         <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>Mi objetivo es superar las expectativas y proporcionar resultados excepcionales en cada proyecto en el que me involucro.</p>
-        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>Mi objetivo es superar las expectativas y proporcionar resultados excepcionales en cada proyecto en el que me involucro.</p>
+        <p className='font-text m-2 font-semibold texts-justify text-p_white text-lg'>Mi objetivo es superar las expectativas y proporcionar resultados excepcionales en cada proyecto en el que me involucro.</p>
         <div className='flex justify-around mt-4'>
         <FontAwesomeIcon className='text-4xl md:text-5xl text-p_white' icon={faGithub} />
         <FontAwesomeIcon className='text-4xl md:text-5xl text-p_white' icon={faInstagram} />
