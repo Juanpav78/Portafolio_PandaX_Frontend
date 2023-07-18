@@ -46,6 +46,7 @@ const ProyectosProvider = ({children}) => {
     }
 
     const submitProyecto = async proyecto =>{
+        //ERROR ACA PASA A NUEVO PROYECTO
         if(proyecto.id){
             await editarProyecto(proyecto)
         }else{
@@ -59,11 +60,13 @@ const ProyectosProvider = ({children}) => {
             if(!token) return
             const config ={
                 headers:{
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`
                 }
                 
             }
+            
+
             const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos/${proyecto.id}`
             const{data} = await axios.put(url, proyecto, config)
             const proyectosActu = proyectos.map(proyectoState => proyectoState._id === data._id ? data : proyectoState)
@@ -79,7 +82,7 @@ const ProyectosProvider = ({children}) => {
                 navigate("/admin")
             }, 2000);
         } catch(error){
-            console.log(error)
+            console.log(error.response)
         }
     }
 

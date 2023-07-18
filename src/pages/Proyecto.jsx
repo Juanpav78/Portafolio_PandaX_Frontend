@@ -10,7 +10,6 @@ const Proyecto = () => {
        obtenerProyecto(params.id) //Obtengo el proyecto
 
     },[])
-    console.log(proyecto)
     if(cargando) return "cargando..."
   return (
     <>
@@ -26,7 +25,7 @@ const Proyecto = () => {
         <p className='text-center text-2xl my-4 text-p_white font-title uppercase '>
           {proyecto.nombre}
         </p> 
-        <img src={proyecto.imagen} alt={proyecto.nombre + " "+proyecto.tipo} />
+        <img src={proyecto.imagen && proyecto.imagen.secure_url} alt={proyecto.nombre + " "+proyecto.tipo} />
         <div className='flex gap-4 text-center mt-4' >
         { proyecto.tecnologias && proyecto.tecnologias.split(",").map((tech, i) =>( //Se muestran las tecnologias
             <p key={i} className='flex-1 rounded inner-box p-2 uppercase'>{tech}</p>

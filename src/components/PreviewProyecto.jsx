@@ -6,7 +6,7 @@ const PreviewProyecto = ({proyecto}) => {
     <div className="shadow-md shadow-p_dark border-1px p-4 my-4  rounded-lg flex justify-between">
       <div className="flex items-center flex-col justify-start">
       <h4 className='font-title font-bold text-p_white  text-xl'>{nombre}</h4>
-      <img className='w-56 h-32 border-2 border-p_orange' src={imagen} alt={nombre + " "+tipo} />
+      <img className='w-56 h-32 border-2 border-p_orange' src={imagen.secure_url} alt={nombre + " "+tipo} />
       </div>
 
 

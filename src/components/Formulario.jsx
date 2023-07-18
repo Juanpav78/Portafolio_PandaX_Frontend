@@ -1,8 +1,10 @@
-import { useState } from "react"
+import {  useEffect, useState } from "react"
 import Boton from "./Boton"
 import Alert from "./Alert"
 import useProyectos from "../hooks/useProyectos"
+import { useParams } from "react-router-dom"
 const Formulario = () => {
+  const [id, setId] = useState(null);
   const [nombre, setNombre] = useState("")
   const [link, setLink] = useState("")
   const [github, setGithub] = useState("")
@@ -10,10 +12,21 @@ const Formulario = () => {
   const [tipo, setTipo] = useState("")
   const [tecnologias, setTecnologias] = useState("")
   const [imagen, setImagen] = useState()
-  const {submitProyecto} = useProyectos();
+  const {submitProyecto, proyecto} = useProyectos();
 
   const [alerta, setAlerta] = useState({})
-
+  const params = useParams();
+  useEffect(()=>{
+    if(params.id){
+      setId(proyecto._id)
+      setNombre(proyecto.nombre) 
+      setLink(proyecto.link) 
+      setGithub(proyecto.github)  
+      setDescripcion(proyecto.descripcion) 
+      setTipo(proyecto.tipo) 
+      setTecnologias(proyecto.tecnologias) 
+    }
+  },[params])
   const handleSubmit = async (e) =>{
     e.preventDefault()
 
@@ -27,19 +40,30 @@ const Formulario = () => {
       }, 5000)
       return
     }
-    const medida =2000 * 1000;
-    if (imagen.size > medida){
-      setAlerta({
-        msg: "Todos los campos son obligatorios",
-        error: true
-      })
-      setTimeout(()=>{  //se elimina la alerta despues de 5s
-        setAlerta({})
-      }, 5000)
-      return
+    if(!params.id && imagen){
+      const medida =2000 * 1000;
+      if (imagen.size > medida){
+        setAlerta({
+          msg: "Tla imagen es muy grande",
+          error: true
+        })
+        setTimeout(()=>{  //se elimina la alerta despues de 5s
+          setAlerta({})
+        }, 5000)
+        return
+      }
     }
+   
 
-    await submitProyecto({nombre,link,github,descripcion,tipo,tecnologias, imagen})
+    await submitProyecto({id, nombre,link,github,descripcion,tipo,tecnologias, imagen})
+    setId(null)
+    setNombre('') 
+    setLink('') 
+    setGithub('')  
+    setDescripcion('') 
+    setTipo('') 
+    setTecnologias('') 
+  
   }
 
   const uploadImg = files =>{
