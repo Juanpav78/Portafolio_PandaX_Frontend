@@ -29,7 +29,7 @@ const ProyectosProvider = ({children}) => {
         }
 
         return ()=>obtenerProyectos();
-    }, [])
+    }, [auth])
 
     const mostrarAlerta =alerta =>{
         setAlerta(alerta)
