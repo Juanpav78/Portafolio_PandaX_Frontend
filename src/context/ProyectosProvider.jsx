@@ -13,6 +13,7 @@ const ProyectosProvider = ({children}) => {
 
     useEffect(()=>{
         const obtenerProyectos = async ()=>{
+            setCargando(true)
             try{
                 const token = localStorage.getItem('token')
                 if(!token) return
@@ -25,13 +26,16 @@ const ProyectosProvider = ({children}) => {
                 }
                 const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos`
                 const{data} = await axios(url, config)
-                setProyectos(data)
+                setProyectos(data.proyectos)
             } catch(error){
                 console.log(error)
             }
+                setCargando(false)
+            
+            
         }
 
-        obtenerProyectos();
+        return ()=>obtenerProyectos();
     }, [])
 
     const mostrarAlerta =alerta =>{
@@ -94,7 +98,7 @@ const ProyectosProvider = ({children}) => {
 
             const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos`
             const {data}= await axios.post(url, proyecto, config)
-/*             setProyectos([...proyectos, data]) */
+            setProyectos([...proyectos, data])
             setAlerta({
                 msg: "Proyecto creado correctamente",
                 error: false
@@ -125,12 +129,12 @@ const ProyectosProvider = ({children}) => {
             const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos/${id}`
             
             const{data} = await axios(url, config)
-            setProyecto(data.proyecto)
+            setProyecto(data)
         } catch (error) {
             console.log(error)
-        }finally{
-            setCargando(false)
         }
+            setCargando(false)
+        
     }
 
     const eliminarProyecto = async id=>{

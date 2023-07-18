@@ -10,7 +10,7 @@ const Nav = () => {
     
       {location.pathname !== '/' ? (
         <>
-        <Link className='font-title text-p_white' to='/'>Home</Link>
+        <Link className='font-title text-p_white' to='/login'>Login</Link>
         </>
       ):(
         <>

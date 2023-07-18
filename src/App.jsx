@@ -14,6 +14,7 @@ import NewPassword from './pages/NewPassword';
 
 import { AuthProvider } from './context/AuthProvider';
 import { ProyectosProvider } from './context/ProyectosProvider';
+import Proyecto from './pages/Proyecto';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path='/admin/' element={<AdminLayout />}>
           <Route index    element={<IndexAdmin />} />
           <Route path='create'              element={<Create />} />
+          <Route path='preview/:id'             element={<Proyecto />} />
           <Route path='edit/:id'            element={<Edit />} />
         </Route>
       </Routes>

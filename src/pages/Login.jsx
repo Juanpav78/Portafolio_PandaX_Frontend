@@ -41,8 +41,7 @@ const Login = () => {
       localStorage.setItem('token', data.token)
       setAuth(data)
       navigate("/admin");
-      
-      console.log(data)
+
     } catch (error) {
       console.log(error)
       setAlerta({msg : error.response.data.msg, //error
