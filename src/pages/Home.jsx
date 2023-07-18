@@ -1,5 +1,5 @@
-import Boton from '../components/Boton'
-import Perfil from '/src/assets/perfil.png'
+
+import Perfil from '../assets/Perfil.png'
 import {Link as Scroll} from "react-scroll"
 const Home = () => {
   return (
