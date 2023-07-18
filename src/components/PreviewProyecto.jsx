@@ -14,9 +14,6 @@ const PreviewProyecto = ({proyecto}) => {
         <Link 
         className='bg-p_blue rounded p-4'
         to={`preview/${_id}`} > Editar</Link>
-        <button className='bg-p_red rounded p-4'>
-          Eliminar
-        </button>
       </div>
       
     </div>

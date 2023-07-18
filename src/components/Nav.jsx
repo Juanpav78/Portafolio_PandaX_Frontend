@@ -10,16 +10,17 @@ const Nav = () => {
     
       {location.pathname !== '/' ? (
         <>
-        <Link className='font-title text-p_white' to='/login'>Login</Link>
+        <Link className='font-title text-p_white hover:text-p_orange cursor-pointer' to='/'>Home</Link>
+        <Link className='font-title text-p_white hover:text-p_orange cursor-pointer' to='/login'>Login</Link>
         </>
       ):(
         <>
-        <Scroll className='font-title text-p_white' smooth={true} offset={0} duration={500} to='home'>Home</Scroll>
-        <Scroll className='font-title text-p_white' smooth={true} offset={-100} duration={500} to='about'>About Me</Scroll>
-        <Scroll className='font-title text-p_white' smooth={true} offset={-100} duration={500} to='proyects'>Proyects</Scroll>
-        <Scroll className='font-title text-p_white' smooth={true} offset={-100} duration={500} to='contact'>Contact</Scroll>
+        <Scroll className='font-title text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={0} duration={500} to='home'>Home</Scroll>
+        <Scroll className='font-title text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={-100} duration={500} to='about'>About Me</Scroll>
+        <Scroll className='font-title text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={-100} duration={500} to='proyects'>Proyects</Scroll>
+        <Scroll className='font-title text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={-100} duration={500} to='contact'>Contact</Scroll>
 
-        <Link to='/login'><FontAwesomeIcon  className=' text-p_white' icon={faUser} /></Link>
+        <Link to='/login'><FontAwesomeIcon  className=' text-p_white hover:text-p_orange cursor-pointer' icon={faUser} /></Link>
         </>
       )}
        

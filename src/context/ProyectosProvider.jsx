@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useState, useEffect, createContext } from "react"
 import { useNavigate } from "react-router-dom";
-
+import useAuth from "../hooks/useAuth";
 const ProyectoContext = createContext();
 const ProyectosProvider = ({children}) => {
     const [proyectos, setProyectos] = useState([]);
     const [proyecto, setProyecto] = useState({});
     const [alerta, setAlerta] = useState({});
     const [cargando, setCargando] = useState(false)
+    const {auth} = useAuth()
 
     const navigate = useNavigate();
 
@@ -15,17 +16,9 @@ const ProyectosProvider = ({children}) => {
         const obtenerProyectos = async ()=>{
             setCargando(true)
             try{
-                const token = localStorage.getItem('token')
-                if(!token) return
-                const config ={
-                    headers:{
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
-                    
-                }
+                
                 const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos`
-                const{data} = await axios(url, config)
+                const{data} = await axios(url)
                 setProyectos(data.proyectos)
             } catch(error){
                 console.log(error)
@@ -36,7 +29,7 @@ const ProyectosProvider = ({children}) => {
         }
 
         return ()=>obtenerProyectos();
-    }, [])
+    }, [auth])
 
     const mostrarAlerta =alerta =>{
         setAlerta(alerta)
@@ -168,6 +161,12 @@ const ProyectosProvider = ({children}) => {
         }
     }
 
+    const cerrarSesionProyectos = ()=>{
+        setProyecto({})
+        setProyectos([])
+        setAlerta({})
+    }
+
   return (
     <ProyectoContext.Provider
         value={{
@@ -178,7 +177,8 @@ const ProyectosProvider = ({children}) => {
             obtenerProyecto,
             proyecto,
             cargando,
-            eliminarProyecto
+            eliminarProyecto,
+            cerrarSesionProyectos
         }}
     >
         {children}

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 const Boton = ({isImportant = false, isNormal = false, 
               msg = "", isLink = false,  isBtn = false,
-              clase = "", where ="/", target = ""
+              clase = "", where ="/", target = "", click
             }) => {
   return (
     <>
@@ -27,7 +27,9 @@ const Boton = ({isImportant = false, isNormal = false,
 
       )}
       {isBtn && (
-        <button className={`uppercase my-4 mx-auto text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box ${clase}`}>
+        <button
+        onClick={click}
+        className={`uppercase my-4 mx-auto text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box ${clase}`}>
           {msg}
         </button>
       )

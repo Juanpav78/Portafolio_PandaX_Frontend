@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom"
 import Logo from "/src/assets/PandaX_White.svg";
 import Boton from "./Boton";
+import useProyectos from "../hooks/useProyectos";
+import useAuth from "../hooks/useAuth";
 const HeaderAdmin = () => {
+
+    const {cerrarSesionAuth} = useAuth()
+    const {cerrarSesionProyectos} = useProyectos()
+    const handleClick = e =>{
+        e.preventDefault()
+        cerrarSesionAuth()
+        cerrarSesionProyectos()
+        localStorage.removeItem('token')
+
+    }
   return (
     <header className='px-4 py-5'>
         <div className='md:flex md:justify-between md:items-center'>
@@ -24,6 +36,7 @@ const HeaderAdmin = () => {
                 isBtn
                 msg="cerrar sesion"
                 clase="w-56"
+                click={handleClick}
                 />
             </div>
 

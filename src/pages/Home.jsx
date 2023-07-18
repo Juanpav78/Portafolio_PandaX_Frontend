@@ -1,6 +1,6 @@
 import Boton from '../components/Boton'
 import Perfil from '/src/assets/perfil.png'
-
+import {Link as Scroll} from "react-scroll"
 const Home = () => {
   return (
     <section className='home bg-p_silverDark min-h-screen' id='home'>
@@ -8,11 +8,13 @@ const Home = () => {
         <div className='flex-1 flex flex-col justify-center'>
           <h2 className='text-center font-title text-p_white text-5xl md:text-left'>Hi, I’m Juan Alvarado</h2>
           <span className=' mx-auto w-72 font-text mb-2 font-bold text-3xl md:mx-0 text-transparent bg-clip-text inner-box--text '>Developer web junior</span>
-          <p className='text-center text-p_white font-text text-lg md:text-left'>High-quality web development, paying attention to every detail to perfectly represent my client{"'"}s brand.</p>
+          <p className='px-2 text-center text-p_white font-text text-lg md:text-left'>High-quality web development, paying attention to every detail to perfectly represent my client{"'"}s brand.</p>
         
           <div className=' my-4 flex gap-4 justify-center md:justify-start'>
-            <Boton msg='My work' isNormal/>
-            <Boton msg='Contact Me' isImportant />
+            
+          <Scroll className='uppercase text-p_white block w-40 text-center border-1px text-xl py-3 px-5 rounded-md cursor-pointer' smooth={true} offset={-100} duration={500} to='proyects'>Proyects</Scroll>
+          <Scroll className=' uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box cursor-pointer' smooth={true} offset={-100} duration={500} to='contact'>Contact</Scroll>
+
           </div>
         </div>
         <div className='flex-1 inner-box rounded-full w-10/12 aspect-square overflow-hidden max-w-sm md:max-w-none '>

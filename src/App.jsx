@@ -15,6 +15,7 @@ import NewPassword from './pages/NewPassword';
 import { AuthProvider } from './context/AuthProvider';
 import { ProyectosProvider } from './context/ProyectosProvider';
 import Proyecto from './pages/Proyecto';
+import Portafolio from './pages/Portafolio';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <Route path='/' element={<IndexLayout />}>
           <Route index  element={<Index />} />
 
-          <Route path='proyects'                  element={<Proyects />} />
+          <Route path='proyectos'                 element={<Portafolio />} />
           <Route path='login'                     element={<Login />} />
           <Route path='signup'                    element={<Signup />} />
           <Route path='recover-password'          element={<Password />} />
@@ -35,7 +36,7 @@ function App() {
         <Route path='/admin/' element={<AdminLayout />}>
           <Route index    element={<IndexAdmin />} />
           <Route path='create'              element={<Create />} />
-          <Route path='preview/:id'             element={<Proyecto />} />
+          <Route path='preview/:id'         element={<Proyecto />} />
           <Route path='edit/:id'            element={<Edit />} />
         </Route>
       </Routes>

@@ -1,6 +1,7 @@
 
 import Formulario from '../components/Formulario'
 const Edit = () => {
+  
   return (
     <>
      <h1 className=' font-title text-6xl inner-box--text'>Editar Proyecto</h1>
