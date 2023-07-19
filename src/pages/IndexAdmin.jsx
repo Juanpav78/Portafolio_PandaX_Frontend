@@ -1,8 +1,9 @@
 import useProyectos from "../hooks/useProyectos"
 import PreviewProyecto from "../components/PreviewProyecto";
+import Loading from "../components/Loading";
 const IndexAdmin = () => {
   const {proyectos, cargando} = useProyectos();
-  if (cargando) return "cargando..."
+  if (cargando) return <Loading />
   return (
       <>
       <h1 className=' font-title text-6xl inner-box--text'>Proyectos</h1>

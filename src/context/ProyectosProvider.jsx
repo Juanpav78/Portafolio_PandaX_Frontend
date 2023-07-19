@@ -1,32 +1,31 @@
 import axios from "axios";
 import { useState, useEffect, createContext } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 const ProyectoContext = createContext();
 const ProyectosProvider = ({children}) => {
     const [proyectos, setProyectos] = useState([]);
     const [proyecto, setProyecto] = useState({});
     const [alerta, setAlerta] = useState({});
     const [cargando, setCargando] = useState(false)
-    const {auth} = useAuth()
     const navigate = useNavigate();
-    useEffect(()=>{
-        const obtenerProyectos = async ()=>{
-            setCargando(true)
-            try{
-                
-                const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos`
-                const{data} = await axios(url)
-                setProyectos(data.proyectos)
-            } catch(error){
-                console.log(error)
-            }
-                setCargando(false)
-            
-        }
 
-        obtenerProyectos();
-    }, [auth])
+    const obtenerProyectos = async ()=>{
+        setCargando(true)
+        try{
+            
+            const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos`
+            const{data} = await axios(url)
+            setProyectos(data.proyectos)
+        } catch(error){
+            console.log(error)
+        }
+        setTimeout(()=>{
+            setCargando(false)
+        },1000)
+           
+        
+    }
+
 
     const mostrarAlerta =alerta =>{
         setAlerta(alerta)
@@ -126,7 +125,9 @@ const ProyectosProvider = ({children}) => {
         } catch (error) {
             console.log(error)
         }
+        setTimeout(()=>{
             setCargando(false)
+        },1000)
         
     }
 
@@ -167,6 +168,7 @@ const ProyectosProvider = ({children}) => {
   return (
     <ProyectoContext.Provider
         value={{
+            obtenerProyectos ,
             proyectos,
             mostrarAlerta,
             alerta,

@@ -4,6 +4,7 @@ import useProyectos from '../hooks/useProyectos'
 import { Link } from 'react-router-dom'
 
 import ModalProyectos from '../components/ModalProyectos'
+import Loading from '../components/Loading'
 const Proyecto = () => {
     const params = useParams()
     const {obtenerProyecto, proyecto, cargando, eliminarProyecto} = useProyectos()
@@ -17,7 +18,7 @@ const Proyecto = () => {
          eliminarProyecto(params.id)
       }
     }
-    if(cargando) return "cargando..."
+    if(cargando) return <Loading />
   return (
     <>
     <div className='flex justify-between gap-4'>
