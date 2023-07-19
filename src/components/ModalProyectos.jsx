@@ -11,7 +11,7 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
         <p className='text-center text-2xl my-4 text-p_white font-title uppercase '>
           {nombre}
         </p> 
-        <img src={imagen && imagen.secure_url} alt={nombre + " "+tipo} />
+        <img src={imagen && imagen.secure_url} loading="lazy" className=" w-full" alt={nombre + " "+tipo} />
         <div className='flex gap-4 text-center mt-4' >
         { tecnologias && tecnologias.split(",").map((tech, i) =>( //Se muestran las tecnologias
             <p key={i} className='flex-1 rounded inner-box p-2 uppercase'>{tech}</p>
