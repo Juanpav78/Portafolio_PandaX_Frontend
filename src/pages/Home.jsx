@@ -18,7 +18,7 @@ const Home = () => {
           </div>
         </div>
         <div className='flex-1 inner-box rounded-full w-10/12 aspect-square overflow-hidden max-w-sm md:max-w-none '>
-          <img className=' h-full mx-auto' src={Perfil} alt="" />
+          <img className=' h-full mx-auto' src={Perfil} alt="Juan Alvarado PandaX Desarrollo Web Perfil" />
         </div>
       </div>
       

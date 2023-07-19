@@ -69,9 +69,18 @@ const About = () => {
 
       <div className=' h-full flex flex-col bg-opacity-90 p-8 rounded-md bg-p_silverDark  drop-shadow-Dark '>
         <h2 className='text-3xl text-p_white mb-4 font-title text-center'>About me</h2>  
-        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>Hola, me llamo Juan, soy autodidacta y me apasiona la programación.</p>
-        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>Mi objetivo es superar las expectativas y proporcionar resultados excepcionales en cada proyecto en el que me involucro.</p>
-        <p className='font-text m-2 font-semibold texts-justify text-p_white text-lg'>Mi objetivo es superar las expectativas y proporcionar resultados excepcionales en cada proyecto en el que me involucro.</p>
+        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>
+          Hello, my name is Juan. I am a self-taught individual passionate about programming, and I am a full-stack developer specializing in the frontend area.
+        </p>
+        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>
+          My goal is to exceed expectations and deliver exceptional results in every project I get involved in.
+        </p>
+        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>
+        I am passionate about continuous learning, and I am always seeking opportunities to improve my skills and knowledge. I consider myself a creative, proactive person with a great ability to solve problems.
+        </p>
+        <p className='font-text m-2 font-semibold texts-justify text-p_white text-lg'>
+          More about me? I am currently learning French, I enjoy doing sports, and I like to watch series.
+        </p>
         <div className='flex justify-around mt-4'>
         <Link to="https://github.com/Juanpav78" target='newBlank'>
         <FontAwesomeIcon className='text-4xl md:text-5xl text-p_white hover:text-p_orange' icon={faGithub} />
