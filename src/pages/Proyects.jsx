@@ -9,9 +9,9 @@ const Proyects = () => {
   const orderP = [...proyectos].reverse()
   return (
     <main className='proyects bg-p_silverDark py-16 ' id="proyects" >
-      <h2 className=' text-center  font-title text-6xl text-p_white mb-16'>
+      <h2 className=' text-center  font-title  text-5xl md:text-6xl text-p_white mb-16'>
         My
-      <span className=' ml-4 w-72 font-title mb-2 font-bold text-6xl inner-box--text '>
+      <span className=' ml-4 w-72 font-title mb-2 font-bold  text-5xl md:text-6xl inner-box--text '>
         Proyects
       </span>
 

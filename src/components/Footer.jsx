@@ -20,7 +20,7 @@ const Footer = () => {
         <Link to="https://www.youtube.com/@pandaxcode9228" target='newBlank'>
         <FontAwesomeIcon className='text-4xl md:text-4xl text-p_white hover:text-p_orange' icon={faYoutube} />
         </Link>
-        <Link to="https://www.linkedin.com/in/juanpavpandax/" target='newBlank'>
+        <Link to="https://wa.me/573224081829" target='newBlank'>
         <FontAwesomeIcon className='text-4xl md:text-4xl text-p_white hover:text-p_orange' icon={faWhatsapp} />
         </Link>
         </div>

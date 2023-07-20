@@ -5,8 +5,8 @@ import { Link } from "react-router-dom"
 const Contact = () => {
   return (
     <section className='contact  bg-p_silverDark p-8' id="contact" >
-    <h2 className='text-center  font-title text-6xl text-p_white mb-16'>Contact
-    <span className=' ml-4 w-72 font-title mb-2 font-bold text-6xl inner-box--text '>
+    <h2 className='text-center  font-title text-5xl md:text-6xl text-p_white mb-16'>Contact
+    <span className=' ml-4 w-72 font-title mb-2 font-bold text-5xl md:text-6xl inner-box--text '>
         Me
       </span>
     </h2>
@@ -21,11 +21,13 @@ const Contact = () => {
         <Link to="https://www.instagram.com/pandaxcode/" target='newBlank'>
         <FontAwesomeIcon className='text-4xl md:text-4xl text-p_white hover:text-p_orange' icon={faInstagram} />
         </Link>
-        <Link to="https://www.linkedin.com/in/juanpavpandax/" target='newBlank'>
+        <Link to="https://wa.me/573224081829" target='newBlank'>
         <FontAwesomeIcon className='text-4xl md:text-4xl text-p_white hover:text-p_orange' icon={faWhatsapp} />
         </Link>
         </div>
         <a href="/src/assets/HojaDeVida_JPAV_Dev.pdf" download="HojaDeVida" className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box`} >My cv</a>
+
+
       </div>
 
      {/*  <form className='border-1px flex flex-col p-4' action="">
