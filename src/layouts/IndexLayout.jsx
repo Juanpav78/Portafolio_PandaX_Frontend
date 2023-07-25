@@ -6,11 +6,20 @@ import { useEffect } from "react";
 import Loading from "../components/Loading";
 import {motion} from "framer-motion"
 const IndexLayout = () => {
-  const {obtenerProyectos, cargando } = useProyectos();
+  const {obtenerProyectos, cargando, proyectos } = useProyectos();
   useEffect(()=>{
     obtenerProyectos()
   },[])
-  if(cargando) return <Loading />
+  if(cargando) {
+    if(!proyectos){
+      setTimeout(()=>{
+      location.reload();
+    },2000)
+    }
+    return <Loading />
+  }
+  
+
   return (
     <motion.div
     initial={{opacity: 0}}
