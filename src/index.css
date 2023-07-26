@@ -41,6 +41,13 @@
     -o-animation: bg_Animated 10s ease-in infinite;
     animation: bg_Animated 10s ease-in infinite;
 }
+@media (max-width: 768px) {
+    .inner-box{
+        animation: none;
+        background-size: 200% 200%;
+    } 
+  }
+
 
 .inner-box--text {
     background: rgb(156,26,4);
