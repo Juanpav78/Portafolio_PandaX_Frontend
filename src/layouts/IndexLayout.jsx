@@ -12,11 +12,12 @@ const IndexLayout = () => {
   },[])
   if(cargando) {
     if(!proyectos){
-      setTimeout(()=>{
+    setTimeout(()=>{
       location.reload();
-    },2000)
-    }
+    },1000)
     return <Loading />
+    }
+   
   }
   
 
