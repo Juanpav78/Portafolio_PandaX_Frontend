@@ -1,6 +1,7 @@
 import { faInstagram, faWhatsapp } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Coffe from '/src/assets/coffe.png'
+import HDV from '/src/assets/HojaDeVida_JPAV_Dev.pdf'
 import { Link } from "react-router-dom"
 const Contact = () => {
   return (
@@ -25,7 +26,7 @@ const Contact = () => {
         <FontAwesomeIcon className='text-4xl md:text-4xl text-p_white hover:text-p_orange' icon={faWhatsapp} />
         </Link>
         </div>
-        <a href="/public/HojaDeVida_JPAV_Dev.pdf" download="HojaDeVida.pdf" className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box`} >My cv</a>
+        <a href={ HDV} download="HojaDeVida.pdf" className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box`} >My cv</a>
 
 
       </div>
