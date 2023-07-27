@@ -25,7 +25,7 @@ const Contact = () => {
         <FontAwesomeIcon className='text-4xl md:text-4xl text-p_white hover:text-p_orange' icon={faWhatsapp} />
         </Link>
         </div>
-        <a href="/src/assets/HojaDeVida_JPAV_Dev.pdf" download="HojaDeVida" className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box`} >My cv</a>
+        <a href="/public/HojaDeVida_JPAV_Dev.pdf" download="HojaDeVida" className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box`} >My cv</a>
 
 
       </div>
