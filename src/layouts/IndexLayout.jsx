@@ -14,10 +14,10 @@ const IndexLayout = () => {
     if(!proyectos){
     setTimeout(()=>{
       location.reload();
-    },1000)
-    return <Loading />
-    }
+    })
    
+    }
+    return <Loading />
   }
   
 
