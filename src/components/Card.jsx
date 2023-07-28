@@ -15,10 +15,10 @@ const Card = ({proyecto}) => {
     <div 
     onClick={handleClick}
     className='cursor-pointer card border-1px flex flex-col max-w-sm  rounded-md overflow-hidden'>
-              <div className=''>
-                <img loading="lazy"  className=" w-full" src={imagen.secure_url} alt={`proyecto web design ${tipo +" "+ nombre} `} />
+              <div className='h-48 bg-p_blue'>
+                <img loading="lazy"  className="  h-full" src={imagen.secure_url} alt={`proyecto web design ${tipo +" "+ nombre} `} />
               </div>
-              <div className='p-4'>
+              <div className='p-4 h-48'>
               <div className='flex gap-2 mb-2'>
               { tecnologias && tecnologias.split(",").map((tech, i) =>{
                 if(i<3){
