@@ -29,11 +29,14 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
           {nombre}
         </p> 
         <img src={imagen && imagen.secure_url} loading="lazy" className=" w-full" alt={nombre + " "+tipo} />
-        <div className='relative flex w-screen gap-4 text-center mt-4 overflow-x-scroll' >
+        <div className='w-full overflow-hidden '>
+        <div className='relative flex w-screen gap-4 text-center mt-4 overflow-x-scroll tech' >
         { tecnologias && tecnologias.split(",").map((tech, i) =>( //Se muestran las tecnologias
             <p key={i} className=' rounded inner-box p-2 uppercase'>{tech}</p>
         ))}
         </div>
+        </div>
+       
         <p className=' text-md my-4 text-p_white font-text '>
             <span className='font-title'>{tipo}: </span>
             {descripcion}</p>

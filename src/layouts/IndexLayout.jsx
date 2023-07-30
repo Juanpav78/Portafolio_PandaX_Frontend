@@ -13,6 +13,7 @@ const IndexLayout = () => {
   if(cargando) {
     if(!proyectos){
     setTimeout(()=>{
+      console.log("hola")
       location.reload();
     })
    
