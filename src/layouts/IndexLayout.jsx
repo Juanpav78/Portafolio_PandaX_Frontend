@@ -11,13 +11,14 @@ const IndexLayout = () => {
     obtenerProyectos()
   },[])
   if(cargando) {
-    if(!proyectos){
+
     setTimeout(()=>{
+      if(!proyectos){
       console.log("hola")
       location.reload();
-    })
+      }
+    },1000)
    
-    }
     return <Loading />
   }
   
