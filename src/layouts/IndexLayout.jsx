@@ -16,6 +16,7 @@ const IndexLayout = () => {
     console.log("hola")
     if(!proyectos){
       location.reload();
+      navigate(0);
       return false
     }
     return true
