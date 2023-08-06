@@ -30,7 +30,7 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
         </p> 
         <img src={imagen && imagen.secure_url} loading="lazy" className=" w-full" alt={nombre + " "+tipo} />
         <div className='w-full overflow-hidden '>
-        <div className='relative flex w-screen gap-4 text-center mt-4 overflow-x-scroll tech' >
+        <div className='relative flex w-full gap-4 text-center mt-4 overflow-x-scroll tech' >
         { tecnologias && tecnologias.split(",").map((tech, i) =>( //Se muestran las tecnologias
             <p key={i} className=' rounded inner-box p-2 uppercase'>{tech}</p>
         ))}

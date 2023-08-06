@@ -25,9 +25,10 @@
 }
 .tech::-webkit-scrollbar-thumb {
     
-    background-color: rgba(204,66,32,1);
+    background-color: rgba(204, 66, 32, 0.4);
     border-radius: 20px;
-    border: 2px solid rgba(232,102,67,1);
+    border: 1px solid rgba(232,102,67,.8);
+    cursor: pointer;
 }
 
 .tech::-webkit-scrollbar-track {
