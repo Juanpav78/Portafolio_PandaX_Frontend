@@ -8,6 +8,12 @@
 .tech{
    
 }
+
+.modal{
+    display: flex;
+    padding: 2em 10em;
+    flex-direction: column;
+}
 .tech::-webkit-scrollbar {
     -webkit-appearance: none;
     

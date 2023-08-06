@@ -20,7 +20,7 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
       scale: 0
      }}
      
-    className={`shadow mt-10 rounded-lg p-5  max-w-2xl mx-auto ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2"}`}>
+    className={`shadow mt-10 rounded-lg p-5  max-w-2xl mx-auto ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
         <div className='w-full flex justify-end'>
         <span className='font-bold text-p_white font-title text-2xl mr-4 cursor-pointer ' onClick={handleClick}>x</span> 
 
