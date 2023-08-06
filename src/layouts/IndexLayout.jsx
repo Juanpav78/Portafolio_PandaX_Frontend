@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
 import Header from "../components/Header"
 import useProyectos from "../hooks/useProyectos";
@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Loading from "../components/Loading";
 import {motion} from "framer-motion"
 const IndexLayout = () => {
+  const navigate = useNavigate()
   const {obtenerProyectos, cargando, proyectos } = useProyectos();
   useEffect(()=>{
     obtenerProyectos()
@@ -15,9 +16,9 @@ const IndexLayout = () => {
     setTimeout(()=>{
       if(!proyectos){
       console.log("hola")
-      location.reload();
+      navigate(0);
       }
-    },1000)
+    },1200)
    
     return <Loading />
   }
