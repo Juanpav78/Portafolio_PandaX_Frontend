@@ -3,7 +3,14 @@
 @tailwind utilities;
 .no-scroll{
     overflow-y:hidden;
+      
 }
+
+@media (max-width: 768px) {
+    .no-scroll{
+        overflow-y: visible;
+    } 
+  
 
 .tech{
    

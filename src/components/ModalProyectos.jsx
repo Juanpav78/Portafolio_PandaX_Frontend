@@ -3,23 +3,7 @@ import {motion} from "framer-motion"
 const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
     const {nombre, imagen, descripcion, tipo, tecnologias, link, github} = proyecto
   return (
-    <motion.div 
-    initial={{
-      opacity:0,
-      scale: 0,
-      boxShadow: "0 0 0px black",
-    }}
-    whileInView={{ 
-      opacity: 1,
-      scale: 1,
-      boxShadow: "0 4px 5px black",
-     }}
-     
-     exit={{
-      opacity:0,
-      scale: 0
-     }}
-     
+    <div 
     className={`shadow mt-10 rounded-lg p-5  max-w-2xl mx-auto ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
         <div className='w-full flex justify-end'>
         <span className='font-bold text-p_white font-title text-2xl mr-4 cursor-pointer ' onClick={handleClick}>x</span> 
@@ -55,7 +39,7 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
         />
         </div>
         
-    </motion.div>
+    </div>
   )
 }
 
