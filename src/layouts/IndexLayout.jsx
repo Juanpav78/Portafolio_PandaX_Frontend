@@ -13,7 +13,7 @@ const IndexLayout = () => {
   const {obtenerProyectos, cargando, proyectos } = useProyectos();
 
   const comprobar = (resp)=>{
-    if(!resp || resp <=0){
+    if(!resp){
       location.reload();
       navigate("/");
     }
