@@ -19,9 +19,8 @@ const ProyectosProvider = ({children}) => {
         } catch(error){
             console.log(error)
         }
-        setTimeout(()=>{
-            setCargando(false)
-        },1000)
+        setCargando(false)
+
            
         
     }

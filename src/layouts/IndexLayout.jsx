@@ -12,26 +12,22 @@ const IndexLayout = () => {
   const navigate = useNavigate()
   const {obtenerProyectos, cargando, proyectos } = useProyectos();
 
-  const comprobar = ()=>{
-    console.log("hola")
-    if(!proyectos){
+  const comprobar = (resp)=>{
+    if(!resp || resp <=0){
       location.reload();
-      navigate(0);
-      return false
+      navigate("/");
     }
-    return true
   }
   useEffect(()=>{
     obtenerProyectos()
   },[])
   if(cargando) {
+      setTimeout(()=>{
+        comprobar(proyectos)
+      },2000)
 
-    setTimeout(()=>{
-      comprobar(proyectos);
+      return <Loading />
 
-    },1200)
-   
-    return <Loading />
   }
   
 
