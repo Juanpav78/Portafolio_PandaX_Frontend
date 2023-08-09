@@ -84,7 +84,7 @@ const Login = () => {
           onChange={e => setPassword(e.target.value)}
           />
 
-          <Link to='/recover-password' className='text-p_silver font-text my-2 text-right' >¿Olvidaste tu contraseña?</Link>
+          <Link to='/recover-password' className='text-p_silver font-text my-2 text-right hover:text-p_white transition-colors' >¿Olvidaste tu contraseña?</Link>
           <Boton isBtn
             msg="Iniciar Sesion"
             clase='w-52'

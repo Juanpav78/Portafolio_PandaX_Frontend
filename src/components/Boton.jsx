@@ -7,12 +7,12 @@ const Boton = ({isImportant = false, isNormal = false,
   return (
     <>
       {isNormal && (
-        <a href={where} className={` uppercase text-p_white block w-40 text-center border-1px text-xl py-3 px-5 rounded-md`} >
+        <a href={where} className={` uppercase text-p_white block w-40 text-center border-1px text-xl py-3 px-5 rounded-md transition-all hover:bg-p_orange`} >
         {msg}
         </a>
       )}
       {isImportant && (
-        <a href={where} className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box`} >
+        <a href={where} className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box transition-all hover:bg-p_orange`} >
         {msg}
         </a>
       )}
@@ -21,7 +21,7 @@ const Boton = ({isImportant = false, isNormal = false,
         target={target}
        
         to={where}
-        className={` uppercase text-p_white block w-40 border-1px text-xl py-3 px-5 text-center rounded-md ${clase}`}>
+        className={` uppercase text-p_white block w-40 border-1px text-xl py-3 px-5 text-center rounded-md ${clase} transition-all hover:bg-p_orange`}>
         {msg}
         </Link>
 
@@ -29,7 +29,7 @@ const Boton = ({isImportant = false, isNormal = false,
       {isBtn && (
         <button
         onClick={click}
-        className={`uppercase my-4 mx-auto text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box ${clase}`}>
+        className={`uppercase my-4 mx-auto text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box ${clase} transition-all hover:bg-p_orange`}>
           {msg}
         </button>
       )

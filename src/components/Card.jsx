@@ -15,7 +15,7 @@ const Card = ({proyecto}) => {
     <div 
     onClick={handleClick}
     className='cursor-pointer card border-1px flex flex-col max-w-sm  rounded-md overflow-hidden'>
-              <div className='h-48 bg-p_blue'>
+              <div className='h-48'>
                 <img loading="lazy"  className="  h-full" src={imagen.secure_url} alt={`proyecto web design ${tipo +" "+ nombre} `} />
               </div>
               <div className='p-4 h-48'>

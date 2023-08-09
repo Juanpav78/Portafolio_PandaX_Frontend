@@ -6,6 +6,16 @@
       
 }
 
+.logo{
+    filter: brightness(5);
+    transition: all .3s ease-in-out;
+}
+
+.logo:hover{
+    transition: all .3s ease-in-out;
+    filter: brightness(1);
+}
+
 @media (max-width: 768px) {
     .no-scroll{
         overflow-y: visible;
@@ -17,6 +27,17 @@
 }
 
 .modal{
+    
+    animation: init .3s ease-in-out;
+}
+
+@keyframes init {
+    0%{
+        transform: scale(.1);
+    }
+    100%{
+        transform: scale(1);
+    }
 }
 .tech::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -48,6 +69,11 @@
     animation: bg_Animated 5s ease-in infinite;
 }
 
+.card:hover{
+    background-color: rgb(232, 103, 67);
+    transition: all .3s ease-in-out;
+}
+
 .card p{
     display: -webkit-box;
     color: white;
@@ -77,13 +103,16 @@
 }
 @media (max-width: 768px) {
     .inner-box{
-        animation: none;
         background-size: 200% 200%;
     } 
   }
 
-
-.inner-box--text {
+a.inner-box:hover, button.inner-box:hover{
+    transition: all .5s ease;
+    background-size: 100% 100%;
+    box-shadow: 0 0 10px rgba(232,102,67,1);
+}
+.inner-box--text, .logo {
     background: rgb(156,26,4);
     background: linear-gradient(133deg, rgba(204,66,32,1) 0%, rgba(232,102,67,1) 25%, rgba(237,133,58,1) 50%, rgba(232,103,67,1) 71%, rgba(204,66,32,1) 100%);
     background-size: 200% 200%;

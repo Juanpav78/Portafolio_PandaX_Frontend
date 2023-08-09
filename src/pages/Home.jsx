@@ -13,8 +13,8 @@ const Home = () => {
         
           <div className=' my-4 flex gap-4 justify-center md:justify-start'>
             
-          <Scroll className='uppercase text-p_white block w-40 text-center border-1px text-xl py-3 px-5 rounded-md cursor-pointer' smooth={true} offset={-100} duration={500} to='proyects'>Proyects</Scroll>
-          <Scroll className=' uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box cursor-pointer' smooth={true} offset={-100} duration={500} to='contact'>Contact</Scroll>
+          <Scroll className='transition-all hover:bg-p_orange uppercase text-p_white block w-40 text-center border-1px text-xl py-3 px-5 rounded-md cursor-pointer' smooth={true} offset={-100} duration={500} to='proyects'>Proyects</Scroll>
+          <Scroll className='transition-all  uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box cursor-pointer' smooth={true} offset={-100} duration={500} to='contact'>Contact</Scroll>
 
           </div>
         </div>

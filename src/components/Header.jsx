@@ -9,7 +9,7 @@ const Header = () => {
         <div className='max-w-6xl mx-auto flex justify-between flex-col gap-2  md:flex-row items-center'>
         <Link to='/' className='flex items-center gap-2 '>
             <img className='w-20' src={Logo} alt="PandaX Logo Panda Rojo Web Developer Portafolio" />
-            <h1 className='font-title text-p_white text-5xl'>PandaX{"/>"}</h1>
+            <h1 className='logo font-title text-p_white text-5xl'>PandaX{"/>"}</h1>
         </Link>
         <Nav />
         </div>
