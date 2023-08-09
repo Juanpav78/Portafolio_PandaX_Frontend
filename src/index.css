@@ -20,6 +20,11 @@
     .no-scroll{
         overflow-y: visible;
     } 
+    .modal{
+    
+        max-height: 100vh;
+        margin: 0;
+    }
   
 }
 .tech{
@@ -34,9 +39,11 @@
 @keyframes init {
     0%{
         transform: scale(.1);
+        opacity: 0;
     }
     100%{
         transform: scale(1);
+        opacity: 1;
     }
 }
 .tech::-webkit-scrollbar {
