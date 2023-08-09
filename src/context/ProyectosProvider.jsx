@@ -7,6 +7,7 @@ const ProyectosProvider = ({children}) => {
     const [proyecto, setProyecto] = useState({});
     const [alerta, setAlerta] = useState({});
     const [cargando, setCargando] = useState(false)
+    const [tarda, setTarda] = useState(false)
     const navigate = useNavigate();
 
     const obtenerProyectos = async ()=>{
@@ -19,8 +20,13 @@ const ProyectosProvider = ({children}) => {
         } catch(error){
             console.log(error)
         }
-        setCargando(false)
+        const timet = setTimeout(()=>{
+            setTarda(true)
+        },3000)
 
+        setCargando(false)
+        clearTimeout(timet)
+        setTarda(false)
            
         
     }
@@ -124,9 +130,8 @@ const ProyectosProvider = ({children}) => {
         } catch (error) {
             console.log(error)
         }
-        setTimeout(()=>{
-            setCargando(false)
-        },1000)
+        setCargando(false)
+
         
     }
 
@@ -176,7 +181,8 @@ const ProyectosProvider = ({children}) => {
             proyecto,
             cargando,
             eliminarProyecto,
-            cerrarSesionProyectos
+            cerrarSesionProyectos,
+            tarda
         }}
     >
         {children}
