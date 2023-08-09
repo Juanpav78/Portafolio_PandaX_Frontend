@@ -1,39 +1,41 @@
 import Boton from "./Boton"
-import {motion} from "framer-motion"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faX } from "@fortawesome/free-solid-svg-icons"
 const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
     const {nombre, imagen, descripcion, tipo, tecnologias, link, github} = proyecto
   return (
     <div 
-    className={`shadow mt-10 rounded-lg p-5  max-w-2xl mx-auto ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
-        <div className='w-full flex justify-end'>
-        <span className='font-bold text-p_white font-title text-2xl mr-4 cursor-pointer ' onClick={handleClick}>x</span> 
-
+    className={`shadow mt-10 rounded-lg p-8  max-w-2xl mx-auto ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
+        <div className=''>
+          <FontAwesomeIcon 
+          onClick={handleClick}
+          className="text-p_white relative left-full text-end font-title text-2xl mr-4 cursor-pointer" icon={faX} />  
         </div>
         <p className='text-center text-2xl my-4 text-p_white font-title uppercase '>
           {nombre}
         </p> 
-        <img src={imagen && imagen.secure_url} loading="lazy" className=" w-full" alt={nombre + " "+tipo} />
-        <div className='w-full overflow-hidden '>
-        <div className='relative flex w-full gap-4 text-center mt-4 overflow-x-scroll tech' >
+        <img src={imagen && imagen.secure_url} loading="lazy" className=" shadow-lg my-8 w-full" alt={nombre + " "+tipo} />
+        <div className='flex overflow-hidden  '>
+        <div className='grid grid-cols-3 gap-4 justify-center items-center' >
         { tecnologias && tecnologias.split(",").map((tech, i) =>( //Se muestran las tecnologias
             <p key={i} className=' rounded inner-box p-2 uppercase'>{tech}</p>
         ))}
         </div>
         </div>
        
-        <p className=' text-md my-4 text-p_white font-text '>
+        <p className=' text-md my-4 text-p_white font-text  '>
             <span className='font-title'>{tipo}: </span>
             {descripcion}</p>
-        <div className='flex justify-between gap-4 '>
+        <div className='flex justify-between gap-4 flex-col md:flex-row '>
         <Boton isLink
         msg='Visitar'
-        clase='flex-1'
+        clase='flex-1 w-full md:w-auto'
         where={link}
         target='newBlank'
         />
         <Boton isLink
         msg='Github'
-        clase='flex-1 inner-box '
+        clase='flex-1 inner-box   w-full md:w-auto'
         where={github}
         target='newBlank'
         />
