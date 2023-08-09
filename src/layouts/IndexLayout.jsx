@@ -11,6 +11,9 @@ import {motion} from "framer-motion"
 const IndexLayout = () => {
   const navigate = useNavigate()
   const {obtenerProyectos, cargando } = useProyectos();
+  useEffect(()=>{
+    obtenerProyectos()
+  },[])
 
   const comprobar = (resp)=>{
     if(resp){
@@ -18,16 +21,18 @@ const IndexLayout = () => {
       navigate("/");
     }
   }
-  useEffect(()=>{
-    obtenerProyectos()
-  },[])
-  if(cargando) {
-      setTimeout(()=>{
-        comprobar(cargando)
-      },2000)
+  const reloadTime = setTimeout(()=>{
+    comprobar(cargando)
+  },2000)
+  clearTimeout(reloadTime)
 
+
+  if(cargando) {
+      reloadTime()
       return <Loading />
 
+  }else{
+    clearTimeout(reloadTime)
   }
   
 
