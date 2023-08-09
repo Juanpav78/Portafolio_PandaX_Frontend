@@ -1,5 +1,6 @@
 
 import Perfil from '../assets/Perfil.png'
+import PerfilWeb from '../build/images/Perfil.webp'
 import {Link as Scroll} from "react-scroll"
 const Home = () => {
   return (
@@ -18,7 +19,12 @@ const Home = () => {
           </div>
         </div>
         <div className='flex-1 inner-box rounded-full w-10/12 aspect-square overflow-hidden max-w-sm md:max-w-none '>
-          <img className=' w-3/4 h-full mx-auto' src={Perfil} alt="Juan Alvarado PandaX Desarrollo Web Perfil" />
+          <picture>
+          <source className='w-3/4 h-full mx-auto' srcSet={PerfilWeb} type="image/webp" />
+          <img className='w-3/4 h-full mx-auto' src={Perfil} alt="Juan Alvarado PandaX Desarrollo Web Perfil" />
+          
+          </picture>
+          
         </div>
       </div>
       
