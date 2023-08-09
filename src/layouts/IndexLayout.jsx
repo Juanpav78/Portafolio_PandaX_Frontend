@@ -10,10 +10,10 @@ import {motion} from "framer-motion"
 
 const IndexLayout = () => {
   const navigate = useNavigate()
-  const {obtenerProyectos, cargando, proyectos } = useProyectos();
+  const {obtenerProyectos, cargando } = useProyectos();
 
   const comprobar = (resp)=>{
-    if(!resp){
+    if(resp){
       location.reload();
       navigate("/");
     }
@@ -23,7 +23,7 @@ const IndexLayout = () => {
   },[])
   if(cargando) {
       setTimeout(()=>{
-        comprobar(proyectos)
+        comprobar(cargando)
       },2000)
 
       return <Loading />

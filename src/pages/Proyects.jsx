@@ -7,6 +7,7 @@ import { useEffect } from "react"
 const Proyects = () => {
   const { proyectos} = useProyectos()
   const orderP = [...proyectos].reverse()
+
   return (
     <main className='proyects bg-p_silverDark py-16 ' id="proyects" >
       <h2 className=' text-center  font-title  text-5xl md:text-6xl text-p_white mb-16'>
