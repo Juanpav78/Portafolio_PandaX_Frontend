@@ -5,7 +5,7 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
     const {nombre, imagen, descripcion, tipo, tecnologias, link, github} = proyecto
   return (
     <div 
-    className={`shadow mt-10 rounded-lg p-8 md:p-16  max-w-2xl mx-auto ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
+    className={`shadow mt-10 rounded-lg p-8 md:p-16  max-w-2xl mx-auto my-5  ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
         <div className=''>
           <FontAwesomeIcon 
           onClick={handleClick}
@@ -14,7 +14,7 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
         <p className='text-center text-2xl my-4 inner-box--text font-title uppercase '>
           {nombre}
         </p> 
-        <img src={imagen && imagen.secure_url} loading="lazy" className=" shadow-lg my-8 w-full rounded-md" alt={nombre + " "+tipo} />
+        <img src={imagen && imagen.secure_url} loading="lazy" className=" shadow-lg my-8 w-full h-72 rounded-md" alt={nombre + " "+tipo} />
         <div className='flex overflow-hidden  '>
         <div className='grid grid-cols-3 gap-4 text-center whitespace-nowrap justify-center items-center' >
         { tecnologias && tecnologias.split(",").map((tech, i) =>( //Se muestran las tecnologias

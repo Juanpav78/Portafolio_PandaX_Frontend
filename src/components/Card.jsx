@@ -16,7 +16,7 @@ const Card = ({proyecto}) => {
     onClick={handleClick}
     className='cursor-pointer card border-1px flex flex-col max-w-sm  rounded-md overflow-hidden'>
               <div className='h-48'>
-                <img loading="lazy"  className="  h-full" src={imagen.secure_url} alt={`proyecto web design ${tipo +" "+ nombre} `} />
+                <img loading="lazy"  className="  h-full w-full" src={imagen.secure_url} alt={`proyecto web design ${tipo +" "+ nombre} `} />
               </div>
               <div className='p-4 h-48'>
               <div className='flex gap-2 mb-2'>
@@ -36,7 +36,7 @@ const Card = ({proyecto}) => {
     </div>
 
     {modal && (
-      <div className='fixed w-full h-screen z-10 backdrop-blur-sm top-0 left-0 flex justify-center items-center'>
+      <div className='fixed w-full h-screen z-10 backdrop-blur-sm top-0 left-0 flex justify-center items-center overflow-y-scroll'>
       <ModalProyectos
           isModal
           proyecto={proyecto}
