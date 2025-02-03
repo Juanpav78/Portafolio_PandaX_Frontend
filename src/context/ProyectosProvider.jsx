@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect, createContext } from "react"
+import { useState, useEffect, createContext, useCallback  } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 const ProyectoContext = createContext();
 const ProyectosProvider = ({children}) => {
@@ -10,26 +10,26 @@ const ProyectosProvider = ({children}) => {
     const [tarda, setTarda] = useState(false)
     const navigate = useNavigate();
 
-    const obtenerProyectos = async ()=>{
-        setCargando(true)
-        try{
-            
-            const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos`
-            const{data} = await axios(url)
-            setProyectos(data.proyectos)
-        } catch(error){
-            console.log(error)
+    const obtenerProyectos = useCallback(async () => {
+        setCargando(true);
+    
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/api/proyectos`;
+            const { data } = await axios.get(url);
+            setProyectos(data.proyectos);
+        } catch (error) {
+            console.error("Error al obtener proyectos:", error);
+        } finally {
+            setCargando(false);
         }
-        const timet = setTimeout(()=>{
-            setTarda(true)
-        },3000)
-
-        setCargando(false)
-        clearTimeout(timet)
-        setTarda(false)
-           
-        
-    }
+    
+        // Retraso de 3 segundos para setTarda
+        const timeout = setTimeout(() => {
+            setTarda(true);
+        }, 3000);
+    
+        return () => clearTimeout(timeout); // Limpiar timeout si el componente se desmonta
+    }, []);
 
 
     const mostrarAlerta =alerta =>{

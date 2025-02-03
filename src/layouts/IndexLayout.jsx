@@ -12,7 +12,7 @@ const IndexLayout = () => {
   const {obtenerProyectos, cargando } = useProyectos();
   useEffect(()=>{
     obtenerProyectos()
-  },[])
+  },[obtenerProyectos])
   
 
   if(cargando) {
