@@ -4,8 +4,8 @@ import PerfilWeb from '../build/images/Perfil.webp'
 import {Link as Scroll} from "react-scroll"
 const Home = () => {
   return (
-    <section className='home bg-p_silverDark flex h-screen items-end p-16' id='home'>
-      <div className='mx-auto max-w-6xl flex gap-4 flex-col-reverse items-center  md:flex-row '>
+    <section className='home bg-p_silverDark flex  h-full items-end md:p-16' id='home'>
+      <div className='mx-auto max-w-6xl flex gap-4 flex-col-reverse items-center  md:flex-row pt-44 md:pt-28 '>
         <div className='flex-1 flex flex-col justify-center'>
           <h2 className='text-center font-title text-p_white text-5xl md:text-left'>Hi, I’m Juan Alvarado</h2>
           <span className=' mx-auto w-72 font-text mb-2 font-bold text-3xl md:mx-0 text-transparent bg-clip-text inner-box--text '>Developer web junior</span>
