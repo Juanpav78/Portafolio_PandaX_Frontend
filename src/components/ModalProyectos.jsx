@@ -5,7 +5,7 @@ const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
     const {nombre, imagen, descripcion, tipo, tecnologias, link, github} = proyecto
   return (
     <div 
-    className={`shadow mt-10 rounded-lg p-8 md:p-16  max-w-2xl mx-auto my-5  ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
+    className={`shadow mt-10 h-auto rounded-lg p-8 md:p-16  max-w-2xl m-auto my-5  ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
         <div className=''>
           <FontAwesomeIcon 
           onClick={handleClick}
