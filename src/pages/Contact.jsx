@@ -1,7 +1,7 @@
 import { faInstagram, faWhatsapp } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Coffe from '/src/assets/coffe.png'
-import HDV from '/src/assets/HojaDeVida_JPAV_Dev.pdf'
+import HDV from '/src/assets/HojaDeVidaJPAV_2025.pdf'
 import { Link } from "react-router-dom"
 const Contact = () => {
   return (

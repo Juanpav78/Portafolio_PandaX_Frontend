@@ -31,7 +31,7 @@ const Footer = () => {
       </div>
       </div>
 
-      <p className='pt-8 text-p_white text-base font-text text-center'>Copyright &copy; - Juan Alvarado-Pandax-2023</p>
+      <p className='pt-8 text-p_white text-base font-text text-center'>Copyright &copy; - Juan Alvarado-PandaXcode - 2025</p>
     </footer>
   )
 }
