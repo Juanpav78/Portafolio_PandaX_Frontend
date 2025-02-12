@@ -21,7 +21,7 @@ const Proyects = () => {
       <div className='grid grid-cols-1 md:grid-cols-3 justify-items-center max-w-6xl mx-auto gap-8'>
         { proyectos &&
            orderP.map((proyecto, i)=>{
-            if(i>3 && i<=6){
+            if(i>=3 && i<6){
               return(
                 <Card key={proyecto._id} proyecto={proyecto} />
               )
