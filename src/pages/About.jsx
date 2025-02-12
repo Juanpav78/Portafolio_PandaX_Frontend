@@ -4,7 +4,7 @@ import {faGithub, faFigma,
     faCss3Alt, faHtml5,
     faPhp, faNodeJs,
     faSquareJs, faWordpress,
-    faReact, faSass, faNpm,
+    faReact, faPython, faRProject,
     faGulp, faYoutube, faInstagram, faLinkedin
     } from '@fortawesome/free-brands-svg-icons'
 import { Link } from 'react-router-dom'
@@ -29,8 +29,8 @@ const skills = [
     name : "css3"
   },
   {
-    ico : faSass,
-    name : "SASS"
+    ico : faPython,
+    name : "Python"
   },
   {
     ico : faGulp,
@@ -57,8 +57,8 @@ const skills = [
     name : "React.JS"
   },
   {
-    ico: faNpm,
-    name : "npm"
+    ico: faRProject,
+    name : "R"
   }
 ]
 
