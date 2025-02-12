@@ -36,7 +36,7 @@ const Card = ({proyecto}) => {
     </div>
 
     {modal && (
-      <div className='fixed w-full h-screen z-10 backdrop-blur-sm top-0 left-0 flex justify-center items-center overflow-y-scroll'>
+      <div className='fixed p-8 w-full h-screen z-10 backdrop-blur-sm top-0 left-0 flex justify-center items-center overflow-y-scroll'>
       <ModalProyectos
           isModal
           proyecto={proyecto}
