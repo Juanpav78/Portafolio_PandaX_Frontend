@@ -1,0 +1,20 @@
+# Configuración de despliegue en Netlify. Al estar en el repo, manda sobre lo configurado en el
+# panel web, así el build no depende de ajustes que se olvidan con los años.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 8 (rolldown) necesita Node ^20.19 o >=22.12. Sin esto Netlify usaba Node 18, el que
+  # quedó fijado cuando se creó el sitio, y el build fallaba con
+  # "node:util does not provide an export named 'styleText'".
+  NODE_VERSION = "22"
+
+# La web es una SPA: las rutas (/proyectos, /admin, /lo-que-sea) las resuelve React Router en
+# el navegador. Sin esta regla, entrar directo o recargar en una ruta daría el 404 de Netlify
+# en lugar de cargar la app (y su página 404 propia con el panda).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
