@@ -1,42 +1,42 @@
+import { useMemo } from "react"
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import useProyectos from "../hooks/useProyectos"
 import Boton from "../components/Boton"
-import Card from "../components/Card"
-import { useEffect } from "react"
+import SectionTitle from "../components/SectionTitle"
+import GaleriaProyectos from "../components/GaleriaProyectos"
+import { ordenarProyectos } from "../helpers/proyectos"
+import useIdioma from "../hooks/useIdioma"
 
+const DESTACADOS = 6
 
+// Sección de la home: primero los destacados (en el orden elegido en el admin) y se completa
+// con los más recientes. El catálogo completo con búsqueda y filtros vive en /proyectos.
 const Proyects = () => {
-  const { proyectos} = useProyectos()
-  const orderP = [...proyectos].reverse()
+  const { proyectos } = useProyectos()
+  const { t } = useIdioma()
+  const seleccion = useMemo(() => ordenarProyectos(proyectos, 'destacados').slice(0, DESTACADOS), [proyectos])
 
   return (
-    <main className='proyects bg-p_silverDark py-16 ' id="proyects" >
-      <h2 className=' text-center  font-title  text-5xl md:text-6xl text-p_white mb-16'>
-        My
-      <span className=' ml-4 w-72 font-title mb-2 font-bold  text-5xl md:text-6xl inner-box--text '>
-        Proyects
-      </span>
-
-      </h2>
-
-      <div className='grid grid-cols-1 md:grid-cols-3 justify-items-center max-w-6xl mx-auto gap-8'>
-        { proyectos &&
-           orderP.map((proyecto, i)=>{
-            if(i>=3 && i<6){
-              return(
-                <Card key={proyecto._id} proyecto={proyecto} />
-              )
-            }
-          })
-        }
-
-      </div>
-        <Boton isLink 
-        msg="See More"
-        clase='mx-auto my-4'
-        where="/proyectos"
+    <section className='scroll-mt-20 px-4 py-24 sm:px-6' id="proyects">
+      <div className="mx-auto max-w-6xl">
+        <SectionTitle
+          etiqueta={t('projects.label')}
+          titulo={t('projects.title')}
+          destacado={t('projects.highlight')}
+          descripcion={t('projects.description')}
         />
 
-    </main>
+        <GaleriaProyectos proyectos={seleccion} />
+
+        {proyectos.length > DESTACADOS && (
+          <div className="mt-12 flex justify-center">
+            <Boton to="/proyectos" variant="ghost" size="lg" iconRight={faArrowRight}>
+              {t('projects.seeAll', { n: proyectos.length })}
+            </Boton>
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 

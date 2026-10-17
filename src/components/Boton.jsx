@@ -1,43 +1,54 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSpinner } from "@fortawesome/free-solid-svg-icons"
 
-const Boton = ({isImportant = false, isNormal = false, 
-              msg = "", isLink = false,  isBtn = false,
-              clase = "", where ="/", target = "", click
-            }) => {
-  return (
+const VARIANTES = {
+  primary: 'btn-primary',
+  ghost: 'btn-ghost',
+  subtle: 'btn-subtle',
+  danger: 'btn-danger',
+}
+
+const TAMANOS = { sm: 'btn-sm', md: 'btn-md', lg: 'btn-lg', icon: 'btn-icon' }
+
+// Un único componente para todo lo que se ve como botón. La etiqueta se elige por las props:
+//  - `to`   → <Link> de React Router (navegación interna sin recargar la página)
+//  - `href` → <a> (enlaces externos y descargas; los externos abren en pestaña nueva)
+//  - nada   → <button> (acciones; type="button" por defecto para no enviar formularios sin querer)
+const Boton = ({
+  to, href, variant = 'primary', size = 'md',
+  icon, iconRight, loading = false,
+  className = '', children, type = 'button', ...props
+}) => {
+  const clases = `btn ${VARIANTES[variant]} ${TAMANOS[size]} ${className}`
+  const contenido = (
     <>
-      {isNormal && (
-        <a href={where} className={` uppercase text-p_white block w-40 text-center border-1px text-xl py-3 px-5 rounded-md transition-all hover:bg-p_orange`} >
-        {msg}
-        </a>
-      )}
-      {isImportant && (
-        <a href={where} className={` uppercase text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box transition-all hover:bg-p_orange`} >
-        {msg}
-        </a>
-      )}
-      {isLink && (
-        <Link 
-        target={target}
-       
-        to={where}
-        className={` uppercase text-p_white block w-40 border-1px text-xl py-3 px-5 text-center rounded-md ${clase} transition-all hover:bg-p_orange`}>
-        {msg}
-        </Link>
-
-      )}
-      {isBtn && (
-        <button
-        onClick={click}
-        className={`uppercase my-4 mx-auto text-p_white block w-40 text-center text-xl py-3 px-5 rounded-md inner-box ${clase} transition-all hover:bg-p_orange`}>
-          {msg}
-        </button>
-      )
-
-      }
-    
+      {loading
+        ? <FontAwesomeIcon icon={faSpinner} spin />
+        : icon && <FontAwesomeIcon icon={icon} />}
+      {children}
+      {iconRight && <FontAwesomeIcon icon={iconRight} className="text-[0.85em]" />}
     </>
+  )
 
+  if (to) return <Link to={to} className={clases} {...props}>{contenido}</Link>
+
+  if (href) {
+    // noopener evita que la pestaña abierta pueda controlar esta vía window.opener
+    const externo = !props.download && /^https?:/.test(href)
+    return (
+      <a href={href} className={clases}
+        {...(externo && { target: '_blank', rel: 'noopener noreferrer' })}
+        {...props}>
+        {contenido}
+      </a>
+    )
+  }
+
+  return (
+    <button type={type} className={clases} disabled={loading || props.disabled} aria-busy={loading} {...props}>
+      {contenido}
+    </button>
   )
 }
 

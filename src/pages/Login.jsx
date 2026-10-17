@@ -1,96 +1,79 @@
-import { Link } from "react-router-dom"
+import { useState } from "react"
+import { Link, Navigate, useNavigate } from "react-router"
+import { faArrowRightToBracket, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import AuthCard from "../components/AuthCard"
 import Boton from "../components/Boton"
+import Campo from "../components/Campo"
 import Alert from "../components/Alert"
 import clientAxios from "../config/clientAxios"
-import { useState } from "react"
 import useAuth from "../hooks/useAuth"
-import { useNavigate } from "react-router-dom"
+import useAlerta from "../hooks/useAlerta"
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [alerta, setAlerta] = useState({})
+  const [verPassword, setVerPassword] = useState(false)
+  const [enviando, setEnviando] = useState(false)
+  const { alerta, mostrarAlerta, cerrarAlerta } = useAlerta()
 
-  const {setAuth} = useAuth();
+  const {auth, setAuth} = useAuth();
   const navigate = useNavigate()
+
+  // Con sesión activa no tiene sentido mostrar el login: se va directo al panel
+  if (auth._id) return <Navigate to="/admin" replace />
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    if([email,password].includes("")){
-      setAlerta({msg : "Todos los campos son obligatorios",
-    error : true
-    })
-      setTimeout(()=>{  //se elimina la alerta despues de 5s
-        setAlerta({})
-      }, 5000)
+    if([email,password].includes("")) return mostrarAlerta("Todos los campos son obligatorios")
+    if(password.length < 8) return mostrarAlerta("La contraseña debe tener mínimo 8 caracteres")
 
-      return;
-      
-    }
-    if(password.length < 8){
-      setAlerta({msg : "Las contraseña debe ser de minimo 8 caracteres"})
-      setTimeout(()=>{  //se elimina la alerta despues de 5s
-        setAlerta({})
-      }, 5000)
-      return;
-    }
-
-
+    setEnviando(true)
     try {
       const {data} = await clientAxios.post('/usuarios/login', {email, password})
       localStorage.setItem('token', data.token)
       setAuth(data)
       navigate("/admin");
-
     } catch (error) {
-      console.log(error)
-      setAlerta({msg : error.response.data.msg, //error
-      error : true
-      })
-      setTimeout(()=>{  //se elimina la alerta despues de 5s
-          setAlerta({})
-      }, 5000)
+      // Sin response = el backend no respondió (dormido en Render, sin conexión, CORS)
+      mostrarAlerta(error.response?.data?.msg ?? "No se pudo conectar con el servidor")
+    } finally {
+      setEnviando(false)
     }
   }
+
   return (
-    <main className='max-w-6xl mx-auto py-20'>
-      {alerta.msg && ( //se muestra de manera condicional la alerta
-          <Alert 
-            isError ={alerta.error}
-            msg={alerta.msg}
+    <>
+      <Alert isError={alerta.error} msg={alerta.msg} onClose={cerrarAlerta} />
+      <AuthCard
+        titulo="Welcome back"
+        subtitulo="Inicia sesión para administrar tu portafolio"
+        pie={<Link to="/" className="transition-colors hover:text-neon">← Volver al portafolio</Link>}
+      >
+        <form className='flex flex-col gap-5' onSubmit={handleSubmit} noValidate>
+          <Campo
+            label="Email" id="email" type="email" autoComplete="email" placeholder="tu@email.com"
+            value={email} onChange={e => setEmail(e.target.value)}
           />
-        )}
-        <form className='border-1px flex flex-col p-8 max-w-md  mx-auto'
-        onSubmit={handleSubmit}
-        >
-          
-          <legend className='font-title text-4xl mb-8 text-p_white'>Iniciar Sesion</legend>
-
-          <label className=' text-p_white font-text my-2 '
-          htmlFor="email"
-          >Email</label>
-          <input className='bg-transparent border-1px p-2 text-p_white font-text '
-          type="email"
-          name="email" id="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          />
-
-          <label className=' text-p_white font-text my-2 ' htmlFor="password">Contraseña</label>
-          <input className='bg-transparent border-1px p-2 text-p_white font-text '
-          type="password" name="password" id="password" placeholder="min. 8 caracteres" 
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          />
-
-          <Link to='/recover-password' className='text-p_silver font-text my-2 text-right hover:text-p_white transition-colors' >¿Olvidaste tu contraseña?</Link>
-          <Boton isBtn
-            msg="Iniciar Sesion"
-            clase='w-52'
-          />
-      </form>
-    </main>
+          <div className="relative">
+            <Campo
+              label="Contraseña" id="password" type={verPassword ? 'text' : 'password'}
+              autoComplete="current-password" placeholder="Mínimo 8 caracteres" className="pr-12"
+              value={password} onChange={e => setPassword(e.target.value)}
+              extra={<Link to='/recover-password' className='text-xs text-muted transition-colors hover:text-neon'>¿La olvidaste?</Link>}
+            />
+            <button type="button" onClick={() => setVerPassword(v => !v)}
+              aria-label={verPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              className="absolute right-3 bottom-2.5 p-1 text-subtle transition-colors hover:text-fg">
+              <FontAwesomeIcon icon={verPassword ? faEyeSlash : faEye} />
+            </button>
+          </div>
+          <Boton type="submit" size="lg" loading={enviando} icon={faArrowRightToBracket} className="mt-2 w-full">
+            Iniciar sesión
+          </Boton>
+        </form>
+      </AuthCard>
+    </>
   )
 }
 

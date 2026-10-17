@@ -1,76 +1,48 @@
+import { useState } from "react";
+import { Link } from "react-router";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import AuthCard from "../components/AuthCard";
 import Boton from "../components/Boton"
+import Campo from "../components/Campo";
 import Alert from "../components/Alert";
 import clientAxios from "../config/clientAxios";
-import { useState } from "react";
+import useAlerta from "../hooks/useAlerta";
 
 const Password = () => {
-  const [alerta, setAlerta] = useState({});
   const [email, setEmail] = useState("");
-  const handleSubmit = async (e)=>{ //Funcion para enviar correo para reestablecer el password
+  const [enviando, setEnviando] = useState(false)
+  const { alerta, mostrarAlerta, cerrarAlerta } = useAlerta()
+
+  const handleSubmit = async (e)=>{
     e.preventDefault();
+    if(!email) return mostrarAlerta("El email es obligatorio")
 
-    if([email].includes("")){
-      setAlerta({msg : "El email es obligatorio",
-    error : true
-    })
-      setTimeout(()=>{  //se elimina la alerta despues de 5s
-        setAlerta({})
-      }, 5000)
-
-      return;
-    }
-
+    setEnviando(true)
     try {
-      const url = `/usuarios/recover-password`
-      const {data} = await clientAxios.post(url, {email});
-
-      setAlerta({msg :data.msg, //Correo enviando correctamente
-      error : false
-      })
-      setTimeout(()=>{  //se elimina la alerta despues de 5s
-        setAlerta({})
-      }, 5000)
+      const {data} = await clientAxios.post('/usuarios/recover-password', {email});
+      mostrarAlerta(data.msg, false)
     } catch (error) {
-      setAlerta({msg : error.response.data.msg, // Mensaje de error
-      error : true
-      })
-      setTimeout(()=>{  //se elimina la alerta despues de 5s
-        setAlerta({})
-      }, 5000)
+      mostrarAlerta(error.response?.data?.msg ?? "No se pudo conectar con el servidor")
+    } finally {
+      setEnviando(false)
     }
   }
 
-
   return (
-    <main className='max-w-6xl mx-auto py-20'>
-      {alerta.msg && ( //se muestra de manera condicional la alerta
-          <Alert 
-            isError ={alerta.error}
-            msg={alerta.msg}
-          />
-        )}
-      
-      <form className='border-1px flex flex-col p-8 max-w-md  mx-auto' onSubmit={handleSubmit}>
-        
-        <legend className='font-title text-4xl mb-8 text-p_white'>Recuperar Password</legend>
-
-        <label className=' text-p_white font-text my-2 '
-        htmlFor="email"
-        >Email</label>
-        <input className='bg-transparent border-1px p-2 text-p_white font-text '
-        type="email"
-        name="email" id="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        />
-        <Boton isBtn
-          msg="Recuperar Password"
-          clase='w-full'
-        />
-       </form>
-    </main>
-    
+    <>
+      <Alert isError={alerta.error} msg={alerta.msg} onClose={cerrarAlerta} />
+      <AuthCard
+        titulo="Recuperar acceso"
+        subtitulo="Te enviaremos un enlace para crear una nueva contraseña"
+        pie={<Link to="/login" className="transition-colors hover:text-neon">← Volver a iniciar sesión</Link>}
+      >
+        <form className='flex flex-col gap-5' onSubmit={handleSubmit} noValidate>
+          <Campo label="Email" id="email" type="email" autoComplete="email" placeholder="tu@email.com"
+            value={email} onChange={e => setEmail(e.target.value)} />
+          <Boton type="submit" size="lg" loading={enviando} icon={faPaperPlane} className="w-full">Enviar enlace</Boton>
+        </form>
+      </AuthCard>
+    </>
   )
 }
 

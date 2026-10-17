@@ -1,14 +1,17 @@
-
+import { useLocation } from 'react-router'
+import EncabezadoAdmin from '../components/EncabezadoAdmin'
 import Formulario from '../components/Formulario'
+
 const Create = () => {
+  // El planificador navega aquí con { state: { borrador } } al publicar un plan completado.
+  // Se usa el state de la navegación (no la URL) porque la descripción puede ser larga.
+  const { state } = useLocation()
+
   return (
     <>
-      <h1 className=' font-title text-6xl inner-box--text'>Crear Nuevo Proyecto</h1>
-
-      <div className='mt-10 flex justify-center max-w-2xl mx-auto'>
-        <Formulario />
-      </div>
-      </>
+      <EncabezadoAdmin etiqueta="nuevo" titulo={state?.borrador ? 'Publicar plan' : 'Crear proyecto'} />
+      <Formulario borrador={state?.borrador} />
+    </>
   )
 }
 

@@ -1,47 +1,99 @@
-import Boton from "./Boton"
+import { useEffect, useRef } from "react"
+import { createPortal } from "react-dom"
+import { AnimatePresence, motion } from "framer-motion"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faX } from "@fortawesome/free-solid-svg-icons"
-const ModalProyectos = ({proyecto, isModal = false, handleClick}) => {
-    const {nombre, imagen, descripcion, tipo, tecnologias, link, github} = proyecto
-  return (
-    <div 
-    className={`shadow mt-10 h-auto rounded-lg p-8 md:p-16  max-w-2xl m-auto  ${!isModal ? "bg-p_silver" : " bg-p_silverDark border-p_orange border-2 modal"}`}>
-        <div className=''>
-          <FontAwesomeIcon 
-          onClick={handleClick}
-          className="text-p_white relative left-full text-end font-title text-2xl block cursor-pointer transition-colors hover:text-p_orange" icon={faX} />  
-        </div>
-        <p className='text-center text-2xl my-4 inner-box--text font-title uppercase '>
-          {nombre}
-        </p> 
-        <img src={imagen && imagen.secure_url} loading="lazy" className=" shadow-lg my-8 w-full h-72 rounded-md" alt={nombre + " "+tipo} />
-        <div className='flex overflow-hidden  '>
-        <div className='grid grid-cols-3 gap-4 text-center whitespace-nowrap justify-center items-center' >
-        { tecnologias && tecnologias.split(",").map((tech, i) =>( //Se muestran las tecnologias
-            <p key={i} className=' rounded inner-box p-2 uppercase truncate'>{tech}</p>
-        ))}
-        </div>
-        </div>
-       
-        <p className=' text-md my-4 text-p_white font-text  '>
-            <span className='font-title'>{tipo}: </span>
-            {descripcion}</p>
-        <div className='flex justify-between gap-4 flex-col md:flex-row '>
-        <Boton isLink
-        msg='Visitar'
-        clase='flex-1 w-full md:w-auto'
-        where={link}
-        target='newBlank'
-        />
-        <Boton isLink
-        msg='Github'
-        clase='flex-1 inner-box   w-full md:w-auto'
-        where={github}
-        target='newBlank'
-        />
-        </div>
-        
-    </div>
+import { faChevronLeft, faChevronRight, faXmark } from "@fortawesome/free-solid-svg-icons"
+import DetalleProyecto from "./DetalleProyecto"
+import useBloquearScroll from "../hooks/useBloquearScroll"
+import useIdioma from "../hooks/useIdioma"
+
+// Modal de detalle con navegación entre proyectos.
+// Teclado: Esc cierra, ← / → cambian de proyecto. Al abrir se enfoca el botón de cerrar y al
+// cerrar se devuelve el foco a la tarjeta que lo abrió, para que quien navega con teclado no
+// pierda su posición en la página.
+const ModalProyectos = ({ proyectos, indice, onCerrar, onCambiar }) => {
+  const abierto = indice !== null
+  const proyecto = abierto ? proyectos[indice] : null
+  const cerrarRef = useRef(null)
+  const { t } = useIdioma()
+  useBloquearScroll(abierto)
+
+  useEffect(() => {
+    if (!abierto) return
+    const origen = document.activeElement
+    cerrarRef.current?.focus()
+    return () => origen?.focus?.()
+  }, [abierto])
+
+  useEffect(() => {
+    if (!abierto) return
+    const alPulsar = e => {
+      if (e.key === 'Escape') onCerrar()
+      if (e.key === 'ArrowRight') onCambiar(1)
+      if (e.key === 'ArrowLeft') onCambiar(-1)
+    }
+    window.addEventListener('keydown', alPulsar)
+    return () => window.removeEventListener('keydown', alPulsar)
+  }, [abierto, onCerrar, onCambiar])
+
+  const varios = proyectos.length > 1
+
+  return createPortal(
+    <AnimatePresence>
+      {proyecto && (
+        <motion.div
+          className="fixed inset-0 z-80 overflow-y-auto bg-ink-950/80 backdrop-blur-md"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          onClick={onCerrar}
+        >
+          <div className="flex min-h-full items-center justify-center p-4 sm:p-8">
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-proyecto-titulo"
+              initial={{ opacity: 0, y: 40, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 40, scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              onClick={e => e.stopPropagation()}
+              className="glass neon-border relative w-full max-w-3xl rounded-3xl p-5 shadow-2xl sm:p-8"
+            >
+              <div className="mb-4 flex items-center justify-between gap-4">
+                {varios
+                  ? <span className="font-mono text-xs text-subtle">{String(indice + 1).padStart(2, '0')} / {String(proyectos.length).padStart(2, '0')}</span>
+                  : <span />}
+                <div className="flex items-center gap-1">
+                  {varios && (
+                    <>
+                      <button onClick={() => onCambiar(-1)} aria-label={t('modal.prev')}
+                        className="btn btn-subtle btn-icon"><FontAwesomeIcon icon={faChevronLeft} /></button>
+                      <button onClick={() => onCambiar(1)} aria-label={t('modal.next')}
+                        className="btn btn-subtle btn-icon"><FontAwesomeIcon icon={faChevronRight} /></button>
+                    </>
+                  )}
+                  <button ref={cerrarRef} onClick={onCerrar} aria-label={t('modal.close')}
+                    className="btn btn-subtle btn-icon text-lg"><FontAwesomeIcon icon={faXmark} /></button>
+                </div>
+              </div>
+
+              {/* key por id: al cambiar de proyecto el contenido entra con su propia animación */}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={proyecto._id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <DetalleProyecto proyecto={proyecto} idTitulo="modal-proyecto-titulo" />
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body
   )
 }
 

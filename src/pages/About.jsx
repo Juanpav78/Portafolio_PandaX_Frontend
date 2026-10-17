@@ -1,129 +1,110 @@
+import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-import {faGithub, faFigma,
+import {faGithub, faGitAlt, faFigma,
     faCss3Alt, faHtml5,
     faPhp, faNodeJs,
-    faSquareJs, faWordpress,
-    faReact, faPython, faRProject,
-    faGulp, faYoutube, faInstagram, faLinkedin
+    faSquareJs, faReact, faPython,
     } from '@fortawesome/free-brands-svg-icons'
-import { Link } from 'react-router-dom'
+import { faChartColumn, faCode, faDatabase, faLanguage, faLightbulb, faTableCells } from '@fortawesome/free-solid-svg-icons'
+import SectionTitle from '../components/SectionTitle'
+import ConNegritas from '../components/ConNegritas'
+import useIdioma from '../hooks/useIdioma'
+import { REDES } from '../helpers/redes'
 
-
-
-const skills = [
-  {
-    ico : faGithub,
-    name : "github"
-  },
-  {
-    ico : faFigma,
-    name : "figma"
-  },
-  {
-    ico : faHtml5,
-    name : "html5"
-  },
-  {
-    ico : faCss3Alt,
-    name : "css3"
-  },
-  {
-    ico : faPython,
-    name : "Python"
-  },
-  {
-    ico : faGulp,
-    name : "Gulp.JS"
-  },
-  {
-    ico : faPhp,
-    name : "php"
-  },
-  {
-    ico : faNodeJs,
-    name : "Node.JS"
-  },
-  {
-    ico : faSquareJs,
-    name : "javascript"
-  },
-  {
-    ico : faWordpress,
-    name : "wordpress"
-  },
-  {
-    ico :  faReact,
-    name : "React.JS"
-  },
-  {
-    ico: faRProject,
-    name : "R"
-  }
+// Las habilidades sin icono en Font Awesome usan una imagen; `imagen` y `icono` son excluyentes.
+// Ordenadas por relevancia según la hoja de vida: primero el stack principal, luego datos y
+// automatización, y al final herramientas complementarias.
+const SKILLS = [
+  { nombre: 'React', icono: faReact },
+  { nombre: 'Next.js', imagen: 'https://cdn.simpleicons.org/nextdotjs/white' },
+  { nombre: 'JavaScript', icono: faSquareJs },
+  { nombre: 'Node.js', icono: faNodeJs },
+  { nombre: 'Python', icono: faPython },
+  { nombre: 'MongoDB', imagen: 'https://www.vectorlogo.zone/logos/mongodb/mongodb-icon.svg' },
+  { nombre: 'MySQL', imagen: 'https://www.vectorlogo.zone/logos/mysql/mysql-icon.svg' },
+  { nombre: 'SQL', icono: faDatabase },
+  { nombre: 'HTML5', icono: faHtml5 },
+  { nombre: 'CSS3', icono: faCss3Alt },
+  { nombre: 'PHP', icono: faPhp },
+  { nombre: 'Power BI', icono: faChartColumn },
+  { nombre: 'Excel · VBA', icono: faTableCells },
+  { nombre: 'Git', icono: faGitAlt },
+  { nombre: 'GitHub', icono: faGithub },
+  { nombre: 'Figma', icono: faFigma },
 ]
 
+// Iconos de los rasgos, en el mismo orden que about.traits en los textos traducidos
+const ICONOS_RASGOS = [faCode, faDatabase, faLightbulb, faLanguage]
+
+const aparecer = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-80px' },
+}
+
 const About = () => {
+  const { t } = useIdioma()
   return (
-    <section className='inner-box py-20  gap-4' id='about'>
-      <div className='grid grid-cols-1 md:grid-cols-2 max-w-6xl mx-auto items-center gap-4'>
+    <section id='about' className='scroll-mt-20 px-4 py-24 sm:px-6'>
+      <div className='mx-auto max-w-6xl'>
+        <SectionTitle etiqueta={t('about.label')} titulo={t('about.title')} destacado={t('about.highlight')} />
 
-      <div className=' h-full flex flex-col bg-opacity-90 p-8 rounded-md bg-p_silverDark  drop-shadow-Dark '>
-        <h2 className='text-3xl text-p_white mb-4 font-title text-center'>About me</h2>  
-        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>
-          Hello, my name is Juan. I am a self-taught individual passionate about programming, and I am a full-stack developer specializing in the frontend area.
-        </p>
-        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>
-          My goal is to exceed expectations and deliver exceptional results in every project I get involved in.
-        </p>
-        <p className='font-text m-2 font-semibold text-justify text-p_white text-lg'>
-        I am passionate about continuous learning, and I am always seeking opportunities to improve my skills and knowledge. I consider myself a creative, proactive person with a great ability to solve problems.
-        </p>
-        <p className='font-text m-2 font-semibold texts-justify text-p_white text-lg'>
-          More about me? I am currently learning French, I enjoy doing sports, and I like to watch series.
-        </p>
-        <div className='flex justify-around mt-4'>
-        <Link to="https://github.com/Juanpav78" target='newBlank'>
-        <FontAwesomeIcon className='text-4xl md:text-5xl text-p_white hover:text-p_orange' icon={faGithub} />
-        </Link>
-        <Link to="https://www.instagram.com/pandaxcode/" target='newBlank'>
-        <FontAwesomeIcon className='text-4xl md:text-5xl text-p_white hover:text-p_orange' icon={faInstagram} />
-        </Link>
-        <Link to="https://www.linkedin.com/in/juanpavpandax/" target='newBlank'>
-        <FontAwesomeIcon className='text-4xl md:text-5xl text-p_white hover:text-p_orange' icon={faLinkedin} />
-        </Link>
-        <Link to="https://www.youtube.com/@pandaxcode9228" target='newBlank'>
-        <FontAwesomeIcon className='text-4xl md:text-5xl text-p_white hover:text-p_orange' icon={faYoutube} />
-        </Link>
-       
-        
-        
-        
+        <div className='grid gap-6 lg:grid-cols-[1.1fr_1fr]'>
+          <motion.div {...aparecer} transition={{ duration: 0.6 }}
+            className='glass neon-border flex flex-col rounded-3xl p-8'>
+            <div className="space-y-4 text-lg leading-relaxed text-muted">
+              {t('about.paragraphs').map(parrafo => <p key={parrafo}><ConNegritas texto={parrafo} /></p>)}
+            </div>
+
+            <ul className="mt-8 grid grid-cols-2 gap-3">
+              {t('about.traits').map((rasgo, i) => (
+                <li key={rasgo.titulo} className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/2 p-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-neon/10 text-neon">
+                    <FontAwesomeIcon icon={ICONOS_RASGOS[i]} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-fg">{rasgo.titulo}</p>
+                    <p className="text-xs text-subtle">{rasgo.texto}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <ul className='mt-8 flex gap-2'>
+              {REDES.slice(0, 4).map(red => (
+                <li key={red.nombre}>
+                  <a href={red.url} target="_blank" rel="noopener noreferrer" aria-label={red.nombre}
+                    className="btn btn-ghost btn-icon text-lg"><FontAwesomeIcon icon={red.icono} /></a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          <motion.div {...aparecer} transition={{ duration: 0.6, delay: 0.1 }} className='glass rounded-3xl p-8'>
+            <h3 className='mb-6 flex items-center gap-3 font-display text-2xl text-fg'>
+              {t('about.stack')} <span className="h-px flex-1 bg-linear-to-r from-neon/50 to-transparent" />
+            </h3>
+            <ul className='grid grid-cols-3 gap-3 sm:grid-cols-4'>
+              {SKILLS.map((skill, i) => (
+                <motion.li
+                  key={skill.nombre}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.03, type: 'spring', stiffness: 300, damping: 20 }}
+                  className='group flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-white/5
+                    bg-white/2 text-muted transition-all duration-300
+                    hover:-translate-y-1 hover:border-neon/40 hover:bg-neon/5 hover:text-neon hover:shadow-[0_0_24px_-8px_var(--color-neon)]'
+                >
+                  {skill.icono
+                    ? <FontAwesomeIcon className='text-3xl' icon={skill.icono} />
+                    : <img src={skill.imagen} alt="" loading="lazy" className='size-8 opacity-70 grayscale transition group-hover:opacity-100 group-hover:grayscale-0' />}
+                  <span className='text-xs font-semibold'>{skill.nombre}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
         </div>
-      
-      </div>
-      
-      
-
-      <div className=' h-full bg-opacity-90 p-8 rounded-md bg-p_silverDark'>
-        <h2 className='text-3xl text-p_white mb-7 font-title text-center'>Skills</h2>
-
-        <div className='grid grid-cols-4 justify-items-center gap-0 gap-y-7'>
-          {skills.map(skill =>(
-          <div key={skill.name} className='flex flex-col text-p_white hover:text-p_orange'>
-          <FontAwesomeIcon className='text-4xl md:text-5xl' icon={skill.ico} />
-          <p className=' font-text p-1'>{skill.name}</p>
-          </div>
-          ))}
-          <div className='flex flex-col items-center text-p_white hover:text-p_orange'>
-          <img className=' aspect-square w-12 grayscale hover:grayscale-0' src="https://www.vectorlogo.zone/logos/mysql/mysql-icon.svg" alt="" />
-          <p className=' font-text p-1'>MySql</p>
-          </div>
-          <div className='flex flex-col items-center text-p_white hover:text-p_orange'>
-          <img className=' aspect-square w-12 grayscale hover:grayscale-0' src="https://www.vectorlogo.zone/logos/mongodb/mongodb-icon.svg" alt="" />
-          <p className=' font-text p-1'>MongoDB</p>
-          </div>
-        </div>
-      </div>
       </div>
     </section>
   )

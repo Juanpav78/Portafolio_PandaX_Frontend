@@ -1,125 +1,83 @@
-import { useParams } from "react-router-dom"
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router"
+import AuthCard from "../components/AuthCard";
 import Boton from "../components/Boton"
+import Campo from "../components/Campo";
 import Alert from "../components/Alert";
 import clientAxios from "../config/clientAxios";
-import { useEffect, useState } from "react";
+import useAlerta from "../hooks/useAlerta";
 
-//TODO: REALIZAR UN STATE PARA MOSTRAR UN ENLACE AL LOGIN
-//TODO: ENLACE AL LOGIN EN CASO DE NO SER VALIDO
+// El enlace del email trae un token de un solo uso. Primero se valida (GET) y sólo si es
+// válido se muestra el formulario; así el usuario no rellena nada para luego descubrir que
+// el enlace caducó.
 const NewPassword = () => {
     const {token}  = useParams();
-    const [alerta, setAlerta] = useState({});
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
-    const [isToken, setIsToken] = useState(false)
+    // 'comprobando' | 'valido' | 'invalido' | 'cambiado'
+    const [estado, setEstado] = useState('comprobando')
+    const [enviando, setEnviando] = useState(false)
+    const { alerta, mostrarAlerta, cerrarAlerta } = useAlerta()
+    const comprobado = useRef(false) // evita doble petición en StrictMode
 
-    const handleSubmit = async (e)=>{ //Funcion para reestablecer el password
+    useEffect(()=>{
+        if(comprobado.current) return
+        comprobado.current = true
+        clientAxios(`/usuarios/recover-password/${token}`)
+          .then(() => setEstado('valido'))
+          .catch(() => setEstado('invalido'))
+    },[token])
+
+    const handleSubmit = async (e)=>{
         e.preventDefault();
+        if(password.length < 8) return mostrarAlerta("La contraseña debe tener mínimo 8 caracteres")
+        if(password !== repeatPassword) return mostrarAlerta("Las contraseñas no coinciden")
 
-        if(password.length < 8){
-            setAlerta({msg : "Las contraseña debe ser de minimo 8 caracteres"})
-            setTimeout(()=>{  //se elimina la alerta despues de 5s
-              setAlerta({})
-            }, 5000)
-            return;
-        }
-        
-      
-        if(password !== repeatPassword){
-            setAlerta({msg : "Las contraseñas no coinciden",
-            error : true
-          })
-            setTimeout(()=>{  //se elimina la alerta despues de 5s
-              setAlerta({})
-            }, 5000)
-            return;
-        }
-
+        setEnviando(true)
         try {
-            const url = `/usuarios/recover-password/${token}`
-            const {data} = await clientAxios.post(url, {password});
-
-            setAlerta({msg :data.msg, //password cambiado de forma exitosa
-            error : false
-            })
-            setTimeout(()=>{  //se elimina la alerta despues de 5s
-                setAlerta({})
-            }, 5000)
+            const {data} = await clientAxios.post(`/usuarios/recover-password/${token}`, {password});
+            mostrarAlerta(data.msg, false)
+            setEstado('cambiado')
         } catch (error) {
-            setAlerta({msg : error.response.data.msg, // Mensaje de error
-            error : true
-            })
-            setTimeout(()=>{  //se elimina la alerta despues de 5s
-                setAlerta({})
-            }, 5000)
+            mostrarAlerta(error.response?.data?.msg ?? "No se pudo conectar con el servidor")
+        } finally {
+            setEnviando(false)
         }
     }
 
-    useEffect(()=>{
-        const comprobarToken = async ()=>{
-          try {
-            const {data} = await clientAxios(`/usuarios/recover-password/${token}`)
-            setAlerta({msg :data.msg, //Token verificado
-            error : false
-            })
-            setTimeout(()=>{  //se elimina la alerta despues de 5s
-              setAlerta({})
-            }, 5000)
-            setIsToken(true)
-            
-          
-          } catch (error) {
-            setAlerta({msg : error.response.data.msg, // Mensaje de error
-            error : true
-            })
-            setTimeout(()=>{  //se elimina la alerta despues de 5s
-              setAlerta({})
-            }, 5000)
-    
-          }
+    const textos = {
+      comprobando: ['Verificando enlace…', 'Un momento, estamos validando tu enlace'],
+      valido: ['Nueva contraseña', 'Elige una contraseña de al menos 8 caracteres'],
+      invalido: ['Enlace no válido', 'El enlace caducó o ya fue utilizado. Solicita uno nuevo.'],
+      cambiado: ['¡Listo!', 'Tu contraseña se cambió correctamente'],
+    }
+    const [titulo, subtitulo] = textos[estado]
 
-          
-        }
-    
-        return ()=>{comprobarToken()}
-      },[])
   return (
-    <main className='max-w-6xl mx-auto py-20'>
-        {alerta.msg && ( //se muestra de manera condicional la alerta
-          <Alert 
-            isError ={alerta.error}
-            msg={alerta.msg}
-          />
+    <>
+      <Alert isError={alerta.error} msg={alerta.msg} onClose={cerrarAlerta} />
+      <AuthCard titulo={titulo} subtitulo={subtitulo}>
+        {estado === 'comprobando' && <div className="skeleton mx-auto h-12 w-full rounded-xl" />}
+
+        {estado === 'valido' && (
+          <form className='flex flex-col gap-5' onSubmit={handleSubmit} noValidate>
+            <Campo label="Contraseña" id="password" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres"
+              value={password} onChange={e => setPassword(e.target.value)} />
+            <Campo label="Repite tu contraseña" id="repeat-password" type="password" autoComplete="new-password"
+              value={repeatPassword} onChange={e => setRepeatPassword(e.target.value)}
+              error={repeatPassword && password !== repeatPassword ? 'Las contraseñas no coinciden' : undefined} />
+            <Boton type="submit" size="lg" loading={enviando} className="w-full">Cambiar contraseña</Boton>
+          </form>
         )}
-    {isToken ? (
-        <form className='border-1px flex flex-col p-8 max-w-md  mx-auto' onSubmit={handleSubmit}>
-        
-        <legend className='font-title text-4xl mb-8 text-p_white'>Nuevo Password</legend>
 
-        <label className=' text-p_white font-text my-2 ' htmlFor="password">Contraseña</label>
-          <input className='bg-transparent border-1px p-2 text-p_white font-text '
-          type="password" name="password" id="password" placeholder="min. 8 caracteres" 
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          />
+        {estado === 'invalido' && <Boton to="/recover-password" variant="ghost" className="w-full">Solicitar nuevo enlace</Boton>}
+        {estado === 'cambiado' && <Boton to="/login" className="w-full">Iniciar sesión</Boton>}
 
-          <label className=' text-p_white font-text my-2 ' htmlFor="repeat-password">Repite tu contraseña</label>
-          <input className='bg-transparent border-1px p-2 text-p_white font-text '
-          type="password" name="repeat-password" id="repeat-password" placeholder="min. 8 caracteres"
-          value={repeatPassword}
-          onChange={e => setRepeatPassword(e.target.value)}
-          />
-        <Boton isBtn
-          msg="Cambiar Password"
-          clase='w-full'
-        />
-       </form>
-    ):(
-        <h1 className=' text-4xl text-p_white font-title text-center p-44'>Token no valido :/</h1>
-    )}
-    
-
-    </main>
+        {estado !== 'cambiado' && (
+          <Link to="/login" className="mt-6 block text-center text-sm text-muted transition-colors hover:text-neon">← Volver a iniciar sesión</Link>
+        )}
+      </AuthCard>
+    </>
   )
 }
 

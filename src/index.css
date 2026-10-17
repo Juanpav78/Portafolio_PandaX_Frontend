@@ -1,160 +1,381 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-.no-scroll{
-    overflow-y:hidden;
-      
+@import 'tailwindcss';
+
+@theme {
+  /* Se borra la paleta por defecto de Tailwind: así sólo existen los colores de la marca
+     y no se cuelan grises/azules genéricos que rompan la estética neón. */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Superficies, de la más profunda (fondo) a la más elevada (tarjetas, inputs) */
+  --color-ink-950: #06060a;
+  --color-ink-900: #0b0b12;
+  --color-ink-800: #12121c;
+  --color-ink-700: #1b1b29;
+  --color-ink-600: #272738;
+
+  --color-fg: #f3f3f7;
+  --color-muted: #a0a0b4;
+  --color-subtle: #64647a;
+
+  /* Neón de marca: el naranja del panda rojo y su degradado hacia rosa y ámbar */
+  --color-neon: #ff6a3d;
+  --color-neon-soft: #ff9a70;
+  --color-neon-pink: #ff3d8b;
+  --color-neon-amber: #ffb547;
+  --color-neon-cyan: #3de8ff;
+
+  --color-success: #3dffb0;
+  --color-danger: #ff4d6d;
+
+  --font-*: initial;
+  --font-display: Righteous, cursive;
+  --font-text: Urbanist, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-spin-slow: spin 7s linear infinite;
+  --animate-gradient: gradient-pan 8s ease infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes gradient-pan {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
 }
 
-.logo{
-    filter: brightness(5);
-    transition: all .3s ease-in-out;
-}
-
-.logo:hover{
-    transition: all .3s ease-in-out;
-    filter: brightness(1);
-}
-
-@media (max-width: 768px) {
-    .no-scroll{
-        overflow-y: visible;
-    } 
-    .modal{
-    
-        max-height: auto;
-        margin: 0;
-    }
-  
-}
-.tech{
-   
-}
-
-.modal{
-    
-    animation: init .3s ease-in-out;
-}
-
-@keyframes init {
-    0%{
-        transform: scale(.1);
-        opacity: 0;
-    }
-    100%{
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-.tech::-webkit-scrollbar {
-    -webkit-appearance: none;
-    
-}
-
-.tech::-webkit-scrollbar:horizontal {
-    
-    height: 10px;
-}
-.tech::-webkit-scrollbar-thumb {
-    
-    background-color: rgba(204, 66, 32, 0.4);
-    border-radius: 20px;
-    border: 1px solid rgba(232,102,67,.8);
-    cursor: pointer;
-}
-
-.tech::-webkit-scrollbar-track {
-    border-radius: 10px;  
-}
-.border-1px{
-    border: 3px solid transparent;
-    border-image: linear-gradient(133deg, rgba(204,66,32,1) 0%, rgba(232,102,67,1) 25%, rgba(237,133,58,1) 50%, rgba(232,103,67,1) 71%, rgba(204,66,32,1) 100%);
-    border-image-slice: 1;
-    -webkit-animation: bg_Animated 5s ease-in infinite;
-    -moz-animation: bg_Animated 5s ease-in infinite;
-    -o-animation: bg_Animated 5s ease-in infinite;
-    animation: bg_Animated 5s ease-in infinite;
-}
-
-.card:hover{
-    background-color: rgb(232, 103, 67);
-    transition: all .3s ease-in-out;
-}
-
-.card p{
-    display: -webkit-box;
-    color: white;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
-
-.info{
-    display: -webkit-box;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
-
-.inner-box {
-    background: rgb(204,66,32);
-    background: linear-gradient(133deg, rgba(204,66,32,1) 0%, rgba(232,102,67,1) 25%, rgba(237,133,58,1) 50%, rgba(232,103,67,1) 71%, rgba(204,66,32,1) 100%);
-    
-    background-size: 600% 600%;
-    -webkit-animation: bg_Animated 10s ease-in infinite;
-    -moz-animation: bg_Animated 10s ease-in infinite;
-    -o-animation: bg_Animated 10s ease-in infinite;
-    animation: bg_Animated 10s ease-in infinite;
-}
-@media (max-width: 768px) {
-    .inner-box{
-        background-size: 200% 200%;
-    } 
+@layer base {
+  /* Tailwind v4 usa currentColor como borde por defecto; con texto claro eso daría bordes blancos
+     muy duros, así que todo borde sin color explícito toma el tono de superficie. */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-ink-600, currentcolor);
   }
 
-a.inner-box:hover, button.inner-box:hover{
-    transition: all .5s ease;
-    background-size: 100% 100%;
-    box-shadow: 0 0 10px rgba(232,102,67,1);
-}
-.inner-box--text, .logo {
-    background: rgb(156,26,4);
-    background: linear-gradient(133deg, rgba(204,66,32,1) 0%, rgba(232,102,67,1) 25%, rgba(237,133,58,1) 50%, rgba(232,103,67,1) 71%, rgba(204,66,32,1) 100%);
-    background-size: 200% 200%;
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
 
-    -webkit-text-fill-color: transparent;
+  body {
+    min-height: 100vh;
+    background-color: var(--color-ink-950);
+    color: var(--color-fg);
+    font-family: var(--font-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-neon) 45%, transparent);
+    color: var(--color-white);
+  }
+
+  /* Tailwind v4 dejó de poner cursor pointer en los botones; se mantiene el comportamiento de v3 */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Sólo se muestra el anillo de foco al navegar con teclado (no al hacer click) */
+  :focus-visible {
+    outline: 2px solid var(--color-neon);
+    outline-offset: 3px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--color-neon) 45%, transparent) transparent;
+  }
+
+  /* El autocompletado de Chrome pinta los inputs de blanco; esta transición eterna "congela"
+     el fondo transparente y mantiene el texto claro. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-fg);
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+
+  /* Quien pide menos movimiento en su sistema operativo no ve animaciones decorativas.
+     Framer Motion se ajusta aparte con <MotionConfig reducedMotion="user"> en App. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Fondo de la página: halos de color + rejilla que se desvanece hacia abajo.
+     Es fixed para que el halo no "se vaya" al hacer scroll y no tenga que repintarse. */
+  .bg-escena {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    background:
+      radial-gradient(60rem 40rem at 5% -10%, color-mix(in oklab, var(--color-neon) 16%, transparent), transparent 60%),
+      radial-gradient(50rem 35rem at 100% 0%, color-mix(in oklab, var(--color-neon-pink) 12%, transparent), transparent 60%),
+      var(--color-ink-950);
+  }
+  .bg-escena::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at 50% 0%, black 25%, transparent 75%);
+  }
+
+  .neon-text {
+    background: linear-gradient(110deg, var(--color-neon-amber), var(--color-neon) 35%, var(--color-neon-pink) 70%, var(--color-neon));
+    background-size: 200% auto;
     -webkit-background-clip: text;
-    
-    -webkit-animation: bg_Animated 10s ease infinite;
-    -moz-animation: bg_Animated 10s ease infinite;
-    -o-animation: bg_Animated 10s ease infinite;
-    animation: bg_Animated 10s ease infinite;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-pan 8s ease infinite;
+    filter: drop-shadow(0 0 18px color-mix(in oklab, var(--color-neon) 40%, transparent));
+  }
+
+  .glass {
+    background: color-mix(in oklab, var(--color-ink-800) 72%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgb(255 255 255 / 0.06);
+  }
+
+  /* Borde degradado que respeta el border-radius (border-image no lo hace): un ::before con el
+     degradado y una máscara que sólo deja visible el anillo de 1px del padding. */
+  .neon-border {
+    position: relative;
+    isolation: isolate;
+  }
+  .neon-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--color-neon), rgb(255 255 255 / 0.06) 35%, rgb(255 255 255 / 0.06) 65%, var(--color-neon-pink));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  /* Foco de luz que sigue al cursor: Card escribe --x/--y en mousemove. En pantallas táctiles
+     no hay hover, así que simplemente no aparece (no hace falta detectar el dispositivo). */
+  .spotlight::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(420px circle at var(--x, 50%) var(--y, 50%), color-mix(in oklab, var(--color-neon) 16%, transparent), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+
+  /* Anillo giratorio del avatar: se rota el degradado cónico, no la foto */
+  .anillo-neon {
+    position: relative;
+    border-radius: 9999px;
+    padding: 4px;
+    isolation: isolate;
+  }
+  .anillo-neon::before,
+  .anillo-neon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(from 0deg, var(--color-neon), var(--color-neon-pink), var(--color-neon-amber), var(--color-neon));
+    animation: spin 7s linear infinite;
+  }
+  .anillo-neon::after {
+    filter: blur(28px);
+    opacity: 0.55;
+  }
+
+  /* ---------- Botones ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    transition: transform 0.2s, box-shadow 0.25s, background-color 0.2s, background-position 0.5s, color 0.2s, border-color 0.2s;
+  }
+  .btn:active:not(:disabled) { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-sm { padding: 0.5rem 0.85rem; font-size: 0.85rem; }
+  .btn-md { padding: 0.72rem 1.25rem; font-size: 0.95rem; }
+  .btn-lg { padding: 0.95rem 1.6rem; font-size: 1.05rem; }
+  .btn-icon { padding: 0.6rem; aspect-ratio: 1; }
+
+  .btn-primary {
+    color: var(--color-ink-950);
+    background: linear-gradient(110deg, var(--color-neon-amber), var(--color-neon) 45%, var(--color-neon-pink));
+    background-size: 200% auto;
+    box-shadow: 0 0 22px -8px color-mix(in oklab, var(--color-neon) 80%, transparent);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-position: right center;
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 26px -4px color-mix(in oklab, var(--color-neon) 75%, transparent),
+      0 0 60px -12px color-mix(in oklab, var(--color-neon-pink) 70%, transparent);
+  }
+
+  .btn-ghost {
+    color: var(--color-fg);
+    background: rgb(255 255 255 / 0.03);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    color: var(--color-neon-soft);
+    border-color: color-mix(in oklab, var(--color-neon) 70%, transparent);
+    background: color-mix(in oklab, var(--color-neon) 8%, transparent);
+    box-shadow: 0 0 22px -8px var(--color-neon);
+  }
+
+  .btn-subtle {
+    color: var(--color-muted);
+  }
+  .btn-subtle:hover:not(:disabled) {
+    color: var(--color-fg);
+    background: rgb(255 255 255 / 0.05);
+  }
+
+  .btn-danger {
+    color: var(--color-white);
+    background: color-mix(in oklab, var(--color-danger) 85%, black);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background: var(--color-danger);
+    box-shadow: 0 0 24px -6px var(--color-danger);
+  }
+
+  /* ---------- Formularios ---------- */
+  .field {
+    width: 100%;
+    border-radius: 0.8rem;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.03);
+    padding: 0.72rem 1rem;
+    color: var(--color-fg);
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+  }
+  .field::placeholder { color: var(--color-subtle); }
+  .field:hover { border-color: rgb(255 255 255 / 0.18); }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-neon);
+    background: rgb(255 255 255 / 0.05);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-neon) 20%, transparent), 0 0 24px -10px var(--color-neon);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-danger) 15%, transparent);
+  }
+  select.field {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0a0b4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 1rem;
+  }
+  select.field option { background: var(--color-ink-800); }
+  /* El icono de calendario nativo es negro; se invierte para que se vea sobre fondo oscuro */
+  input[type="date"].field::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
+
+  /* ---------- Chips ---------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklab, var(--color-neon) 25%, transparent);
+    background: color-mix(in oklab, var(--color-neon) 9%, transparent);
+    padding: 0.2rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-neon-soft);
+    white-space: nowrap;
+  }
+
+  /* Chip de filtro: el estado activo lo da aria-pressed, así el estilo y la accesibilidad
+     comparten una única fuente de verdad. */
+  .chip-filtro {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.03);
+    padding: 0.42rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .chip-filtro:hover { color: var(--color-fg); border-color: rgb(255 255 255 / 0.22); }
+  .chip-filtro[aria-pressed="true"] {
+    color: var(--color-ink-950);
+    border-color: transparent;
+    background: linear-gradient(110deg, var(--color-neon-amber), var(--color-neon) 50%, var(--color-neon-pink));
+    box-shadow: 0 0 20px -6px var(--color-neon);
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, rgb(255 255 255 / 0.04) 25%, rgb(255 255 255 / 0.09) 37%, rgb(255 255 255 / 0.04) 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+  }
 }
 
-@-webkit-keyframes bg_Animated {
-    0%{background-position:0% 67%}
-    50%{background-position:100% 34%}
-    100%{background-position:0% 67%}
-}
-@-moz-keyframes bg_Animated {
-    0%{background-position:0% 67%}
-    50%{background-position:100% 34%}
-    100%{background-position:0% 67%}
-}
-@-o-keyframes bg_Animated {
-    0%{background-position:0% 67%}
-    50%{background-position:100% 34%}
-    100%{background-position:0% 67%}
-}
-@keyframes bg_Animated {
-    0%{background-position:0% 67%}
-    50%{background-position:100% 34%}
-    100%{background-position:0% 67%}
+/* Definido con @utility (no como clase normal) para poder usarlo con variantes: hover:neon-glow */
+@utility neon-glow {
+  box-shadow:
+    0 0 24px -6px color-mix(in oklab, var(--color-neon) 60%, transparent),
+    0 0 70px -20px color-mix(in oklab, var(--color-neon-pink) 55%, transparent);
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-  transition: background-color 600000s 0s, color 600000s 0s;
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* Encendido de letrero neón: parpadea un par de veces antes de quedarse fijo */
+@keyframes flicker-in {
+  0%, 18%, 22%, 25%, 53%, 57% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.25; }
+  100% { opacity: 1; }
+}
+.animate-flicker {
+  animation: flicker-in 1.6s linear both;
 }

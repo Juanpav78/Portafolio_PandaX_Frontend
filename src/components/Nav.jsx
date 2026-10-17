@@ -1,31 +1,51 @@
-import { Link, useLocation } from "react-router-dom"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {faUser}  from "@fortawesome/free-solid-svg-icons"
-import {Link as Scroll} from "react-scroll"
+import { Link, useLocation, useNavigate } from "react-router"
+import { SECCIONES } from "../helpers/secciones"
+import useIdioma from "../hooks/useIdioma"
 
-const Nav = () => {
-  const location = useLocation();
+// Enlaces a secciones de la home. Si ya estamos en "/", se hace scroll directo y se actualiza el
+// hash con replaceState (sin crear entradas en el historial por cada click). Desde otra página se
+// navega a "/#id" y es IndexLayout quien hace el scroll cuando la home termina de montarse.
+const Nav = ({ activa, onNavegar, className = '', claseEnlace = '' }) => {
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const { t } = useIdioma()
+
+  const irA = (e, id) => {
+    e.preventDefault()
+    onNavegar?.()
+    if (pathname === '/') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+      history.replaceState(null, '', id === 'home' ? '/' : `#${id}`)
+    } else {
+      navigate(id === 'home' ? '/' : `/#${id}`)
+    }
+  }
+
   return (
-    <nav className='flex justify-between gap-4 items-center '>
-    
-      {location.pathname !== '/' ? (
-        <>
-        <Link className='font-title transition-colors text-p_white hover:text-p_orange cursor-pointer' to='/'>Home</Link>
-        <Link className='font-title transition-colors text-p_white hover:text-p_orange cursor-pointer' to='/login'>Login</Link>
-        </>
-      ):(
-        <>
-        <Scroll className='font-title transition-colors text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={0} duration={500} to='home'>Home</Scroll>
-        <Scroll className='font-title transition-colors text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={-100} duration={500} to='about'>About Me</Scroll>
-        <Scroll className='font-title transition-colors text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={-100} duration={500} to='proyects'>Proyects</Scroll>
-        <Scroll className='font-title transition-colors text-p_white hover:text-p_orange cursor-pointer' smooth={true} offset={-100} duration={500} to='contact'>Contact</Scroll>
-
-        <Link to='/login'><FontAwesomeIcon  className=' text-p_white hover:text-p_orange cursor-pointer' icon={faUser} /></Link>
-        </>
-      )}
-       
-        
-        
+    <nav aria-label={t('nav.main')} className={className}>
+      {SECCIONES.map(({ id, clave }) => (
+        <Link
+          key={id}
+          to={id === 'home' ? '/' : `/#${id}`}
+          onClick={e => irA(e, id)}
+          aria-current={activa === id ? 'true' : undefined}
+          className={`relative font-semibold transition-colors hover:text-fg
+            ${activa === id ? '' : 'text-muted'} ${claseEnlace}`}
+        >
+          {t(clave)}
+          {/* Subrayado neón del enlace activo */}
+          <span className={`absolute -bottom-1.5 left-0 h-0.5 rounded-full bg-linear-to-r from-neon to-neon-pink
+            shadow-[0_0_10px_var(--color-neon)] transition-all duration-300 ${activa === id ? 'w-full' : 'w-0'}`} />
+        </Link>
+      ))}
+      <Link
+        to="/proyectos"
+        onClick={onNavegar}
+        aria-current={pathname === '/proyectos' ? 'page' : undefined}
+        className={`font-semibold transition-colors hover:text-fg ${pathname === '/proyectos' ? 'text-neon-soft' : 'text-muted'} ${claseEnlace}`}
+      >
+        {t('nav.allWork')}
+      </Link>
     </nav>
   )
 }
