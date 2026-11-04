@@ -22,8 +22,9 @@ const DetalleProyecto = ({ proyecto, idTitulo }) => {
 
   return (
     <article>
-      {/* key: al pasar a otro proyecto el carrusel vuelve a su primera imagen */}
-      <GaleriaImagenes key={proyecto._id} imagenes={imagenes} nombre={nombre} />
+      {/* key: al pasar a otro proyecto el carrusel vuelve a su primera imagen. Sin imágenes
+          (proyectos creados para PandaX Code o por el seed) se omite: el carrusel asume al menos una */}
+      {imagenes.length > 0 && <GaleriaImagenes key={proyecto._id} imagenes={imagenes} nombre={nombre} />}
 
       <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-muted">
         {tipo && <span className="chip">{tipo}</span>}

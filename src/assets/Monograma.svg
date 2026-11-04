@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="JA">
+  <defs>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb547"/>
+      <stop offset="0.45" stop-color="#ff6a3d"/>
+      <stop offset="1" stop-color="#ff3d8b"/>
+    </linearGradient>
+  </defs>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="16" fill="#0b0b12" stroke="url(#neon)" stroke-width="3"/>
+  <text x="32" y="42" text-anchor="middle" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-size="27" font-weight="900" letter-spacing="-1" fill="url(#neon)">JA</text>
+</svg>

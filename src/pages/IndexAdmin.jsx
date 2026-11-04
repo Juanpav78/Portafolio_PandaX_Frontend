@@ -10,6 +10,10 @@ import PreviewProyecto from "../components/PreviewProyecto";
 import ConfirmDialog from "../components/ConfirmDialog"
 import Boton from "../components/Boton"
 import PanelDestacados from "../components/PanelDestacados"
+import FiltroSitio from "../components/admin/FiltroSitio"
+import EncabezadoPagina from "../components/admin/EncabezadoPagina"
+import useSitioFiltro from "../hooks/useSitioFiltro"
+import { nombreSitio, sitiosDe } from "../helpers/sitios"
 import {
   contarTecnologias, contarTipos, filtrarProyectos, formatearFecha, ordenarProyectos,
 } from "../helpers/proyectos"
@@ -21,19 +25,28 @@ const Estadistica = ({ icono, etiqueta, valor, detalle, indice }) => (
     initial={{ opacity: 0, y: 16 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: indice * 0.06 }}
-    className="glass neon-border rounded-2xl p-5"
+    className="tarjeta p-5"
   >
     <div className="flex items-center justify-between">
-      <p className="text-sm font-semibold text-muted">{etiqueta}</p>
-      <span className="grid size-9 place-items-center rounded-lg bg-neon/10 text-neon"><FontAwesomeIcon icon={icono} /></span>
+      <p className="text-sm font-medium text-muted">{etiqueta}</p>
+      <FontAwesomeIcon icon={icono} className="text-subtle" />
     </div>
-    <p className="mt-3 truncate font-display text-2xl text-fg sm:text-3xl">{valor}</p>
+    <p className="mt-3 truncate text-2xl font-semibold tracking-tight text-fg">{valor}</p>
     {detalle && <p className="mt-1 truncate text-xs text-subtle">{detalle}</p>}
   </motion.div>
 )
 
 const IndexAdmin = () => {
-  const { proyectos, cargando, eliminarProyecto } = useProyectos();
+  const { proyectos: todos, cargando, eliminarProyecto } = useProyectos();
+  // Filtro rápido por sitio (?sitio=). Todo lo de abajo (métricas, tipos, búsqueda) trabaja
+  // sobre los proyectos del sitio elegido, para que el listado sea coherente con el filtro.
+  const sitio = useSitioFiltro()
+  const proyectos = useMemo(() => sitio ? todos.filter(p => sitiosDe(p).includes(sitio)) : todos, [todos, sitio])
+  const conteos = useMemo(() => ({
+    total: todos.length,
+    code: todos.filter(p => sitiosDe(p).includes('code')).length,
+    portafolio: todos.filter(p => sitiosDe(p).includes('portafolio')).length,
+  }), [todos])
   // Igual que en el portafolio público, los filtros viven en la URL: al volver de editar un
   // proyecto con el botón "atrás", el listado conserva la búsqueda y la vista que tenías.
   const [params, setParams] = useSearchParams()
@@ -63,8 +76,9 @@ const IndexAdmin = () => {
     }, { replace: true })
   }
 
-  // Se conserva la vista elegida al limpiar: es una preferencia, no un filtro
-  const limpiar = () => setParams(vista === 'lista' ? {} : { vista }, { replace: true })
+  // Se conservan la vista y el sitio al limpiar: la vista es una preferencia y el sitio la
+  // sección en la que estás (se cambia con sus propios filtros)
+  const limpiar = () => setParams({ ...(vista !== 'lista' && { vista }), ...(sitio && { sitio }) }, { replace: true })
 
   const confirmarEliminar = async () => {
     setEliminando(true)
@@ -84,19 +98,19 @@ const IndexAdmin = () => {
 
   return (
     <>
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="font-mono text-sm text-neon">{'// dashboard'}</p>
-          <h1 className='mt-1 font-display text-4xl text-fg'>Proyectos</h1>
-          <p className="mt-1 text-muted">Gestiona lo que se muestra en tu portafolio.</p>
-        </div>
-      </div>
+      <EncabezadoPagina
+        titulo={sitio ? `Proyectos · ${nombreSitio(sitio)}` : 'Proyectos'}
+        descripcion="Contenido compartido: cada proyecto indica en qué webs aparece y si está publicado."
+      />
+
+      <div className="mb-6"><FiltroSitio conteos={conteos} /></div>
 
       <section aria-label="Resumen" className="mb-8 grid grid-cols-2 gap-4 xl:grid-cols-4">
         {cargandoInicial
           ? Array.from({ length: 4 }, (_, i) => <div key={i} className="skeleton h-32 rounded-2xl" />)
           : <>
-            <Estadistica indice={0} icono={faLayerGroup} etiqueta="Proyectos" valor={proyectos.length} detalle="publicados en el portafolio" />
+            <Estadistica indice={0} icono={faLayerGroup} etiqueta="Proyectos" valor={proyectos.length}
+              detalle={`${proyectos.filter(p => p.publicado !== false).length} publicados · ${proyectos.filter(p => p.publicado === false).length} ocultos`} />
             <Estadistica indice={1} icono={faTags} etiqueta="Tipos" valor={tipos.length}
               detalle={tipos.slice(0, 3).map(t => t.valor).join(' · ')} />
             <Estadistica indice={2} icono={faCode} etiqueta="Tecnologías" valor={tecnologias.length}
@@ -106,7 +120,8 @@ const IndexAdmin = () => {
           </>}
       </section>
 
-      {!cargandoInicial && proyectos.length > 0 && <PanelDestacados />}
+      {/* Los destacados ordenan la home del portafolio: sólo tienen sentido sin filtro o en Portafolio */}
+      {!cargandoInicial && proyectos.length > 0 && sitio !== 'code' && <PanelDestacados />}
 
       <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label="Filtrar por tipo">
@@ -125,11 +140,11 @@ const IndexAdmin = () => {
           <select aria-label="Ordenar" value={orden} onChange={e => actualizar('orden', e.target.value, 'recientes')} className="field w-auto py-2 text-sm">
             {Object.entries(ORDENES_ADMIN).map(([valor, texto]) => <option key={valor} value={valor}>{texto}</option>)}
           </select>
-          <div className="flex rounded-xl border border-white/10 p-1" role="group" aria-label="Vista">
+          <div className="flex rounded-lg border border-ink-600 bg-ink-800 p-1" role="group" aria-label="Vista">
             {[['lista', faList, 'Lista'], ['grid', faGrip, 'Cuadrícula']].map(([valor, icono, texto]) => (
               <button key={valor} onClick={() => actualizar('vista', valor, 'lista')} aria-pressed={vista === valor} title={texto}
                 className={`grid size-8 place-items-center rounded-lg text-sm transition-colors
-                  ${vista === valor ? 'bg-neon/15 text-neon' : 'text-subtle hover:text-fg'}`}>
+                  ${vista === valor ? 'bg-ink-700 text-fg' : 'text-subtle hover:text-fg'}`}>
                 <FontAwesomeIcon icon={icono} /><span className="sr-only">{texto}</span>
               </button>
             ))}
@@ -142,7 +157,7 @@ const IndexAdmin = () => {
           <p>{hayFiltros ? <>{resultado.length} de {proyectos.length} proyectos{busqueda && <> para «<span className="text-fg">{busqueda}</span>»</>}</> : `${proyectos.length} proyectos`}</p>
         )}
         {hayFiltros && (
-          <button onClick={limpiar} className="inline-flex items-center gap-2 font-semibold text-neon-soft hover:text-neon">
+          <button onClick={limpiar} className="inline-flex items-center gap-2 font-medium text-neon hover:underline">
             <FontAwesomeIcon icon={faXmark} /> Limpiar filtros
           </button>
         )}
@@ -160,18 +175,18 @@ const IndexAdmin = () => {
       )}
 
       {!cargandoInicial && !proyectos.length && (
-        <div className="glass flex flex-col items-center gap-4 rounded-2xl p-12 text-center">
-          <span className="grid size-16 place-items-center rounded-2xl bg-neon/10 text-2xl text-neon"><FontAwesomeIcon icon={faFolderOpen} /></span>
-          <h2 className="text-xl font-bold text-fg">Aún no hay proyectos</h2>
-          <p className="max-w-sm text-muted">Crea tu primer proyecto y aparecerá automáticamente en el portafolio.</p>
+        <div className="tarjeta flex flex-col items-center gap-3 p-12 text-center">
+          <span className="grid size-12 place-items-center rounded-xl bg-ink-700 text-xl text-subtle"><FontAwesomeIcon icon={faFolderOpen} /></span>
+          <h2 className="text-base font-semibold text-fg">{sitio ? `Aún no hay proyectos en ${nombreSitio(sitio)}` : 'Aún no hay proyectos'}</h2>
+          <p className="max-w-sm text-sm text-muted">Crea un proyecto y elige en qué webs aparece.</p>
           <Boton to="/admin/create" icon={faPlus}>Crear proyecto</Boton>
         </div>
       )}
 
       {!cargandoInicial && proyectos.length > 0 && !resultado.length && (
-        <div className="glass flex flex-col items-center gap-3 rounded-2xl p-12 text-center">
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-3xl text-subtle" />
-          <h2 className="text-lg font-bold text-fg">Sin resultados</h2>
+        <div className="tarjeta flex flex-col items-center gap-3 p-12 text-center">
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-2xl text-subtle" />
+          <h2 className="text-base font-semibold text-fg">Sin resultados</h2>
           <p className="text-muted">Ningún proyecto coincide con los filtros actuales.</p>
           <Boton variant="ghost" onClick={limpiar}>Limpiar filtros</Boton>
         </div>
@@ -186,12 +201,12 @@ const IndexAdmin = () => {
           </AnimatePresence>
         </ul>
       ) : (
-        <div className="glass overflow-hidden rounded-2xl">
-          <div className="hidden grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1.6fr)_7rem_auto] gap-4 border-b border-white/5 px-4 py-3
-            font-mono text-xs tracking-wider text-subtle uppercase md:grid">
-            <span>Proyecto</span><span>Tipo</span><span>Tecnologías</span><span>Fecha</span><span className="w-30 text-right">Acciones</span>
+        <div className="tarjeta overflow-hidden">
+          <div className="hidden grid-cols-[minmax(0,2.2fr)_minmax(0,1.2fr)_minmax(0,1.4fr)_7.5rem_auto] gap-4 border-b border-ink-600 px-4 py-2.5
+            text-[0.72rem] font-semibold tracking-wide text-subtle uppercase md:grid">
+            <span>Proyecto</span><span>Sitios</span><span>Tecnologías</span><span>Estado</span><span className="w-30 text-right">Acciones</span>
           </div>
-          <ul className="divide-y divide-white/5">
+          <ul className="divide-y divide-ink-600">
             <AnimatePresence mode="popLayout">
               {resultado.map(proyecto => (
                 <PreviewProyecto key={proyecto._id} proyecto={proyecto} busqueda={busquedaDiferida} onEliminar={setAEliminar} />

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Link } from "react-router"
 import { REDES } from "../helpers/redes"
 import useIdioma from "../hooks/useIdioma"
-import Logo from "../assets/PandaX_White.svg"
+import Logo from "../assets/Monograma.svg"
 
 // Se calcula una vez al cargar el módulo: el año no cambia durante una visita y así el render
 // se mantiene puro (las reglas de React Compiler marcan new Date() dentro de componentes).
@@ -18,7 +18,7 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-3 md:items-start">
           <Link to="/" className="flex items-center gap-2">
             <img src={Logo} alt="" className="w-9" />
-            <span className="font-display text-xl text-fg">PandaX<span className="neon-text">{"/>"}</span></span>
+            <span className="font-display text-xl text-fg">Juan Alvarado<span className="neon-text">{"/>"}</span></span>
           </Link>
           <p className="max-w-xs text-center text-sm text-muted md:text-left">
             {t('footer.tagline')}
@@ -38,7 +38,7 @@ const Footer = () => {
         </ul>
       </div>
       <p className='border-t border-white/5 py-6 text-center font-mono text-xs text-subtle'>
-        © {ANIO} Juan Alvarado · PandaXcode
+        © {ANIO} Juan Alvarado
       </p>
     </footer>
   )

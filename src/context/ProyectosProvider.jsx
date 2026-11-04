@@ -5,7 +5,7 @@ import useAlerta from "../hooks/useAlerta";
 const ProyectoContext = createContext();
 
 // Campos opcionales que el usuario puede vaciar: estos sí se envían aunque estén en blanco
-const VACIABLES = ['problema', 'solucion', 'descripcionEn', 'problemaEn', 'solucionEn']
+const VACIABLES = ['problema', 'solucion', 'descripcionEn', 'problemaEn', 'solucionEn', 'slug', 'subtitulo', 'resumen', 'link']
 
 // Se arma el FormData a mano para omitir campos vacíos: si se enviara imagen=undefined o
 // github="" el backend los trataría como valores y, al editar, borraría los existentes.
@@ -23,6 +23,9 @@ const crearFormData = proyecto => {
     return formData
 }
 
+// Sitio que representa esta web en la API compartida (los proyectos de PandaX Code no salen aquí)
+const SITIO = import.meta.env.VITE_SITE || 'portafolio'
+
 // Convierte cualquier error de axios en un mensaje que se pueda mostrar al usuario
 const mensajeError = (error, porDefecto) => error.response?.data?.msg ?? porDefecto
 
@@ -35,11 +38,14 @@ const ProyectosProvider = ({children}) => {
     // Promesa de la petición en curso: el sitio público y el admin piden la lista al montarse
     // (y StrictMode monta dos veces en desarrollo); compartiendo la promesa sólo sale una petición.
     const peticion = useRef(null)
-    const cargado = useRef(false)
+    // Qué lista hay cargada: la pública (sólo lo publicado del portafolio) o la del admin (todo).
+    // Comparten estado, así que al pasar de la web al admin, o al revés, hay que volver a pedirla.
+    const cargado = useRef(null)
 
-    const obtenerProyectos = useCallback(({ forzar = false } = {}) => {
-        if (peticion.current) return peticion.current
-        if (cargado.current && !forzar) return Promise.resolve()
+    const obtenerProyectos = useCallback(({ forzar = false, admin = false } = {}) => {
+        const alcance = admin ? 'admin' : 'publico'
+        if (peticion.current?.alcance === alcance) return peticion.current
+        if (cargado.current === alcance && !forzar) return Promise.resolve()
 
         setCargando(true)
         setError(null)
@@ -48,20 +54,26 @@ const ProyectosProvider = ({children}) => {
         // espera en lugar de parecer rota.
         const aviso = setTimeout(() => setTarda(true), 3000)
 
-        peticion.current = clientAxios('/proyectos')
+        const params = admin ? { todos: true } : { site: SITIO }
+        const actual = clientAxios('/proyectos', { params })
             .then(({ data }) => {
+                // Si mientras tanto se pidió la otra lista, esta respuesta ya no sirve
+                if (peticion.current !== actual) return
                 setProyectos(data.proyectos)
-                cargado.current = true
+                cargado.current = alcance
             })
             .catch(() => setError('No se pudieron cargar los proyectos'))
             .finally(() => {
                 clearTimeout(aviso)
+                if (peticion.current !== actual) return
                 setTarda(false)
                 setCargando(false)
                 peticion.current = null
             })
+        actual.alcance = alcance
+        peticion.current = actual
 
-        return peticion.current
+        return actual
     }, []);
 
     // Crear y editar devuelven el proyecto guardado o lanzan un Error con el mensaje del backend,
@@ -118,6 +130,13 @@ const ProyectosProvider = ({children}) => {
         'No se pudo cambiar el destacado'
     ), [conRespaldo])
 
+    // Ocultar/publicar en las webs sin borrar el proyecto
+    const publicarProyecto = useCallback((id, publicado) => conRespaldo(
+        actuales => actuales.map(p => p._id === id ? { ...p, publicado } : p),
+        () => clientAxios.patch(`/admin/projects/${id}/publicado`, { publicado }),
+        'No se pudo cambiar la visibilidad'
+    ), [conRespaldo])
+
     const ordenarDestacados = useCallback(ids => conRespaldo(
         actuales => actuales.map(p => ids.includes(p._id) ? { ...p, orden: ids.indexOf(p._id) } : p),
         () => clientAxios.put('/proyectos/orden', { ids }),
@@ -135,6 +154,7 @@ const ProyectosProvider = ({children}) => {
             submitProyecto,
             eliminarProyecto,
             destacarProyecto,
+            publicarProyecto,
             ordenarDestacados,
             alerta,
             mostrarAlerta,

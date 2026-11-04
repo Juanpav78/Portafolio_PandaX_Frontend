@@ -5,6 +5,9 @@ import { faArrowUpRightFromSquare, faEye, faPen, faStar, faTrash } from "@fortaw
 import { faStar as faStarVacia } from "@fortawesome/free-regular-svg-icons"
 import Resaltado from "./Resaltado"
 import useProyectos from "../hooks/useProyectos"
+import { BadgesSitios } from "./admin/BadgeSitio"
+import { sitiosDe } from "../helpers/sitios"
+import InterruptorPublicado from "./admin/InterruptorPublicado"
 import { dominio, formatearFecha, imagenOptimizada, parseTecnologias } from "../helpers/proyectos"
 
 // Acciones compartidas por ambas vistas. Llevan aria-label con el nombre del proyecto porque
@@ -30,6 +33,12 @@ const Acciones = ({ proyecto, onEliminar }) => {
   )
 }
 
+const Publicado = ({ proyecto }) => {
+  const { publicarProyecto } = useProyectos()
+  return <InterruptorPublicado publicado={proyecto.publicado !== false} nombre={proyecto.nombre}
+    onChange={valor => publicarProyecto(proyecto._id, valor)} />
+}
+
 // Un proyecto dentro del listado del admin, en formato fila (vista lista) o tarjeta (vista grid).
 const PreviewProyecto = ({ proyecto, vista = 'lista', busqueda, onEliminar }) => {
   const { nombre, imagen, tipo, link } = proyecto
@@ -46,7 +55,7 @@ const PreviewProyecto = ({ proyecto, vista = 'lista', busqueda, onEliminar }) =>
 
   if (vista === 'grid') {
     return (
-      <motion.li {...animacion} className="group glass overflow-hidden rounded-2xl transition-colors hover:border-neon/30">
+      <motion.li {...animacion} className={`group tarjeta overflow-hidden transition-colors hover:border-white/20 ${proyecto.publicado === false ? 'opacity-70' : ''}`}>
         <Link to={`/admin/preview/${proyecto._id}`} className="block aspect-16/10 overflow-hidden bg-ink-700">
           {miniatura && <img src={miniatura} alt="" loading="lazy" className="size-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />}
         </Link>
@@ -58,9 +67,10 @@ const PreviewProyecto = ({ proyecto, vista = 'lista', busqueda, onEliminar }) =>
             </div>
             <Acciones proyecto={proyecto} onEliminar={onEliminar} />
           </div>
-          <ul className="mt-3 flex flex-wrap gap-1.5">
-            {techs.slice(0, 4).map(tech => <li key={tech} className="chip">{tech}</li>)}
-          </ul>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <BadgesSitios sitios={sitiosDe(proyecto)} />
+            <Publicado proyecto={proyecto} />
+          </div>
         </div>
       </motion.li>
     )
@@ -68,8 +78,8 @@ const PreviewProyecto = ({ proyecto, vista = 'lista', busqueda, onEliminar }) =>
 
   return (
     <motion.li {...animacion}
-      className="grid grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 transition-colors hover:bg-white/3
-        md:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1.6fr)_7rem_auto]">
+      className={`grid grid-cols-[auto_1fr_auto] items-center gap-x-4 gap-y-2 px-4 py-3 transition-colors hover:bg-white/3
+        md:grid-cols-[minmax(0,2.2fr)_minmax(0,1.2fr)_minmax(0,1.4fr)_7.5rem_auto] ${proyecto.publicado === false ? 'opacity-70' : ''}`}>
       <div className="col-span-2 flex min-w-0 items-center gap-4 md:col-span-1">
         <div className="h-12 w-18 shrink-0 overflow-hidden rounded-lg bg-ink-700 ring-1 ring-white/10">
           {miniatura && <img src={miniatura} alt="" loading="lazy" className="size-full object-cover object-top" />}
@@ -78,20 +88,26 @@ const PreviewProyecto = ({ proyecto, vista = 'lista', busqueda, onEliminar }) =>
           <Link to={`/admin/preview/${proyecto._id}`} className="block truncate font-bold text-fg hover:text-neon-soft">
             <Resaltado texto={nombre} busqueda={busqueda} />
           </Link>
-          {link && (
-            <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex max-w-full items-center gap-1.5 truncate text-xs text-subtle hover:text-neon">
-              {dominio(link)} <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[0.6rem]" />
-            </a>
-          )}
+          <p className="flex min-w-0 items-center gap-1.5 truncate text-xs text-subtle">
+            <span className="capitalize">{tipo}</span> · <span>{formatearFecha(proyecto, 'es')}</span>
+            {link && (
+              <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 truncate hover:text-neon">
+                · {dominio(link)} <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[0.6rem]" />
+              </a>
+            )}
+          </p>
         </div>
       </div>
-      <span className="hidden text-sm text-muted capitalize md:block">{tipo}</span>
+      <div className="col-span-3 flex flex-wrap items-center gap-3 md:col-span-1"><BadgesSitios sitios={sitiosDe(proyecto)} /></div>
       <ul className="hidden flex-wrap gap-1.5 md:flex">
         {techs.slice(0, 3).map(tech => <li key={tech} className="chip">{tech}</li>)}
         {techs.length > 3 && <li className="chip border-white/10 bg-white/5 text-muted">+{techs.length - 3}</li>}
       </ul>
-      <span className="hidden font-mono text-xs text-subtle md:block">{formatearFecha(proyecto, 'es')}</span>
-      <Acciones proyecto={proyecto} onEliminar={onEliminar} />
+      <div className="hidden md:block"><Publicado proyecto={proyecto} /></div>
+      <div className="col-start-3 row-start-1 flex items-center gap-2 md:col-start-auto md:row-start-auto">
+        <span className="md:hidden"><Publicado proyecto={proyecto} /></span>
+        <Acciones proyecto={proyecto} onEliminar={onEliminar} />
+      </div>
     </motion.li>
   )
 }

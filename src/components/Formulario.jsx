@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { useNavigate } from "react-router"
+import { useNavigate, useSearchParams } from "react-router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCloudArrowUp, faFloppyDisk, faImage } from "@fortawesome/free-solid-svg-icons"
 import Boton from "./Boton"
@@ -8,6 +8,9 @@ import Card from "./Card"
 import CampoTecnologias from "./CampoTecnologias"
 import CampoGaleria from "./CampoGaleria"
 import useProyectos from "../hooks/useProyectos"
+import SelectorSitios from "./admin/SelectorSitios"
+import InterruptorPublicado from "./admin/InterruptorPublicado"
+import { esSitio } from "../helpers/sitios"
 import { contarTecnologias, contarTipos, parseTecnologias } from "../helpers/proyectos"
 
 const MAX_IMAGEN = 2 * 1000 * 1000 // 2 MB, mismo límite que se usaba antes
@@ -28,12 +31,13 @@ const aFechaInput = fecha => (fecha ? new Date(fecha).toISOString().slice(0, 10)
 
 // Devuelve un objeto { campo: mensaje } sólo con los campos inválidos. El orden de las claves
 // sigue el orden visual del formulario: se usa para enfocar el primer error al enviar.
-const validar = (datos, techs, imagen, editando) => {
+const validar = (datos, techs, imagen, editando, sitios) => {
   const errores = {}
+  if (!sitios.length) errores.sitios = 'Elige al menos un sitio donde mostrar el proyecto'
   if (!datos.nombre.trim()) errores.nombre = 'El nombre es obligatorio'
   if (!datos.tipo.trim()) errores.tipo = 'Indica el tipo de proyecto'
-  if (!datos.link.trim()) errores.link = 'El enlace es obligatorio'
-  else if (!esUrl(datos.link)) errores.link = 'Debe ser una URL completa (https://…)'
+  // El enlace ya no es obligatorio: un proyecto de cliente de PandaX Code puede no tener demo pública
+  if (datos.link.trim() && !esUrl(datos.link)) errores.link = 'Debe ser una URL completa (https://…)'
   if (datos.github && !esUrl(datos.github)) errores.github = 'Debe ser una URL completa (https://…)'
   if (!techs.length) errores.tecnologias = 'Añade al menos una tecnología'
   if (!editando && !imagen) errores.imagen = 'La imagen es obligatoria'
@@ -97,7 +101,17 @@ const Formulario = ({ proyecto, borrador }) => {
   const editando = Boolean(proyecto)
 
   const base = proyecto ?? borrador
+  // Al crear desde un listado filtrado (p. ej. "Proyectos de clientes" de PandaX Code) se
+  // preselecciona ese sitio; si no, el portafolio, que es donde vivían todos los proyectos.
+  const [params] = useSearchParams()
+  const sitioInicial = esSitio(params.get('sitio')) ? params.get('sitio') : 'portafolio'
+  const [sitios, setSitios] = useState(() => base?.sitios?.length ? base.sitios : [sitioInicial])
+  const [publicado, setPublicado] = useState(base?.publicado !== false)
+  const [puntosClave, setPuntosClave] = useState(() => base?.puntosClave ?? [])
   const [datos, setDatos] = useState({
+    slug: base?.slug ?? '',
+    subtitulo: base?.subtitulo ?? '',
+    resumen: base?.resumen ?? '',
     nombre: base?.nombre ?? '',
     tipo: base?.tipo ?? '',
     link: base?.link ?? '',
@@ -140,8 +154,13 @@ const Formulario = ({ proyecto, borrador }) => {
   const tiposExistentes = useMemo(() => contarTipos(proyectos).map(t => t.valor), [proyectos])
   const techsExistentes = useMemo(() => contarTecnologias(proyectos).map(t => t.valor), [proyectos])
 
-  const revalidar = (nuevosDatos, nuevasTechs, nuevaImagen) => {
-    if (intentado.current) setErrores(validar(nuevosDatos, nuevasTechs, nuevaImagen, editando))
+  const revalidar = (nuevosDatos, nuevasTechs, nuevaImagen, nuevosSitios = sitios) => {
+    if (intentado.current) setErrores(validar(nuevosDatos, nuevasTechs, nuevaImagen, editando, nuevosSitios))
+  }
+
+  const cambiarSitios = nuevos => {
+    setSitios(nuevos)
+    revalidar(datos, techs, imagen, nuevos)
   }
 
   const cambiar = e => {
@@ -203,7 +222,7 @@ const Formulario = ({ proyecto, borrador }) => {
   const handleSubmit = async e => {
     e.preventDefault()
     intentado.current = true
-    const nuevosErrores = validar(datos, techs, imagen, editando)
+    const nuevosErrores = validar(datos, techs, imagen, editando, sitios)
     setErrores(nuevosErrores)
 
     const primerError = Object.keys(nuevosErrores)[0]
@@ -218,13 +237,17 @@ const Formulario = ({ proyecto, borrador }) => {
         id: proyecto?._id,
         ...datos,
         tecnologias: techs.join(', '),
+        // Listas y booleanos viajan como texto en el multipart; el backend los interpreta
+        sitios: JSON.stringify(sitios),
+        puntosClave: JSON.stringify(puntosClave),
+        publicado: String(publicado),
         imagen: imagen ?? undefined,
         galeria: galeriaNueva.map(g => g.archivo),
         // El multipart sólo transporta texto y archivos: la lista de ids va como JSON
         galeriaEliminar: galeriaEliminar.length ? JSON.stringify(galeriaEliminar) : undefined,
       })
       // El toast de éxito lo muestra el AdminLayout, que sigue montado tras navegar
-      navigate('/admin')
+      navigate(sitios.length === 1 ? `/admin/proyectos?sitio=${sitios[0]}` : '/admin/proyectos')
     } catch (error) {
       mostrarAlerta(error.message)
       setEnviando(false)
@@ -302,10 +325,29 @@ const Formulario = ({ proyecto, borrador }) => {
         </details>
 
         <fieldset className="glass flex flex-col gap-5 rounded-2xl p-6">
+          <legend className="sr-only">PandaX Code</legend>
+          <div>
+            <h2 className="flex flex-wrap items-center gap-2 font-bold text-fg">
+              Datos para <span className="badge-sitio" data-sitio="code">PandaX Code</span> <span className="font-normal text-subtle">(opcional)</span>
+            </h2>
+            <p className="mt-1 text-sm text-subtle">La web de la empresa los muestra en la tarjeta y el detalle del proyecto. El problema y la solución se usan como objetivo y resultado.</p>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Campo label="Subtítulo" id="subtitulo" placeholder="Luxury Plant Lifestyle Store" value={datos.subtitulo} onChange={cambiar} />
+            <Campo label="Slug (URL)" id="slug" placeholder="se genera del nombre" value={datos.slug} onChange={cambiar}
+              hint="Identificador en la URL. Déjalo vacío para generarlo." />
+          </div>
+          <Campo as="textarea" label="Resumen" id="resumen" rows={3} maxLength={300} className="resize-y"
+            placeholder="Una o dos frases para la tarjeta. Si lo dejas vacío se usa la descripción." value={datos.resumen} onChange={cambiar} />
+          <CampoTecnologias id="puntosClave" label="Puntos clave" techs={puntosClave} setTechs={setPuntosClave}
+            placeholder="Responsive, SEO optimizado… (Enter para añadir)" hint="Etiquetas cortas que resaltan lo mejor del proyecto." />
+        </fieldset>
+
+        <fieldset className="glass flex flex-col gap-5 rounded-2xl p-6">
           <legend className="sr-only">Enlaces</legend>
           <h2 className="font-bold text-fg">Enlaces y fecha</h2>
           <div className="grid gap-5 sm:grid-cols-2">
-            <Campo label="Sitio web" id="link" type="url" placeholder="https://miproyecto.com" value={datos.link} onChange={cambiar} error={errores.link} />
+            <Campo label="Sitio web (opcional)" id="link" type="url" placeholder="https://miproyecto.com" value={datos.link} onChange={cambiar} error={errores.link} />
             <Campo label="Repositorio (opcional)" id="github" type="url" placeholder="https://github.com/…" value={datos.github} onChange={cambiar} error={errores.github} />
           </div>
           <Campo label="Fecha de entrega" id="fechaEntrega" type="date" value={datos.fechaEntrega} onChange={cambiar}
@@ -313,7 +355,15 @@ const Formulario = ({ proyecto, borrador }) => {
         </fieldset>
       </div>
 
-      <aside className="flex flex-col gap-6 lg:sticky lg:top-26 lg:self-start">
+      <aside className="flex flex-col gap-6 lg:sticky lg:top-22 lg:self-start">
+        <div className="glass flex flex-col gap-5 rounded-2xl p-6">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="font-bold text-fg">Publicación</h2>
+            <InterruptorPublicado publicado={publicado} onChange={setPublicado} />
+          </div>
+          <SelectorSitios valor={sitios} onChange={cambiarSitios} error={errores.sitios} publicado={publicado} tipo="El proyecto" />
+        </div>
+
         <div className="glass rounded-2xl p-6">
           <CampoImagen preview={preview ?? proyecto?.imagen?.secure_url} onElegir={elegirImagen} error={errores.imagen} editando={editando} />
           <div className="mt-6 border-t border-white/5 pt-6">
@@ -331,16 +381,16 @@ const Formulario = ({ proyecto, borrador }) => {
         </div>
 
         <div>
-          <p className="mb-3 font-mono text-xs tracking-widest text-subtle uppercase">Vista previa en el portafolio</p>
+          <p className="mb-3 text-xs font-semibold tracking-wide text-subtle uppercase">Vista previa de la tarjeta</p>
           <div className="pointer-events-none">
             <Card proyecto={vistaPrevia} />
           </div>
         </div>
 
         <div className="flex gap-3">
-          <Boton to="/admin" variant="ghost">Cancelar</Boton>
+          <Boton to="/admin/proyectos" variant="ghost">Cancelar</Boton>
           <Boton type="submit" loading={enviando} icon={faFloppyDisk} className="flex-1">
-            {editando ? 'Guardar cambios' : 'Publicar proyecto'}
+            {editando ? 'Guardar cambios' : publicado ? 'Publicar proyecto' : 'Guardar como oculto'}
           </Boton>
         </div>
       </aside>

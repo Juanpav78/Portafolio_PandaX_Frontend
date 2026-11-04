@@ -23,6 +23,15 @@ const Proyecto = lazy(() => import('./pages/Proyecto'));
 const Planes = lazy(() => import('./pages/Planes'));
 const PlanDetalle = lazy(() => import('./pages/PlanDetalle'));
 const Calendario = lazy(() => import('./pages/Calendario'));
+const Panel = lazy(() => import('./pages/admin/Panel'));
+const Proximamente = lazy(() => import('./pages/admin/Proximamente'));
+const Servicios = lazy(() => import('./pages/admin/Servicios'));
+const ServicioForm = lazy(() => import('./pages/admin/ServicioForm'));
+const Testimonios = lazy(() => import('./pages/admin/Testimonios'));
+const TestimonioForm = lazy(() => import('./pages/admin/TestimonioForm'));
+const Mensajes = lazy(() => import('./pages/admin/Mensajes'));
+const MensajeDetalle = lazy(() => import('./pages/admin/MensajeDetalle'));
+const Configuracion = lazy(() => import('./pages/admin/Configuracion'));
 
 function App() {
   return (
@@ -46,7 +55,8 @@ function App() {
           <Route path='*'                         element={<NoEncontrada />} />
         </Route>
         <Route path='/admin/' element={<AdminLayout />}>
-          <Route index    element={<IndexAdmin />} />
+          <Route index    element={<Panel />} />
+          <Route path='proyectos'           element={<IndexAdmin />} />
           <Route path='create'              element={<Create />} />
           <Route path='preview/:id'         element={<Proyecto />} />
           <Route path='edit/:id'            element={<Edit />} />
@@ -54,6 +64,16 @@ function App() {
           <Route path='planes/nuevo'        element={<PlanDetalle />} />
           <Route path='planes/:id'          element={<PlanDetalle />} />
           <Route path='calendario'          element={<Calendario />} />
+          <Route path='proximamente/:seccion' element={<Proximamente />} />
+          <Route path='servicios'           element={<Servicios />} />
+          <Route path='servicios/nuevo'     element={<ServicioForm />} />
+          <Route path='servicios/:id'       element={<ServicioForm />} />
+          <Route path='testimonios'         element={<Testimonios />} />
+          <Route path='testimonios/nuevo'   element={<TestimonioForm />} />
+          <Route path='testimonios/:id'     element={<TestimonioForm />} />
+          <Route path='mensajes'            element={<Mensajes />} />
+          <Route path='mensajes/:id'        element={<MensajeDetalle />} />
+          <Route path='configuracion'       element={<Configuracion />} />
           <Route path='*'                   element={<NoEncontrada admin />} />
         </Route>
       </Routes>

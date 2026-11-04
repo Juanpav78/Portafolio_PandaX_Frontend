@@ -70,6 +70,7 @@ export const TEXTOS = {
         { nombre: 'Francés', nivel: 'Estudiando' },
       ],
     },
+    testimonials: { label: 'testimonios', title: 'Lo que dicen', highlight: 'mis clientes' },
     projects: {
       label: 'trabajo seleccionado', title: 'Proyectos', highlight: 'destacados',
       description: 'Una selección de lo que he construido. Haz click en una tarjeta para ver los detalles.',
@@ -195,6 +196,7 @@ export const TEXTOS = {
         { nombre: 'French', nivel: 'Studying' },
       ],
     },
+    testimonials: { label: 'testimonials', title: 'What clients', highlight: 'say' },
     projects: {
       label: 'selected work', title: 'Featured', highlight: 'Projects',
       description: "A selection of things I've built. Click any card to see the details.",

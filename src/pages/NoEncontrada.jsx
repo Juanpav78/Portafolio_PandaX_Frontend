@@ -16,7 +16,7 @@ const NoEncontrada = ({ admin = false }) => {
   // falló. Se restaura el anterior al salir para no dejarlo "pegado" en otras páginas.
   useEffect(() => {
     const anterior = document.title
-    document.title = '404 · PandaX'
+    document.title = '404 · Juan Alvarado'
     return () => { document.title = anterior }
   }, [])
 

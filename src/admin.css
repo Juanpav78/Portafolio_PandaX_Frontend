@@ -1,0 +1,291 @@
+/* Tema del panel de administración: neutral y sobrio, distinto del neón de las webs públicas.
+   Se activa con la clase `admin` en <html> (la pone AdminLayout al montarse y la quita al
+   salir), por eso también alcanza a los toasts y diálogos que se renderizan en portales.
+   En vez de reescribir cada pantalla se redefinen los mismos tokens que usan los componentes
+   (ink-*, fg, neon…) y se suavizan las clases compartidas (.btn, .field, .glass, .chip). */
+
+@layer base {
+  html.admin {
+    color-scheme: light;
+
+    /* Superficies: fondo gris muy claro, tarjetas blancas, bordes suaves */
+    --color-ink-950: #f4f5f7;
+    --color-ink-900: #ffffff;
+    --color-ink-800: #ffffff;
+    --color-ink-700: #eef0f3;
+    --color-ink-600: #e2e5ea;
+
+    --color-fg: #1d2127;
+    --color-muted: #59616d;
+    --color-subtle: #8a919c;
+
+    /* Un único acento discreto para las acciones principales. Los tonos neón de marca se
+       igualan al acento para que ningún degradado del sitio público se cuele aquí. */
+    --color-neon: #3358b8;
+    --color-neon-soft: #2b4b9c;
+    --color-neon-pink: #3358b8;
+    --color-neon-cyan: #3358b8;
+    --color-neon-amber: #b07a1c;
+
+    --color-success: #1f7f55;
+    --color-danger: #c03b35;
+
+    /* Las utilidades translúcidas (bg-white/5, border-white/10) se pensaron para fondo oscuro;
+       con "white" oscuro se vuelven sombras y bordes sutiles sobre fondo claro. */
+    --color-white: #111827;
+
+    --font-display: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-text: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+    /* Badges por sitio: mismos colores en tablas, formularios y filtros */
+    --sitio-code-bg: #e5f3f0;
+    --sitio-code-fg: #1d6b5f;
+    --sitio-code-borde: #c4e4dc;
+    --sitio-portafolio-bg: #eeecf8;
+    --sitio-portafolio-fg: #574d96;
+    --sitio-portafolio-borde: #dcd7f0;
+  }
+
+  html.admin.admin-oscuro {
+    color-scheme: dark;
+    --color-ink-950: #111318;
+    --color-ink-900: #171a20;
+    --color-ink-800: #1b1e25;
+    --color-ink-700: #242832;
+    --color-ink-600: #2e333d;
+    --color-fg: #e6e8ec;
+    --color-muted: #a2a8b3;
+    --color-subtle: #737a86;
+    --color-neon: #7c9be6;
+    --color-neon-soft: #9bb3ee;
+    --color-neon-pink: #7c9be6;
+    --color-neon-cyan: #7c9be6;
+    --color-neon-amber: #d9a441;
+    --color-success: #4cc28e;
+    --color-danger: #ec6a63;
+    --color-white: #ffffff;
+
+    --sitio-code-bg: rgb(45 160 140 / 0.14);
+    --sitio-code-fg: #7fd0c0;
+    --sitio-code-borde: rgb(45 160 140 / 0.3);
+    --sitio-portafolio-bg: rgb(140 125 220 / 0.16);
+    --sitio-portafolio-fg: #b8afee;
+    --sitio-portafolio-borde: rgb(140 125 220 / 0.32);
+  }
+
+  html.admin body {
+    background-color: var(--color-ink-950);
+    font-size: 15px;
+  }
+
+  html.admin ::selection {
+    background: color-mix(in oklab, var(--color-neon) 22%, transparent);
+    color: var(--color-fg);
+  }
+
+  html.admin * {
+    scrollbar-color: color-mix(in oklab, var(--color-fg) 22%, transparent) transparent;
+  }
+}
+
+@layer components {
+  /* Sin halos, rejilla, brillos ni animaciones decorativas */
+  html.admin .bg-escena { background: var(--color-ink-950); }
+  html.admin .bg-escena::after,
+  html.admin .neon-border::before,
+  html.admin .spotlight::after,
+  html.admin .anillo-neon::before,
+  html.admin .anillo-neon::after { display: none; }
+
+  html.admin .neon-text {
+    background: none;
+    color: inherit;
+    filter: none;
+    animation: none;
+  }
+
+  html.admin .glass {
+    background: var(--color-ink-800);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid var(--color-ink-600);
+    box-shadow: 0 1px 2px rgb(16 24 40 / 0.04);
+  }
+
+  /* ---------- Botones ---------- */
+  html.admin .btn { border-radius: 0.55rem; font-weight: 600; letter-spacing: 0; }
+  html.admin .btn:active:not(:disabled) { transform: none; }
+
+  html.admin .btn-primary {
+    color: #ffffff;
+    background: var(--color-neon);
+    box-shadow: none;
+  }
+  html.admin.admin-oscuro .btn-primary { color: #0f1115; }
+  html.admin .btn-primary:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--color-neon) 86%, black);
+    transform: none;
+    box-shadow: none;
+  }
+
+  html.admin .btn-ghost {
+    color: var(--color-fg);
+    background: var(--color-ink-800);
+    border: 1px solid var(--color-ink-600);
+  }
+  html.admin .btn-ghost:hover:not(:disabled) {
+    color: var(--color-fg);
+    background: var(--color-ink-700);
+    border-color: var(--color-ink-600);
+    box-shadow: none;
+  }
+
+  html.admin .btn-subtle:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--color-fg) 6%, transparent);
+  }
+
+  html.admin .btn-danger { background: var(--color-danger); color: #ffffff; }
+  html.admin .btn-danger:hover:not(:disabled) {
+    background: color-mix(in oklab, var(--color-danger) 86%, black);
+    box-shadow: none;
+  }
+
+  /* ---------- Formularios ---------- */
+  html.admin .field {
+    border-radius: 0.55rem;
+    border: 1px solid var(--color-ink-600);
+    /* background-color (no el atajo background) para no borrar la flecha de los <select> */
+    background-color: var(--color-ink-800);
+    padding: 0.62rem 0.85rem;
+  }
+  html.admin .field:hover { border-color: color-mix(in oklab, var(--color-fg) 22%, transparent); }
+  html.admin .field:focus {
+    border-color: var(--color-neon);
+    background-color: var(--color-ink-800);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-neon) 16%, transparent);
+  }
+  html.admin .field[aria-invalid="true"] {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-danger) 12%, transparent);
+  }
+  html.admin select.field option { background: var(--color-ink-800); color: var(--color-fg); }
+  html.admin input[type="date"].field::-webkit-calendar-picker-indicator { filter: none; }
+  html.admin.admin-oscuro input[type="date"].field::-webkit-calendar-picker-indicator { filter: invert(0.8); }
+
+  /* ---------- Chips ---------- */
+  html.admin .chip {
+    border: 1px solid var(--color-ink-600);
+    background: var(--color-ink-700);
+    color: var(--color-muted);
+    font-family: inherit;
+    font-size: 0.74rem;
+  }
+  html.admin .chip-filtro {
+    border: 1px solid var(--color-ink-600);
+    background: var(--color-ink-800);
+    border-radius: 0.5rem;
+    padding: 0.38rem 0.8rem;
+  }
+  html.admin .chip-filtro:hover { border-color: color-mix(in oklab, var(--color-fg) 22%, transparent); }
+  html.admin .chip-filtro[aria-pressed="true"] {
+    color: var(--color-fg);
+    background: var(--color-ink-700);
+    border-color: color-mix(in oklab, var(--color-fg) 30%, transparent);
+    box-shadow: none;
+  }
+
+  html.admin .skeleton {
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--color-fg) 5%, transparent) 25%,
+      color-mix(in oklab, var(--color-fg) 9%, transparent) 37%,
+      color-mix(in oklab, var(--color-fg) 5%, transparent) 63%);
+    background-size: 400% 100%;
+  }
+
+  /* ---------- Piezas propias del admin ---------- */
+  .badge-sitio {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    padding: 0.12rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .badge-sitio[data-sitio="code"] {
+    background: var(--sitio-code-bg);
+    color: var(--sitio-code-fg);
+    border-color: var(--sitio-code-borde);
+  }
+  .badge-sitio[data-sitio="portafolio"] {
+    background: var(--sitio-portafolio-bg);
+    color: var(--sitio-portafolio-fg);
+    border-color: var(--sitio-portafolio-borde);
+  }
+  .badge-sitio::before {
+    content: '';
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 9999px;
+    background: currentColor;
+    opacity: 0.8;
+  }
+
+  /* Tarjeta estándar del admin (equivalente sobrio de .glass, para pantallas nuevas) */
+  .tarjeta {
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-ink-600);
+    background: var(--color-ink-800);
+    box-shadow: 0 1px 2px rgb(16 24 40 / 0.04);
+  }
+
+  .tabla { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .tabla th {
+    padding: 0.65rem 1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+    border-bottom: 1px solid var(--color-ink-600);
+    white-space: nowrap;
+  }
+  .tabla td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-ink-600);
+    vertical-align: middle;
+  }
+  .tabla tbody tr:last-child td { border-bottom: 0; }
+  .tabla tbody tr:hover { background: color-mix(in oklab, var(--color-fg) 2.5%, transparent); }
+
+  /* Interruptor accesible: es un <button role="switch">, el estado lo da aria-checked */
+  .interruptor {
+    position: relative;
+    display: inline-flex;
+    width: 2.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background: color-mix(in oklab, var(--color-fg) 18%, transparent);
+    transition: background-color 0.2s;
+  }
+  .interruptor::after {
+    content: '';
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+    transition: transform 0.2s;
+  }
+  .interruptor[aria-checked="true"] { background: var(--color-success); }
+  .interruptor[aria-checked="true"]::after { transform: translateX(1rem); }
+  .interruptor:disabled { opacity: 0.5; cursor: wait; }
+}
