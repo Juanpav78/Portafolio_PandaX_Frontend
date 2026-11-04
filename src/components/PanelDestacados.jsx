@@ -23,7 +23,11 @@ const FilaDestacado = ({ proyecto, indice, total, onMover, onQuitar, onSoltar })
         <FontAwesomeIcon icon={faGripVertical} />
       </button>
       <span className="w-5 text-center font-mono text-xs text-neon">{indice + 1}</span>
-      <img src={imagenOptimizada(proyecto.imagen?.secure_url, 120)} alt="" className="h-9 w-14 rounded-md object-cover object-top" />
+      {/* En móvil se oculta la miniatura para dejarle espacio al nombre; sin imagen (proyectos
+          creados para PandaX Code) se muestra un recuadro vacío en vez de una imagen rota */}
+      {proyecto.imagen?.secure_url
+        ? <img src={imagenOptimizada(proyecto.imagen.secure_url, 120)} alt="" className="hidden h-9 w-14 rounded-md object-cover object-top sm:block" />
+        : <span aria-hidden className="hidden h-9 w-14 rounded-md bg-ink-700 sm:block" />}
       <span className="min-w-0 flex-1 truncate text-sm font-semibold text-fg">{proyecto.nombre}</span>
       {/* Los botones ↑↓ son la alternativa al arrastre para teclado y lectores de pantalla */}
       <button onClick={() => onMover(indice, -1)} disabled={indice === 0} aria-label={`Subir ${proyecto.nombre}`}

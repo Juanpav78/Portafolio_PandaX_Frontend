@@ -11,7 +11,8 @@ const SelectorSitios = ({ valor = [], onChange, error, publicado = true, tipo = 
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="mb-1.5 text-sm font-semibold text-fg/90">Sitios donde aparece</legend>
-      <div id="sitios" tabIndex={-1} className="grid gap-2 sm:grid-cols-2">
+      {/* Una columna: el selector vive en la barra lateral de los formularios, que es estrecha */}
+      <div id="sitios" tabIndex={-1} className="grid gap-2">
         {SITIOS.map(({ valor: sitio, nombre, descripcion }) => {
           const activo = valor.includes(sitio)
           return (

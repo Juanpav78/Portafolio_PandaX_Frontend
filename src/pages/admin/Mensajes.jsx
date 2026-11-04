@@ -86,7 +86,7 @@ const Mensajes = () => {
                 <div className="flex shrink-0 items-center gap-2">
                   <BadgeSitio sitio={m.site} />
                   <EtiquetaEstado estado={m.estado} />
-                  <time dateTime={m.createdAt} className="w-24 text-right text-xs text-subtle">{fechaRelativa(m.createdAt)}</time>
+                  <time dateTime={m.createdAt} className="w-28 text-right text-xs whitespace-nowrap text-subtle">{fechaRelativa(m.createdAt)}</time>
                 </div>
               </Link>
             </li>

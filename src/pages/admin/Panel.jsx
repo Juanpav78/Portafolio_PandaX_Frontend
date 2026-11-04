@@ -98,7 +98,7 @@ const Panel = () => {
                     <div className="flex shrink-0 items-center gap-2">
                       <BadgeSitio sitio={m.site} />
                       <EtiquetaEstado estado={m.estado} />
-                      <span className="w-20 text-right text-xs text-subtle">{fechaRelativa(m.createdAt)}</span>
+                      <span className="w-28 text-right text-xs whitespace-nowrap text-subtle">{fechaRelativa(m.createdAt)}</span>
                     </div>
                   </Link>
                 </li>
