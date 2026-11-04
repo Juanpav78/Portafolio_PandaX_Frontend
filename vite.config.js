@@ -5,6 +5,17 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // El admin se carga bajo demanda y es el único que usa algunos paquetes de iconos: si Vite los
+  // descubre recién al abrir el panel, re-empaqueta en caliente y la página falla con
+  // "Failed to fetch dynamically imported module" hasta recargar. Así se empaquetan al arrancar.
+  optimizeDeps: {
+    include: [
+      '@fortawesome/free-solid-svg-icons',
+      '@fortawesome/free-regular-svg-icons',
+      '@fortawesome/free-brands-svg-icons',
+      '@fortawesome/react-fontawesome',
+    ],
+  },
   build: {
     rolldownOptions: {
       output: {
