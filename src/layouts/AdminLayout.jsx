@@ -15,8 +15,9 @@ const AdminLayout = () => {
   const [menuAbierto, setMenuAbierto] = useState(false)
   const cerrarMenu = useCallback(() => setMenuAbierto(false), [])
 
+  // El admin pide la lista completa (también lo oculto y lo de PandaX Code)
   useEffect(()=>{
-    obtenerProyectos()
+    obtenerProyectos({ admin: true })
   },[obtenerProyectos])
 
   // Mientras se valida el token guardado no se sabe si hay sesión: redirigir ya mandaría al
