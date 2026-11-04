@@ -8,3 +8,6 @@ export const SITIOS = [
 export const nombreSitio = valor => SITIOS.find(s => s.valor === valor)?.nombre ?? valor
 
 export const esSitio = valor => SITIOS.some(s => s.valor === valor)
+
+// Los proyectos anteriores al campo `sitios` eran del portafolio (igual que interpreta la API)
+export const sitiosDe = item => item?.sitios?.length ? item.sitios : ['portafolio']

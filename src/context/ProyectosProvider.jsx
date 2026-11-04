@@ -130,6 +130,13 @@ const ProyectosProvider = ({children}) => {
         'No se pudo cambiar el destacado'
     ), [conRespaldo])
 
+    // Ocultar/publicar en las webs sin borrar el proyecto
+    const publicarProyecto = useCallback((id, publicado) => conRespaldo(
+        actuales => actuales.map(p => p._id === id ? { ...p, publicado } : p),
+        () => clientAxios.patch(`/admin/projects/${id}/publicado`, { publicado }),
+        'No se pudo cambiar la visibilidad'
+    ), [conRespaldo])
+
     const ordenarDestacados = useCallback(ids => conRespaldo(
         actuales => actuales.map(p => ids.includes(p._id) ? { ...p, orden: ids.indexOf(p._id) } : p),
         () => clientAxios.put('/proyectos/orden', { ids }),
@@ -147,6 +154,7 @@ const ProyectosProvider = ({children}) => {
             submitProyecto,
             eliminarProyecto,
             destacarProyecto,
+            publicarProyecto,
             ordenarDestacados,
             alerta,
             mostrarAlerta,
