@@ -25,6 +25,8 @@ const PlanDetalle = lazy(() => import('./pages/PlanDetalle'));
 const Calendario = lazy(() => import('./pages/Calendario'));
 const Panel = lazy(() => import('./pages/admin/Panel'));
 const Proximamente = lazy(() => import('./pages/admin/Proximamente'));
+const Servicios = lazy(() => import('./pages/admin/Servicios'));
+const ServicioForm = lazy(() => import('./pages/admin/ServicioForm'));
 
 function App() {
   return (
@@ -58,6 +60,9 @@ function App() {
           <Route path='planes/:id'          element={<PlanDetalle />} />
           <Route path='calendario'          element={<Calendario />} />
           <Route path='proximamente/:seccion' element={<Proximamente />} />
+          <Route path='servicios'           element={<Servicios />} />
+          <Route path='servicios/nuevo'     element={<ServicioForm />} />
+          <Route path='servicios/:id'       element={<ServicioForm />} />
           <Route path='*'                   element={<NoEncontrada admin />} />
         </Route>
       </Routes>
