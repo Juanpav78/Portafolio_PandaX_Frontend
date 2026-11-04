@@ -45,8 +45,12 @@ const validar = (datos, techs, imagen, editando, sitios) => {
   return errores
 }
 
-// Zona para soltar o elegir la imagen, con vista previa inmediata.
-const CampoImagen = ({ preview, onElegir, error, editando }) => {
+// Zona para soltar o elegir la imagen, con vista previa inmediata. Sirve para la portada y para
+// la captura móvil (más alta, `vertical`), que además se puede quitar con `onQuitar`.
+const CampoImagen = ({
+  preview, onElegir, error, editando, id = 'imagen', label = 'Portada', vertical = false, onQuitar,
+  ayuda = 'Si no eliges otra, se mantiene la imagen actual.',
+}) => {
   const [arrastrando, setArrastrando] = useState(false)
 
   const alSoltar = e => {
@@ -57,13 +61,18 @@ const CampoImagen = ({ preview, onElegir, error, editando }) => {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-sm font-semibold text-fg/90">Portada</span>
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-sm font-semibold text-fg/90">{label}</span>
+        {preview && onQuitar && (
+          <button type="button" onClick={onQuitar} className="text-xs font-medium text-subtle hover:text-danger">Quitar</button>
+        )}
+      </div>
       <label
-        htmlFor="imagen"
+        htmlFor={id}
         onDragOver={e => { e.preventDefault(); setArrastrando(true) }}
         onDragLeave={() => setArrastrando(false)}
         onDrop={alSoltar}
-        className={`group relative flex aspect-video cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl
+        className={`group relative flex ${vertical ? 'mx-auto aspect-[9/16] w-1/2 min-w-36' : 'aspect-video'} cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl
           border-2 border-dashed text-center transition-colors
           ${error ? 'border-danger/60' : arrastrando ? 'border-neon bg-neon/5' : 'border-white/10 hover:border-neon/50'}`}
       >
@@ -81,13 +90,13 @@ const CampoImagen = ({ preview, onElegir, error, editando }) => {
             <p className="text-xs text-subtle">PNG, JPG o WebP · máx. 2 MB</p>
           </>
         )}
-        <input id="imagen" type="file" accept={TIPOS_IMAGEN.join(',')} className="sr-only"
-          aria-describedby={error ? 'imagen-error' : undefined}
+        <input id={id} type="file" accept={TIPOS_IMAGEN.join(',')} className="sr-only"
+          aria-describedby={error ? `${id}-error` : undefined}
           onChange={e => onElegir(e.target.files[0])} />
       </label>
       {error
-        ? <p id="imagen-error" className="text-xs font-semibold text-danger">{error}</p>
-        : editando && <p className="text-xs text-subtle">Si no eliges otra, se mantiene la imagen actual.</p>}
+        ? <p id={`${id}-error`} className="text-xs font-semibold text-danger">{error}</p>
+        : (editando || vertical) && <p className="text-xs text-subtle">{ayuda}</p>}
     </div>
   )
 }
@@ -126,6 +135,12 @@ const Formulario = ({ proyecto, borrador }) => {
   })
   const [techs, setTechs] = useState(() => parseTecnologias(base?.tecnologias))
   const [imagen, setImagen] = useState(null)
+  // Captura móvil: archivo nuevo, su vista previa y si se pidió quitar la guardada
+  const [imagenMovil, setImagenMovil] = useState(null)
+  const [previewMovil, setPreviewMovil] = useState(null)
+  const [quitarMovil, setQuitarMovil] = useState(false)
+  const previewMovilRef = useRef(null)
+  useEffect(() => () => previewMovilRef.current && URL.revokeObjectURL(previewMovilRef.current), [])
   const [errores, setErrores] = useState({})
   const [enviando, setEnviando] = useState(false)
   // Tras el primer intento de envío se revalida en cada cambio, para que el error desaparezca
@@ -191,6 +206,32 @@ const Formulario = ({ proyecto, borrador }) => {
     })
   }
 
+  const elegirMovil = archivo => {
+    if (!archivo) return
+    if (!TIPOS_IMAGEN.includes(archivo.type)) return setErrores(e => ({ ...e, imagenMovil: 'Formato no válido. Usa PNG, JPG o WebP' }))
+    if (archivo.size > MAX_IMAGEN) return setErrores(e => ({ ...e, imagenMovil: `La imagen pesa ${(archivo.size / 1e6).toFixed(1)} MB; el máximo es 2 MB` }))
+    if (previewMovilRef.current) URL.revokeObjectURL(previewMovilRef.current)
+    previewMovilRef.current = URL.createObjectURL(archivo)
+    setPreviewMovil(previewMovilRef.current)
+    setImagenMovil(archivo)
+    setQuitarMovil(false)
+    setErrores(actuales => {
+      const restantes = { ...actuales }
+      delete restantes.imagenMovil
+      return restantes
+    })
+  }
+
+  const quitarCapturaMovil = () => {
+    if (previewMovilRef.current) URL.revokeObjectURL(previewMovilRef.current)
+    previewMovilRef.current = null
+    setPreviewMovil(null)
+    setImagenMovil(null)
+    setQuitarMovil(Boolean(proyecto?.imagenMovil))
+  }
+  // Lo que se ve en el campo: la nueva elegida, o la guardada si no se pidió quitarla
+  const vistaMovil = previewMovil ?? (quitarMovil ? null : proyecto?.imagenMovil?.secure_url)
+
   // Se aceptan sólo los archivos válidos que quepan en el límite; los demás se descartan con un
   // aviso que dice cuántos y por qué, en vez de rechazar la selección entera por uno malo.
   const agregarGaleria = archivos => {
@@ -242,6 +283,8 @@ const Formulario = ({ proyecto, borrador }) => {
         puntosClave: JSON.stringify(puntosClave),
         publicado: String(publicado),
         imagen: imagen ?? undefined,
+        imagenMovil: imagenMovil ?? undefined,
+        quitarImagenMovil: quitarMovil && !imagenMovil ? 'true' : undefined,
         galeria: galeriaNueva.map(g => g.archivo),
         // El multipart sólo transporta texto y archivos: la lista de ids va como JSON
         galeriaEliminar: galeriaEliminar.length ? JSON.stringify(galeriaEliminar) : undefined,
@@ -366,6 +409,11 @@ const Formulario = ({ proyecto, borrador }) => {
 
         <div className="glass rounded-2xl p-6">
           <CampoImagen preview={preview ?? proyecto?.imagen?.secure_url} onElegir={elegirImagen} error={errores.imagen} editando={editando} />
+          <div className="mt-6 border-t border-white/5 pt-6">
+            <CampoImagen id="imagenMovil" label="Captura móvil (opcional)" vertical
+              preview={vistaMovil} onElegir={elegirMovil} onQuitar={quitarCapturaMovil} error={errores.imagenMovil}
+              ayuda="Cómo se ve en el celular. PandaX Code la muestra en el celular del inicio." />
+          </div>
           <div className="mt-6 border-t border-white/5 pt-6">
             <CampoGaleria
               existentes={galeriaGuardada}
