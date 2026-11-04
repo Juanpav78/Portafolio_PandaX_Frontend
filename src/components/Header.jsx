@@ -10,7 +10,7 @@ import useSeccionActiva from "../hooks/useSeccionActiva";
 import useIdioma from "../hooks/useIdioma";
 import SelectorIdioma from "./SelectorIdioma";
 import { WHATSAPP } from "../helpers/redes";
-import Logo from "../assets/PandaX_White.svg";
+import Logo from "../assets/Monograma.svg";
 
 const IDS = SECCIONES.map(s => s.id)
 
@@ -41,9 +41,9 @@ const Header = () => {
       ${solido ? 'border-b border-white/5 bg-ink-950/75 backdrop-blur-xl' : 'border-b border-transparent'}`}>
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between gap-6 px-4 sm:px-6">
         <Link to='/' className='group flex items-center gap-2' onClick={() => setMenuAbierto(false)}>
-          <img className='w-11 transition-transform duration-500 group-hover:-rotate-12' src={Logo} alt="" />
+          <img className='w-10 transition-transform duration-500 group-hover:-rotate-6' src={Logo} alt="" />
           <span className='font-display text-2xl text-fg'>
-            PandaX<span className="neon-text">{"/>"}</span>
+            Juan Alvarado<span className="neon-text">{"/>"}</span>
           </span>
         </Link>
 

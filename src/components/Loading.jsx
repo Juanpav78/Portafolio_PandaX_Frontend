@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import logo from "../assets/PandaX_White.svg"
+import logo from "../assets/Monograma.svg"
 
 // Pantalla de carga a pantalla completa. Sólo se usa cuando no hay nada útil que mostrar
 // (validar la sesión del admin, descargar un chunk lazy); las listas usan skeletons.
