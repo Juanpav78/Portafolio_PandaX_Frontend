@@ -1,22 +1,33 @@
 import { useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate, useSearchParams } from "react-router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBars, faMagnifyingGlass, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faBars, faMagnifyingGlass, faMoon, faPlus, faSun } from "@fortawesome/free-solid-svg-icons"
 import Boton from "./Boton"
 
-const HeaderAdmin = ({ onAbrirMenu }) => {
+const LISTADO = '/admin/proyectos'
+
+// Acción principal según la sección: en cada listado lo habitual es crear un elemento de ese tipo
+const ACCIONES = [
+  { prefijo: '/admin/planes', to: '/admin/planes/nuevo', texto: 'Nueva idea' },
+  { prefijo: '/admin/calendario', to: '/admin/planes/nuevo', texto: 'Nueva idea' },
+  { prefijo: '/admin/servicios', to: '/admin/servicios/nuevo', texto: 'Nuevo servicio' },
+  { prefijo: '/admin/testimonios', to: '/admin/testimonios/nuevo', texto: 'Nuevo testimonio' },
+  { prefijo: '/admin/proyectos', to: '/admin/create', texto: 'Nuevo proyecto' },
+]
+
+const HeaderAdmin = ({ onAbrirMenu, tema, setTema }) => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const inputRef = useRef(null)
-  const enListado = pathname.replace(/\/$/, '') === '/admin'
-  const enPlanificacion = /^\/admin\/(planes|calendario)/.test(pathname)
-  // Texto escrito fuera del listado (en editar/crear) antes de pulsar Enter
+  const enListado = pathname.replace(/\/$/, '') === LISTADO
+  // Texto escrito fuera del listado de proyectos antes de pulsar Enter
   const [borrador, setBorrador] = useState('')
+  const accion = ACCIONES.find(a => pathname.startsWith(a.prefijo))
 
   // En el listado la búsqueda filtra en vivo escribiendo en ?q= (la URL es la fuente de verdad,
-  // así el botón "Limpiar filtros" del listado también vacía este input). En otras páginas se
-  // espera a Enter para no sacar al usuario de un formulario a mitad de edición.
+  // así "Limpiar filtros" también vacía este input). En otras páginas se espera a Enter para no
+  // sacar al usuario de un formulario a mitad de edición.
   const valor = enListado ? params.get('q') ?? '' : borrador
 
   const cambiar = e => {
@@ -33,7 +44,7 @@ const HeaderAdmin = ({ onAbrirMenu }) => {
   const enviar = e => {
     e.preventDefault()
     if (enListado) return
-    navigate(borrador ? `/admin?q=${encodeURIComponent(borrador)}` : '/admin')
+    navigate(borrador ? `${LISTADO}?q=${encodeURIComponent(borrador)}` : LISTADO)
     setBorrador('')
   }
 
@@ -51,41 +62,41 @@ const HeaderAdmin = ({ onAbrirMenu }) => {
     return () => window.removeEventListener('keydown', alPulsar)
   }, [])
 
+  const oscuro = tema === 'oscuro'
+
   return (
-    <header className="sticky top-0 z-30 border-b border-white/5 bg-ink-950/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-18 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-30 border-b border-ink-600 bg-ink-950/90 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
         <button onClick={onAbrirMenu} aria-label="Abrir menú" className="btn btn-ghost btn-icon lg:hidden">
           <FontAwesomeIcon icon={faBars} className="w-4" />
         </button>
 
-        <form role="search" onSubmit={enviar} className="relative max-w-md flex-1">
+        <form role="search" onSubmit={enviar} className="relative max-w-sm flex-1">
           <label htmlFor="buscar-admin" className="sr-only">Buscar proyectos</label>
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-subtle" />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-sm text-subtle" />
           <input
             ref={inputRef}
             id="buscar-admin"
             type="search"
             value={valor}
             onChange={cambiar}
-            placeholder="Buscar por nombre, tipo o tecnología…"
-            className="field py-2.5 pr-10 pl-11 text-sm"
+            placeholder="Buscar proyectos…"
+            className="field py-2 pr-9 pl-10 text-sm"
           />
-          <kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 rounded-md border border-white/10 px-1.5 font-mono text-xs text-subtle sm:block">/</kbd>
+          <kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 rounded border border-ink-600 px-1.5 text-xs text-subtle sm:block">/</kbd>
         </form>
 
-        {/* La acción principal cambia según la sección: en el planificador y el calendario
-            lo habitual es apuntar una idea nueva, no publicar un proyecto */}
-        {enPlanificacion
-          ? pathname !== '/admin/planes/nuevo' && (
-            <Boton to="/admin/planes/nuevo" size="sm" icon={faPlus} className="ml-auto">
-              <span className="hidden sm:inline">Nueva idea</span>
-            </Boton>
-          )
-          : pathname !== '/admin/create' && (
-            <Boton to="/admin/create" size="sm" icon={faPlus} className="ml-auto">
-              <span className="hidden sm:inline">Nuevo proyecto</span>
+        <div className="ml-auto flex items-center gap-2">
+          <button onClick={() => setTema(oscuro ? 'claro' : 'oscuro')} className="btn btn-subtle btn-icon"
+            aria-label={oscuro ? 'Usar modo claro' : 'Usar modo oscuro'} title={oscuro ? 'Modo claro' : 'Modo oscuro'}>
+            <FontAwesomeIcon icon={oscuro ? faSun : faMoon} />
+          </button>
+          {accion && pathname !== accion.to && (
+            <Boton to={accion.to} size="sm" icon={faPlus}>
+              <span className="hidden sm:inline">{accion.texto}</span>
             </Boton>
           )}
+        </div>
       </div>
     </header>
   )

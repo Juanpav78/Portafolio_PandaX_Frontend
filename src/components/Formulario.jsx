@@ -224,7 +224,7 @@ const Formulario = ({ proyecto, borrador }) => {
         galeriaEliminar: galeriaEliminar.length ? JSON.stringify(galeriaEliminar) : undefined,
       })
       // El toast de éxito lo muestra el AdminLayout, que sigue montado tras navegar
-      navigate('/admin')
+      navigate('/admin/proyectos')
     } catch (error) {
       mostrarAlerta(error.message)
       setEnviando(false)
@@ -338,7 +338,7 @@ const Formulario = ({ proyecto, borrador }) => {
         </div>
 
         <div className="flex gap-3">
-          <Boton to="/admin" variant="ghost">Cancelar</Boton>
+          <Boton to="/admin/proyectos" variant="ghost">Cancelar</Boton>
           <Boton type="submit" loading={enviando} icon={faFloppyDisk} className="flex-1">
             {editando ? 'Guardar cambios' : 'Publicar proyecto'}
           </Boton>

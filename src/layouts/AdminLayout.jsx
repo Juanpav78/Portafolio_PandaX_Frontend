@@ -30,8 +30,8 @@ const AdminLayout = () => {
 
   return (
     <PlanesProvider>
-    <div className="min-h-screen lg:pl-72">
-      <Sidebar abierto={menuAbierto} onCerrar={cerrarMenu} />
+    <div className="min-h-screen lg:pl-64">
+      <Sidebar abierto={menuAbierto} onCerrar={cerrarMenu} tema={tema} />
       <div className="flex min-h-screen flex-col">
         <HeaderAdmin onAbrirMenu={() => setMenuAbierto(true)} tema={tema} setTema={setTema} />
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">

@@ -30,7 +30,7 @@ const Proyecto = () => {
     setEliminando(true)
     try {
       await eliminarProyecto(id)
-      navigate('/admin')
+      navigate('/admin/proyectos')
     } catch {
       setEliminando(false)
     }
