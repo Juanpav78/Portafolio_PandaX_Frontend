@@ -24,6 +24,9 @@ const HeaderAdmin = ({ onAbrirMenu, tema, setTema }) => {
   // Texto escrito fuera del listado de proyectos antes de pulsar Enter
   const [borrador, setBorrador] = useState('')
   const accion = ACCIONES.find(a => pathname.startsWith(a.prefijo))
+  // Si el listado está filtrado por sitio, lo nuevo se crea ya marcado para ese sitio
+  const sitio = params.get('sitio')
+  const destino = accion && (sitio ? `${accion.to}?sitio=${sitio}` : accion.to)
 
   // En el listado la búsqueda filtra en vivo escribiendo en ?q= (la URL es la fuente de verdad,
   // así "Limpiar filtros" también vacía este input). En otras páginas se espera a Enter para no
@@ -92,7 +95,7 @@ const HeaderAdmin = ({ onAbrirMenu, tema, setTema }) => {
             <FontAwesomeIcon icon={oscuro ? faSun : faMoon} />
           </button>
           {accion && pathname !== accion.to && (
-            <Boton to={accion.to} size="sm" icon={faPlus}>
+            <Boton to={destino} size="sm" icon={faPlus}>
               <span className="hidden sm:inline">{accion.texto}</span>
             </Boton>
           )}

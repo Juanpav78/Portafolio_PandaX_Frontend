@@ -7,7 +7,11 @@ import { parseTecnologias } from "../helpers/proyectos"
 // en el input vacío borra la última, que es lo que se espera de un campo de etiquetas.
 // Internamente es un array, pero al backend se envía como texto separado por comas (el
 // formato que ya usaba la base de datos), así los proyectos antiguos siguen funcionando.
-const CampoTecnologias = ({ techs, setTechs, sugerencias = [], error, hint = 'Las tres primeras se muestran en la tarjeta.' }) => {
+// `id`, `label` y `placeholder` permiten reutilizarlo para otras listas de etiquetas (p. ej. puntos clave).
+const CampoTecnologias = ({
+  techs, setTechs, sugerencias = [], error, hint = 'Las tres primeras se muestran en la tarjeta.',
+  id = 'tecnologias', label = 'Tecnologías', placeholder = 'React, Node.js… (Enter para añadir)',
+}) => {
   const [texto, setTexto] = useState('')
 
   const agregar = valor => {
@@ -28,7 +32,7 @@ const CampoTecnologias = ({ techs, setTechs, sugerencias = [], error, hint = 'La
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor="tecnologias" className="text-sm font-semibold text-fg/90">Tecnologías</label>
+      <label htmlFor={id} className="text-sm font-semibold text-fg/90">{label}</label>
       <div
         aria-invalid={Boolean(error)}
         className="field flex min-h-12 flex-wrap items-center gap-2 py-2 focus-within:border-neon
@@ -42,26 +46,26 @@ const CampoTecnologias = ({ techs, setTechs, sugerencias = [], error, hint = 'La
           </span>
         ))}
         <input
-          id="tecnologias"
-          list="sugerencias-tecnologias"
+          id={id}
+          list={`sugerencias-${id}`}
           value={texto}
           onChange={e => setTexto(e.target.value)}
           onKeyDown={alPulsar}
           // Al salir del campo se confirma lo escrito para que no se pierda si no pulsaron Enter
           onBlur={() => texto && agregar(texto)}
-          placeholder={techs.length ? '' : 'React, Node.js… (Enter para añadir)'}
-          aria-describedby={error ? 'tecnologias-error' : 'tecnologias-hint'}
+          placeholder={techs.length ? '' : placeholder}
+          aria-describedby={error ? `${id}-error` : `${id}-hint`}
           className="min-w-32 flex-1 bg-transparent text-fg outline-none placeholder:text-subtle"
         />
       </div>
       {/* Sugiere las tecnologías ya usadas para evitar duplicados con distinta escritura
           ("React" vs "ReactJS"), que fragmentarían el filtro por tecnología del portafolio */}
-      <datalist id="sugerencias-tecnologias">
+      <datalist id={`sugerencias-${id}`}>
         {sugerencias.filter(s => !techs.includes(s)).map(s => <option key={s} value={s} />)}
       </datalist>
       {error
-        ? <p id="tecnologias-error" className="text-xs font-semibold text-danger">{error}</p>
-        : <p id="tecnologias-hint" className="text-xs text-subtle">{hint}</p>}
+        ? <p id={`${id}-error`} className="text-xs font-semibold text-danger">{error}</p>
+        : <p id={`${id}-hint`} className="text-xs text-subtle">{hint}</p>}
     </div>
   )
 }

@@ -5,7 +5,7 @@ import useAlerta from "../hooks/useAlerta";
 const ProyectoContext = createContext();
 
 // Campos opcionales que el usuario puede vaciar: estos sí se envían aunque estén en blanco
-const VACIABLES = ['problema', 'solucion', 'descripcionEn', 'problemaEn', 'solucionEn']
+const VACIABLES = ['problema', 'solucion', 'descripcionEn', 'problemaEn', 'solucionEn', 'slug', 'subtitulo', 'resumen', 'link']
 
 // Se arma el FormData a mano para omitir campos vacíos: si se enviara imagen=undefined o
 // github="" el backend los trataría como valores y, al editar, borraría los existentes.
