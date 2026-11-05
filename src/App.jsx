@@ -32,6 +32,9 @@ const TestimonioForm = lazy(() => import('./pages/admin/TestimonioForm'));
 const Mensajes = lazy(() => import('./pages/admin/Mensajes'));
 const MensajeDetalle = lazy(() => import('./pages/admin/MensajeDetalle'));
 const Configuracion = lazy(() => import('./pages/admin/Configuracion'));
+const Clientes = lazy(() => import('./pages/admin/Clientes'));
+const ClienteForm = lazy(() => import('./pages/admin/ClienteForm'));
+const ClienteDetalle = lazy(() => import('./pages/admin/ClienteDetalle'));
 
 function App() {
   return (
@@ -74,6 +77,10 @@ function App() {
           <Route path='mensajes'            element={<Mensajes />} />
           <Route path='mensajes/:id'        element={<MensajeDetalle />} />
           <Route path='configuracion'       element={<Configuracion />} />
+          <Route path='clientes'            element={<Clientes />} />
+          <Route path='clientes/nuevo'      element={<ClienteForm />} />
+          <Route path='clientes/:id'        element={<ClienteDetalle />} />
+          <Route path='clientes/:id/editar' element={<ClienteForm />} />
           <Route path='*'                   element={<NoEncontrada admin />} />
         </Route>
       </Routes>
