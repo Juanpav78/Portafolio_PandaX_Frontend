@@ -37,7 +37,7 @@ const validar = (datos, techs, imagen, editando, sitios) => {
   if (!datos.nombre.trim()) errores.nombre = 'El nombre es obligatorio'
   if (!datos.tipo.trim()) errores.tipo = 'Indica el tipo de proyecto'
   // El enlace ya no es obligatorio: un proyecto de cliente de PandaX Code puede no tener demo pública
-  if (datos.link.trim() && !esUrl(datos.link)) errores.link = 'Debe ser una URL completa (https://…)'
+  if (!datos.interno && datos.link.trim() && !esUrl(datos.link)) errores.link = 'Debe ser una URL completa (https://…)'
   if (datos.github && !esUrl(datos.github)) errores.github = 'Debe ser una URL completa (https://…)'
   if (!techs.length) errores.tecnologias = 'Añade al menos una tecnología'
   if (!editando && !imagen) errores.imagen = 'La imagen es obligatoria'
@@ -116,6 +116,8 @@ const Formulario = ({ proyecto, borrador }) => {
   const sitioInicial = esSitio(params.get('sitio')) ? params.get('sitio') : 'portafolio'
   const [sitios, setSitios] = useState(() => base?.sitios?.length ? base.sitios : [sitioInicial])
   const [publicado, setPublicado] = useState(base?.publicado !== false)
+  // Aplicación interna o privada: no tiene enlace público y las webs muestran un aviso
+  const [interno, setInterno] = useState(Boolean(base?.interno))
   const [puntosClave, setPuntosClave] = useState(() => base?.puntosClave ?? [])
   const [datos, setDatos] = useState({
     slug: base?.slug ?? '',
@@ -170,7 +172,7 @@ const Formulario = ({ proyecto, borrador }) => {
   const techsExistentes = useMemo(() => contarTecnologias(proyectos).map(t => t.valor), [proyectos])
 
   const revalidar = (nuevosDatos, nuevasTechs, nuevaImagen, nuevosSitios = sitios) => {
-    if (intentado.current) setErrores(validar(nuevosDatos, nuevasTechs, nuevaImagen, editando, nuevosSitios))
+    if (intentado.current) setErrores(validar({ ...nuevosDatos, interno }, nuevasTechs, nuevaImagen, editando, nuevosSitios))
   }
 
   const cambiarSitios = nuevos => {
@@ -263,7 +265,7 @@ const Formulario = ({ proyecto, borrador }) => {
   const handleSubmit = async e => {
     e.preventDefault()
     intentado.current = true
-    const nuevosErrores = validar(datos, techs, imagen, editando, sitios)
+    const nuevosErrores = validar({ ...datos, interno }, techs, imagen, editando, sitios)
     setErrores(nuevosErrores)
 
     const primerError = Object.keys(nuevosErrores)[0]
@@ -282,6 +284,9 @@ const Formulario = ({ proyecto, borrador }) => {
         sitios: JSON.stringify(sitios),
         puntosClave: JSON.stringify(puntosClave),
         publicado: String(publicado),
+        interno: String(interno),
+        // Una app interna no tiene enlace: se vacía para que ninguna web muestre un link roto
+        link: interno ? '' : datos.link,
         imagen: imagen ?? undefined,
         imagenMovil: imagenMovil ?? undefined,
         quitarImagenMovil: quitarMovil && !imagenMovil ? 'true' : undefined,
@@ -390,9 +395,17 @@ const Formulario = ({ proyecto, borrador }) => {
           <legend className="sr-only">Enlaces</legend>
           <h2 className="font-bold text-fg">Enlaces y fecha</h2>
           <div className="grid gap-5 sm:grid-cols-2">
-            <Campo label="Sitio web (opcional)" id="link" type="url" placeholder="https://miproyecto.com" value={datos.link} onChange={cambiar} error={errores.link} />
+            <Campo label="Sitio web (opcional)" id="link" type="url" placeholder={interno ? 'Sin enlace público' : 'https://miproyecto.com'}
+              value={interno ? '' : datos.link} onChange={cambiar} error={errores.link} disabled={interno} className="disabled:opacity-50" />
             <Campo label="Repositorio (opcional)" id="github" type="url" placeholder="https://github.com/…" value={datos.github} onChange={cambiar} error={errores.github} />
           </div>
+          <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-white/10 p-3">
+            <input type="checkbox" checked={interno} onChange={e => setInterno(e.target.checked)} className="mt-0.5 size-4 accent-[var(--color-neon)]" />
+            <span>
+              <span className="block text-sm font-semibold text-fg">Aplicación interna o privada</span>
+              <span className="block text-xs text-subtle">Para sistemas de una empresa o herramientas sin acceso público. En vez del botón «Visitar», las webs muestran un aviso.</span>
+            </span>
+          </label>
           <Campo label="Fecha de entrega" id="fechaEntrega" type="date" value={datos.fechaEntrega} onChange={cambiar}
             hint="Ordena el portafolio. Si la dejas vacía se usa la fecha de hoy." className="sm:max-w-xs" />
         </fieldset>

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 import { useNavigate, useParams } from "react-router"
-import { faBoxArchive, faEnvelope, faPhone, faReply, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faBoxArchive, faEnvelope, faPhone, faReply, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons"
 import clientAxios from "../../config/clientAxios"
 import useDocumentoAdmin from "../../hooks/useDocumentoAdmin"
 import useProyectos from "../../hooks/useProyectos"
@@ -59,6 +59,20 @@ const Detalle = ({ mensaje }) => {
   }
   const cancelar = useCallback(() => setConfirmar(false), [])
 
+  // Crea el cliente con los datos del mensaje; si ya existía uno con ese correo, lleva a su ficha
+  const [convirtiendo, setConvirtiendo] = useState(false)
+  const convertir = async () => {
+    setConvirtiendo(true)
+    try {
+      const { data } = await clientAxios.post(`/admin/messages/${mensaje._id}/cliente`)
+      mostrarAlerta(data.existente ? 'Ya existía un cliente con ese correo' : 'Cliente creado a partir del mensaje', false)
+      navigate(`/admin/clientes/${data.cliente._id}`)
+    } catch (error) {
+      mostrarAlerta(error.response?.data?.msg ?? 'No se pudo crear el cliente')
+      setConvirtiendo(false)
+    }
+  }
+
   // Responder abre el correo con asunto y cita listos; se marca como respondido al hacer click
   // porque el admin no puede saber si de verdad se envió desde su cliente de correo.
   const asunto = encodeURIComponent(`Re: tu mensaje en ${nombreSitio(mensaje.site)}`)
@@ -88,6 +102,7 @@ const Detalle = ({ mensaje }) => {
           <Boton href={`mailto:${mensaje.email}?subject=${asunto}&body=${cuerpo}`} icon={faReply}
             onClick={() => estado !== 'respondido' && cambiarEstado('respondido')}>Responder por correo</Boton>
           {mensaje.phone && <Boton href={`tel:${mensaje.phone}`} variant="ghost" icon={faPhone}>Llamar</Boton>}
+          <Boton variant="ghost" icon={faUserPlus} loading={convirtiendo} onClick={convertir}>Convertir en cliente</Boton>
           <label htmlFor="estado" className="mt-2 text-sm font-semibold text-fg/90">Estado</label>
           <select id="estado" className="field capitalize" value={estado} disabled={guardando} onChange={e => cambiarEstado(e.target.value)}>
             {ESTADOS_MENSAJE.map(e => <option key={e} value={e}>{e}</option>)}

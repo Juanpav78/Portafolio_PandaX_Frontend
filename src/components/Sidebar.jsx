@@ -142,9 +142,9 @@ const Sidebar = ({ abierto, onCerrar, tema }) => {
           </Grupo>
 
           <Grupo titulo="Negocio">
-            {enlace({ to: '/admin/proximamente/clientes', icono: faUsers, pronto: true, children: 'Clientes' })}
-            {enlace({ to: '/admin/proximamente/cotizaciones', icono: faFileInvoiceDollar, pronto: true, children: 'Cotizaciones' })}
-            {enlace({ to: '/admin/proximamente/pagos', icono: faMoneyBillWave, pronto: true, children: 'Pagos' })}
+            {enlace({ to: '/admin/clientes', icono: faUsers, children: 'Clientes' })}
+            {enlace({ to: '/admin/cotizaciones', icono: faFileInvoiceDollar, children: 'Cotizaciones' })}
+            {enlace({ to: '/admin/pagos', icono: faMoneyBillWave, children: 'Pagos' })}
           </Grupo>
 
           <Grupo titulo="Configuración">

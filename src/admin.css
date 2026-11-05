@@ -289,3 +289,28 @@
   .interruptor[aria-checked="true"]::after { transform: translateX(1rem); }
   .interruptor:disabled { opacity: 0.5; cursor: wait; }
 }
+
+/* ---------- Impresión de cotizaciones ----------
+   «Imprimir / PDF» deja sólo la hoja: sin menú, encabezado ni botones, en blanco aunque el
+   panel esté en modo oscuro, y sin los bordes de tarjeta. */
+@media print {
+  html.admin, html.admin.admin-oscuro {
+    color-scheme: light;
+    --color-ink-950: #ffffff; --color-ink-900: #ffffff; --color-ink-800: #ffffff;
+    --color-ink-700: #f3f4f6; --color-ink-600: #d9dce1;
+    --color-fg: #111318; --color-muted: #3f4651; --color-subtle: #6b7280;
+    --color-white: #111827;
+  }
+  html.admin body { background: #ffffff; }
+  html.admin aside[aria-label="Navegación del panel"],
+  html.admin header.sticky,
+  html.admin .no-imprimir { display: none !important; }
+  html.admin .lg\:pl-64 { padding-left: 0 !important; }
+  html.admin main { padding: 0 !important; max-width: none !important; }
+  html.admin main > div { display: block !important; }
+  html.admin .documento-cotizacion { border: 0; box-shadow: none; padding: 0; }
+  html.admin.admin-oscuro .documento-logo { filter: none; }
+  @page { margin: 16mm 14mm; }
+}
+/* En modo oscuro el logo negro se invierte en pantalla para que se vea; al imprimir vuelve a negro */
+html.admin.admin-oscuro .documento-logo { filter: invert(1); }

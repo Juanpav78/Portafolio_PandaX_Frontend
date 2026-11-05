@@ -32,6 +32,14 @@ const TestimonioForm = lazy(() => import('./pages/admin/TestimonioForm'));
 const Mensajes = lazy(() => import('./pages/admin/Mensajes'));
 const MensajeDetalle = lazy(() => import('./pages/admin/MensajeDetalle'));
 const Configuracion = lazy(() => import('./pages/admin/Configuracion'));
+const Clientes = lazy(() => import('./pages/admin/Clientes'));
+const ClienteForm = lazy(() => import('./pages/admin/ClienteForm'));
+const ClienteDetalle = lazy(() => import('./pages/admin/ClienteDetalle'));
+const Cotizaciones = lazy(() => import('./pages/admin/Cotizaciones'));
+const CotizacionForm = lazy(() => import('./pages/admin/CotizacionForm'));
+const CotizacionDetalle = lazy(() => import('./pages/admin/CotizacionDetalle'));
+const Pagos = lazy(() => import('./pages/admin/Pagos'));
+const PagoForm = lazy(() => import('./pages/admin/PagoForm'));
 
 function App() {
   return (
@@ -74,6 +82,17 @@ function App() {
           <Route path='mensajes'            element={<Mensajes />} />
           <Route path='mensajes/:id'        element={<MensajeDetalle />} />
           <Route path='configuracion'       element={<Configuracion />} />
+          <Route path='clientes'            element={<Clientes />} />
+          <Route path='clientes/nuevo'      element={<ClienteForm />} />
+          <Route path='clientes/:id'        element={<ClienteDetalle />} />
+          <Route path='clientes/:id/editar' element={<ClienteForm />} />
+          <Route path='cotizaciones'            element={<Cotizaciones />} />
+          <Route path='cotizaciones/nueva'      element={<CotizacionForm />} />
+          <Route path='cotizaciones/:id'        element={<CotizacionDetalle />} />
+          <Route path='cotizaciones/:id/editar' element={<CotizacionForm />} />
+          <Route path='pagos'                   element={<Pagos />} />
+          <Route path='pagos/nuevo'             element={<PagoForm />} />
+          <Route path='pagos/:id/editar'        element={<PagoForm />} />
           <Route path='*'                   element={<NoEncontrada admin />} />
         </Route>
       </Routes>

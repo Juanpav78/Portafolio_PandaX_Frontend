@@ -1,6 +1,8 @@
 import { Link } from "react-router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight, faEnvelope, faInbox, faLayerGroup, faPlus, faQuoteLeft, faTags } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight, faEnvelope, faFileInvoiceDollar, faHandHoldingDollar, faInbox, faLayerGroup, faMoneyBillWave, faPlus, faQuoteLeft, faTags } from "@fortawesome/free-solid-svg-icons"
+import { formatoCOP } from "../../helpers/dinero"
+import { mesBogota, nombreMes } from "../../helpers/pagos"
 import useAuth from "../../hooks/useAuth"
 import useListaAdmin from "../../hooks/useListaAdmin"
 import Boton from "../../components/Boton"
@@ -67,6 +69,17 @@ const Panel = () => {
               <Metrica titulo="Testimonios" icono={faQuoteLeft} to="/admin/testimonios"
                 total={r.testimonios.total} porSitio={r.testimonios} />
             </>}
+        </section>
+      )}
+
+      {/* Negocio: lo que entró este mes, lo que falta cobrar y lo que espera respuesta */}
+      {listo && r.negocio && (
+        <section aria-label="Negocio" className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <Metrica titulo={`Ingresos de ${nombreMes(mesBogota())}`} icono={faMoneyBillWave} to="/admin/pagos" total={formatoCOP(r.negocio.ingresosMes)} />
+          <Metrica titulo="Por cobrar" icono={faHandHoldingDollar} to="/admin/cotizaciones?estado=aceptada"
+            total={formatoCOP(r.negocio.porCobrar)} destacado={r.negocio.porCobrar > 0} />
+          <Metrica titulo="Cotizaciones por responder" icono={faFileInvoiceDollar} to="/admin/cotizaciones?estado=enviada"
+            total={r.negocio.cotizacionesPorResponder} />
         </section>
       )}
 
