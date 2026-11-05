@@ -12,6 +12,8 @@ import EncabezadoAdmin from "../../components/EncabezadoAdmin"
 import EstadoVacio from "../../components/admin/EstadoVacio"
 import BadgeSitio from "../../components/admin/BadgeSitio"
 import { formatoCOP } from "../../helpers/dinero"
+import EtiquetaCotizacion from "../../components/admin/EtiquetaCotizacion"
+import { codigoCotizacion } from "../../helpers/cotizaciones"
 import { fechaCompleta } from "../../helpers/fechas"
 
 // WhatsApp necesita el número con indicativo y sin símbolos; si viene sin indicativo se asume Colombia
@@ -77,16 +79,22 @@ const ClienteDetalle = () => {
           </section>
 
           <section className="tarjeta">
-            <h2 className="border-b border-ink-600 px-5 py-3.5 font-semibold text-fg">Cotizaciones</h2>
+            <div className="flex items-center justify-between border-b border-ink-600 px-5 py-3">
+              <h2 className="font-semibold text-fg">Cotizaciones</h2>
+              <Boton to={`/admin/cotizaciones/nueva?cliente=${id}`} size="sm" variant="ghost" icon={faFileInvoiceDollar}>Nueva cotización</Boton>
+            </div>
             {cotizaciones.length === 0
               ? <p className="flex items-center gap-2 px-5 py-6 text-sm text-muted"><FontAwesomeIcon icon={faFileInvoiceDollar} /> Aún no hay cotizaciones para este cliente.</p>
               : (
                 <ul className="divide-y divide-ink-600">
                   {cotizaciones.map(q => (
-                    <li key={q._id} className="flex items-center justify-between gap-3 px-5 py-3 text-sm">
-                      <span className="min-w-0 truncate text-fg">{q.title}</span>
-                      <span className="shrink-0 text-xs text-subtle capitalize">{q.estado}</span>
-                      <span className="shrink-0 tabular-nums">{formatoCOP(q.total)}</span>
+                    <li key={q._id}>
+                      <Link to={`/admin/cotizaciones/${q._id}`} className="flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-white/3">
+                        <span className="shrink-0 font-mono text-xs font-semibold text-fg">{codigoCotizacion(q.numero)}</span>
+                        <span className="min-w-0 flex-1 truncate text-muted">{q.title}</span>
+                        <EtiquetaCotizacion estado={q.estadoVisible} />
+                        <span className="w-28 shrink-0 text-right tabular-nums text-fg">{formatoCOP(q.total)}</span>
+                      </Link>
                     </li>
                   ))}
                 </ul>

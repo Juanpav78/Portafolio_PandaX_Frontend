@@ -14,6 +14,7 @@ const ACCIONES = [
   { prefijo: '/admin/testimonios', to: '/admin/testimonios/nuevo', texto: 'Nuevo testimonio' },
   { prefijo: '/admin/proyectos', to: '/admin/create', texto: 'Nuevo proyecto' },
   { prefijo: '/admin/clientes', to: '/admin/clientes/nuevo', texto: 'Nuevo cliente' },
+  { prefijo: '/admin/cotizaciones', to: '/admin/cotizaciones/nueva', texto: 'Nueva cotización' },
 ]
 
 const HeaderAdmin = ({ onAbrirMenu, tema, setTema }) => {
