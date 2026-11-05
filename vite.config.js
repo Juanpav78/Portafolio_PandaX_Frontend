@@ -1,10 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import seo from './vite-plugin-seo.js'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  // El admin y el login no deben aparecer en Google
+  plugins: [react(), tailwindcss(), seo({ rutas: ['/', '/proyectos'], bloquear: ['/admin', '/login', '/recover-password'] })],
   // El admin se carga bajo demanda y es el único que usa algunos paquetes de iconos: si Vite los
   // descubre recién al abrir el panel, re-empaqueta en caliente y la página falla con
   // "Failed to fetch dynamically imported module" hasta recargar. Así se empaquetan al arrancar.
