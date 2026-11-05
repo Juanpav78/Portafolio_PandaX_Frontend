@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
-import { faArrowUpRightFromSquare, faCalendar, faLightbulb, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
+import { faArrowUpRightFromSquare, faCalendar, faLightbulb, faLock, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 import Boton from "./Boton"
 import GaleriaImagenes from "./GaleriaImagenes"
 import useIdioma from "../hooks/useIdioma"
@@ -62,10 +62,22 @@ const DetalleProyecto = ({ proyecto, idTitulo }) => {
         </div>
       )}
 
+      {/* Una aplicación interna no se puede visitar: se explica en vez de dejar al visitante
+          buscando un enlace que no existe */}
+      {proyecto.interno && (
+        <div className="mt-8 flex items-start gap-3 rounded-xl border border-white/10 bg-white/3 p-4">
+          <FontAwesomeIcon icon={faLock} className="mt-0.5 text-neon" />
+          <div>
+            <p className="text-sm font-semibold text-fg">{t('detail.internalTitle')}</p>
+            <p className="mt-1 text-sm text-muted">{t('detail.internalText')}</p>
+          </div>
+        </div>
+      )}
+
       {/* GitHub es opcional en el backend: el botón sólo aparece si hay repositorio */}
-      {(link || github) && (
+      {((link && !proyecto.interno) || github) && (
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          {link && (
+          {link && !proyecto.interno && (
             <Boton href={link} iconRight={faArrowUpRightFromSquare} className="flex-1">
               {t('detail.visit')}
             </Boton>

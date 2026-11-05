@@ -96,6 +96,8 @@ export const TEXTOS = {
     card: { details: 'Ver detalles de {nombre}', techs: 'Tecnologías', featured: 'Destacado', photos: '{n} imágenes', screenshot: 'Captura del proyecto {nombre}' },
     detail: {
       visit: 'Visitar sitio', source: 'Código fuente', stack: 'Stack',
+      internalTitle: 'Aplicación interna',
+      internalText: 'Es un sistema de uso privado de una empresa, así que no tiene una versión pública para visitar.',
       challenge: 'El problema', solution: 'La solución',
       prevImage: 'Imagen anterior', nextImage: 'Imagen siguiente', goToImage: 'Ver imagen {n}',
     },
@@ -222,6 +224,8 @@ export const TEXTOS = {
     card: { details: 'See details of {nombre}', techs: 'Technologies', featured: 'Featured', photos: '{n} images', screenshot: 'Screenshot of {nombre}' },
     detail: {
       visit: 'Visit site', source: 'Source code', stack: 'Stack',
+      internalTitle: 'Internal application',
+      internalText: "It's a private system used inside a company, so there is no public version to visit.",
       challenge: 'The challenge', solution: 'The solution',
       prevImage: 'Previous image', nextImage: 'Next image', goToImage: 'Show image {n}',
     },
