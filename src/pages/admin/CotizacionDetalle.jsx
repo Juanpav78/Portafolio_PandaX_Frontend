@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router"
-import { faCopy, faPen, faPrint, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faCopy, faMoneyBillWave, faPen, faPrint, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons"
 import clientAxios from "../../config/clientAxios"
 import useDocumentoAdmin from "../../hooks/useDocumentoAdmin"
@@ -12,6 +12,7 @@ import EstadoVacio from "../../components/admin/EstadoVacio"
 import EtiquetaCotizacion from "../../components/admin/EtiquetaCotizacion"
 import { EMPRESA, ESTADOS_COTIZACION, codigoCotizacion, fechaDocumento } from "../../helpers/cotizaciones"
 import { formatoCOP } from "../../helpers/dinero"
+import { fechaPago, textoMetodo } from "../../helpers/pagos"
 import Logo from "../../assets/PandaX_Black.svg"
 
 // Mensaje listo para enviar por WhatsApp junto con el PDF
@@ -188,6 +189,21 @@ const CotizacionDetalle = () => {
             <div className="flex justify-between"><span className="text-muted">Total</span><span className="tabular-nums text-fg">{formatoCOP(q.total)}</span></div>
             <div className="flex justify-between"><span className="text-muted">Pagado</span><span className="tabular-nums text-fg">{formatoCOP(q.pagado)}</span></div>
             <div className="flex justify-between border-t border-ink-600 pt-2 font-semibold"><span className="text-fg">Saldo</span><span className="tabular-nums text-fg">{formatoCOP(q.saldo)}</span></div>
+            {q.client && (
+              <Boton to={`/admin/pagos/nuevo?cliente=${q.client._id}&cotizacion=${q._id}`} size="sm" icon={faMoneyBillWave} className="mt-2">Registrar pago</Boton>
+            )}
+            {q.pagos?.length > 0 && (
+              <ul className="mt-2 flex flex-col gap-1.5 border-t border-ink-600 pt-3">
+                {q.pagos.map(p => (
+                  <li key={p._id}>
+                    <Link to={`/admin/pagos/${p._id}/editar`} className="flex items-center justify-between gap-2 text-xs hover:text-neon">
+                      <span className="text-muted">{fechaPago(p.date)} · {textoMetodo(p.method)}</span>
+                      <span className={`tabular-nums ${p.estado === 'pagado' ? 'text-fg' : 'text-subtle line-through'}`}>{formatoCOP(p.amount)}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
 
           <section className="tarjeta flex flex-col gap-2 p-5">

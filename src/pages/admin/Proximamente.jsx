@@ -1,15 +1,11 @@
 import { useParams } from "react-router"
-import { faFileInvoiceDollar, faHourglassHalf, faMoneyBillWave, faUser, faUsers } from "@fortawesome/free-solid-svg-icons"
+import { faHourglassHalf, faUser } from "@fortawesome/free-solid-svg-icons"
 import Boton from "../../components/Boton"
 import EncabezadoPagina from "../../components/admin/EncabezadoPagina"
 import EstadoVacio from "../../components/admin/EstadoVacio"
 
-// Secciones ya visibles en el menú pero sin pantalla todavía. Los modelos de Clientes,
-// Cotizaciones y Pagos ya existen en el backend; falta la siguiente fase.
+// Secciones ya visibles en el menú pero sin pantalla todavía
 const SECCIONES = {
-  clientes: { titulo: 'Clientes', icono: faUsers, texto: 'Aquí podrás registrar clientes, ver su historial y convertir un mensaje de contacto en cliente.' },
-  cotizaciones: { titulo: 'Cotizaciones', icono: faFileInvoiceDollar, texto: 'Arma cotizaciones con los servicios del catálogo y sigue si están enviadas, aceptadas o vencidas.' },
-  pagos: { titulo: 'Pagos', icono: faMoneyBillWave, texto: 'Registra abonos y pagos por cliente o cotización para saber qué está pendiente.' },
   'sobre-mi': { titulo: 'Sobre mí', icono: faUser, texto: 'Hoy el texto "Sobre mí" del portafolio vive en el código (src/i18n/textos.js). Editarlo desde aquí llegará en una próxima versión.' },
 }
 

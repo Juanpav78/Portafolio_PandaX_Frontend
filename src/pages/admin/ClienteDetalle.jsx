@@ -14,6 +14,8 @@ import BadgeSitio from "../../components/admin/BadgeSitio"
 import { formatoCOP } from "../../helpers/dinero"
 import EtiquetaCotizacion from "../../components/admin/EtiquetaCotizacion"
 import { codigoCotizacion } from "../../helpers/cotizaciones"
+import EtiquetaPago from "../../components/admin/EtiquetaPago"
+import { fechaPago, textoMetodo } from "../../helpers/pagos"
 import { fechaCompleta } from "../../helpers/fechas"
 
 // WhatsApp necesita el número con indicativo y sin símbolos; si viene sin indicativo se asume Colombia
@@ -102,16 +104,22 @@ const ClienteDetalle = () => {
           </section>
 
           <section className="tarjeta">
-            <h2 className="border-b border-ink-600 px-5 py-3.5 font-semibold text-fg">Pagos</h2>
+            <div className="flex items-center justify-between border-b border-ink-600 px-5 py-3">
+              <h2 className="font-semibold text-fg">Pagos</h2>
+              <Boton to={`/admin/pagos/nuevo?cliente=${id}`} size="sm" variant="ghost" icon={faMoneyBillWave}>Registrar pago</Boton>
+            </div>
             {pagos.length === 0
               ? <p className="flex items-center gap-2 px-5 py-6 text-sm text-muted"><FontAwesomeIcon icon={faMoneyBillWave} /> Aún no hay pagos registrados.</p>
               : (
                 <ul className="divide-y divide-ink-600">
                   {pagos.map(p => (
-                    <li key={p._id} className="flex items-center justify-between gap-3 px-5 py-3 text-sm">
-                      <span className="text-muted">{fechaCompleta(p.date)}</span>
-                      <span className="text-xs text-subtle capitalize">{p.method} · {p.estado}</span>
-                      <span className="tabular-nums text-fg">{formatoCOP(p.amount)}</span>
+                    <li key={p._id}>
+                      <Link to={`/admin/pagos/${p._id}/editar`} className="flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-white/3">
+                        <span className="w-28 shrink-0 text-muted">{fechaPago(p.date)}</span>
+                        <span className="min-w-0 flex-1 truncate text-xs text-subtle">{textoMetodo(p.method)}</span>
+                        <EtiquetaPago estado={p.estado} />
+                        <span className="w-28 shrink-0 text-right tabular-nums text-fg">{formatoCOP(p.amount)}</span>
+                      </Link>
                     </li>
                   ))}
                 </ul>

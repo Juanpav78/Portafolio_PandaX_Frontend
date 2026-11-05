@@ -38,6 +38,8 @@ const ClienteDetalle = lazy(() => import('./pages/admin/ClienteDetalle'));
 const Cotizaciones = lazy(() => import('./pages/admin/Cotizaciones'));
 const CotizacionForm = lazy(() => import('./pages/admin/CotizacionForm'));
 const CotizacionDetalle = lazy(() => import('./pages/admin/CotizacionDetalle'));
+const Pagos = lazy(() => import('./pages/admin/Pagos'));
+const PagoForm = lazy(() => import('./pages/admin/PagoForm'));
 
 function App() {
   return (
@@ -88,6 +90,9 @@ function App() {
           <Route path='cotizaciones/nueva'      element={<CotizacionForm />} />
           <Route path='cotizaciones/:id'        element={<CotizacionDetalle />} />
           <Route path='cotizaciones/:id/editar' element={<CotizacionForm />} />
+          <Route path='pagos'                   element={<Pagos />} />
+          <Route path='pagos/nuevo'             element={<PagoForm />} />
+          <Route path='pagos/:id/editar'        element={<PagoForm />} />
           <Route path='*'                   element={<NoEncontrada admin />} />
         </Route>
       </Routes>
