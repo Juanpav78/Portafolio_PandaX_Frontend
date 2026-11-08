@@ -125,6 +125,7 @@ const Sidebar = ({ abierto, onCerrar, tema }) => {
           <Grupo titulo="PandaX Code">
             {enlace({ to: '/admin/servicios?sitio=code', sitio: 'code', children: 'Servicios y precios' })}
             {enlace({ to: '/admin/proyectos?sitio=code', sitio: 'code', children: 'Proyectos de clientes' })}
+            {enlace({ to: '/admin/retos', sitio: 'code', children: 'Retos' })}
             {enlace({ to: '/admin/mensajes?sitio=code', sitio: 'code', contador: resumen?.mensajesNuevosPorSitio?.code, children: 'Mensajes de contacto' })}
             {URL_CODE && <Externo href={URL_CODE}>Ver PandaX Code</Externo>}
           </Grupo>
