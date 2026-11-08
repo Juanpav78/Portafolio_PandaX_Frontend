@@ -29,6 +29,8 @@ const Servicios = lazy(() => import('./pages/admin/Servicios'));
 const ServicioForm = lazy(() => import('./pages/admin/ServicioForm'));
 const Testimonios = lazy(() => import('./pages/admin/Testimonios'));
 const TestimonioForm = lazy(() => import('./pages/admin/TestimonioForm'));
+const Retos = lazy(() => import('./pages/admin/Retos'));
+const RetoForm = lazy(() => import('./pages/admin/RetoForm'));
 const Mensajes = lazy(() => import('./pages/admin/Mensajes'));
 const MensajeDetalle = lazy(() => import('./pages/admin/MensajeDetalle'));
 const Configuracion = lazy(() => import('./pages/admin/Configuracion'));
@@ -79,6 +81,9 @@ function App() {
           <Route path='testimonios'         element={<Testimonios />} />
           <Route path='testimonios/nuevo'   element={<TestimonioForm />} />
           <Route path='testimonios/:id'     element={<TestimonioForm />} />
+          <Route path='retos'               element={<Retos />} />
+          <Route path='retos/nuevo'         element={<RetoForm />} />
+          <Route path='retos/:id'           element={<RetoForm />} />
           <Route path='mensajes'            element={<Mensajes />} />
           <Route path='mensajes/:id'        element={<MensajeDetalle />} />
           <Route path='configuracion'       element={<Configuracion />} />

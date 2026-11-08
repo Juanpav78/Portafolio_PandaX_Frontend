@@ -12,6 +12,7 @@ const ACCIONES = [
   { prefijo: '/admin/calendario', to: '/admin/planes/nuevo', texto: 'Nueva idea' },
   { prefijo: '/admin/servicios', to: '/admin/servicios/nuevo', texto: 'Nuevo servicio' },
   { prefijo: '/admin/testimonios', to: '/admin/testimonios/nuevo', texto: 'Nuevo testimonio' },
+  { prefijo: '/admin/retos', to: '/admin/retos/nuevo', texto: 'Nuevo reto' },
   { prefijo: '/admin/proyectos', to: '/admin/create', texto: 'Nuevo proyecto' },
   { prefijo: '/admin/clientes', to: '/admin/clientes/nuevo', texto: 'Nuevo cliente' },
   { prefijo: '/admin/cotizaciones', to: '/admin/cotizaciones/nueva', texto: 'Nueva cotización' },
